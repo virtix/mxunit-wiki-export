@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<object class="BodyContent" package="com.atlassian.confluence.core">
+<id name="id">819239</id>
+<property name="body"><![CDATA[h2. Running entire directories of Tests with one line of code
+
+When you have a multiple tests  all residing in a directory and subdirectories,    it's very conventient to run everything contained in those directories.  In   this context, a directory of tests _implies_ a test suite, and MXUnit enables   you to run directories as test suites.
+
+Running directories of tests can be done with a single line of code:
+
+{code}
+<cfinvoke component="mxunit.runner.DirectoryTestSuite"
+	      method="run"
+	      directory="#expandPath('/mxunit/PluginDemoTests')#"
+	      componentPath="[classpath.to.install.location.]mxunit.pluginDemoTests"
+	      recurse="true"
+	      excludes="InvalidMarkupTest,FiveSecondTest"
+	      returnvariable="results" />
+{code}
+
+*Explanation:*
+
+
+* component: The MXUnit runner component responsible for running all the tests.
+* method: The component's method being invoked.
+* directory: A physical path to the directory containing your tests.
+* recurse: A flag to indicate whether or not to run tests in all subdirectories.
+* excludes: A list of component names to exclude.
+* componentPath: A class path to the directory containing your tests. This gives MXUnit the needed hint to how your web server and engine sees 
+your tests. Without it, MXUnit attempts to use an Adobe CF component.
+* returnvariable: The variable name of the TestResult object returned
+* componentPath: (Not listed above) Optional parameter that increases performance.    This is the component name prefix; e.g., com.foo.bar.        If not specified, MXUnit will locate the full component name using the ColdFusion server       cache of components.
+* This will pick up any file that *starts or ends with the word "Test"*, but excluding anything in your "excludes" attribute
+
+Once this is exectuted you can easily output the results to the screen:
+
+{code}
+<cfinvoke component="mxunit.runner.DirectoryTestSuite"
+	      method="run"
+	      directory="#expandPath('/mxunit/PluginDemoTests')#"
+	      componentPath="[classpath.to.install.location.]mxunit.pluginDemoTests"
+	      recurse="true"
+	      excludes="InvalidMarkupTest,FiveSecondTest"
+	      returnvariable="results" />
+
+<cfoutput> #results.getResultsOutput('extjs')# </cfoutput>
+{code}
+
+
+Copy the above to a file called /mxunit/doc/tutorial/directoryRunner.cfm and   run it: [http://localhost:8500/mxunit/doc/tutorial/directoryRunner.cfm|http://localhost:8500/mxunit/doc/tutorial/directoryRunner.cfm] You should see this:
+
+!dir-runner-1.png!]]></property>
+<property name="content" class="Page" package="com.atlassian.confluence.pages"><id name="id">786473</id>
+</property>
+</object>
