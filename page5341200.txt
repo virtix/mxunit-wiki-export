@@ -1,0 +1,39 @@
+
+
+
+
+
+
+Getting the source code
+
+5373964
+The MXUnit source code is available in a Subversion repository at Googlecode or as
+a git repository at Github.
+
+*SVN* : [http://mxunit.googlecode.com/svn/mxunit/trunk/]
+
+*Github*: [http://github.com/virtix/mxunit]
+
+For Github users, make sure to look at other forks for specific features.
+
+Patches are always welcome\! For SVN, we like to get patches generated from SVN. With
+Github, simply fork MXUnit, hack away, and send a pull request.
+
+5341200
+
+
+
+
+
+Verstion: 2
+
+Created By: virtix
+
+Created On: 2010-03-26 09:18:12.000
+
+Last Update By: virtix
+
+Last Update On: 2010-03-26 09:20:18.000
+
+
+

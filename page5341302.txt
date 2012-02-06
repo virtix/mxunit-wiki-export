@@ -1,0 +1,41 @@
+
+
+
+Screencast - Using MXUnit and Ant for Build,Test, and Integration Automation - 8 min.
+
+5374057
+{html}
+&lt;center&gt;
+
+	&lt;!-- the comment and script is used to workaround the KB912945 patch --&gt;
+	&lt;!--[if gte IE 6]&gt; &lt;comment id="to_be_rewritten"&gt; &lt;![endif]--&gt;
+	&lt;OBJECT classid="clsid:D27CDB6E-AE6D-11cf-96B8-444553540000" codebase="http://download.macromedia.com/pub/shockwave/cabs/flash/swflash.cab#version=6,0,40,0"
+WIDTH="718" HEIGHT="541" id="movie"&gt;
+	&lt;PARAM NAME=movie VALUE="mxunit-install3.swf"&gt; 
+	&lt;PARAM NAME=quality VALUE=high&gt;
+	&lt;PARAM NAME=bgcolor VALUE=#FFFFFF&gt;
+	&lt;EMBED src="https://mxunit.s3.amazonaws.com/video/mxunit_ant_automation_demo.swf"
+quality=high bgcolor=#FFFFFF WIDTH="718" HEIGHT="541" NAME="movie" ALIGN="" TYPE="application/x-shockwave-flash"
+PLUGINSPAGE="http://www.macromedia.com/go/getflashplayer"&gt;&lt;/EMBED&gt;
+	&lt;/OBJECT&gt;
+	&lt;/comment&gt;&lt;script language="Javascript" src="ieupdate.js"&gt;&lt;/script&gt;
+
+&lt;/center&gt; 
+{html}
+
+5341302
+
+
+
+Verstion: 4
+
+Created By: virtix
+
+Created On: 2010-03-26 11:50:50.000
+
+Last Update By: virtix
+
+Last Update On: 2010-03-26 13:57:35.000
+
+
+

@@ -1,0 +1,40 @@
+
+
+
+Eclipse Plugin Keyboard Shortcuts
+
+819274
+These shortcuts will work when the MXUnit View is _in focus_. You put a view in focus
+by clicking somewhere in the view.
+
+*Note:* If an action can be executed with multiple keyboard shortcuts, they're separated
+by a semicolon
+|| Icon || Action || Shortcut ||
+| !help.png! | Help | F1 |
+| !findtests.png! | Find Tests | CTRL-F |
+| !refresh.png! | Reload Tests | F5 |
+| !runtests.png! | Run selected Tests | Enter; r |
+| !runfailures.png! | Run failures | CTRL-Enter; CTRL-R |
+| !expandcollapse.png! | Expand/Collapse tests | = |
+| | Select All Tests in Tree | CTRL-A |
+| *Test(s) selected in test tree* |
+| !internalbrowser.png! | View test output in browser | b; F8 |
+| *File selected in the "Trace" table* |
+| !fail_circle.png! | Open file at error line | Enter; double-click |
+
+786513
+
+
+
+Verstion: 5
+
+Created By: marcesher
+
+Created On: 2009-01-18 14:01:18.000
+
+Last Update By: marcesher
+
+Last Update On: 2009-01-18 14:05:58.000
+
+
+

@@ -1,0 +1,32 @@
+
+
+
+
+
+
+
+Verification
+
+5374009
+MXUnit offers a couple of different ways perform verification of mocks.
+
+*Note*: V{_}erifying stubs is probably ultra-redundant because if your component under
+test cares anything about what the mock returns, it will probably fail before it can
+be verified, no?_
+
+5341248
+
+
+
+
+Verstion: 1
+
+Created By: virtix
+
+Created On: 2010-03-26 10:23:08.000
+
+Last Update By: virtix
+
+Last Update On: 2010-03-26 10:23:08.000
+
+

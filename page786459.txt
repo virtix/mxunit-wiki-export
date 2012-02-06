@@ -1,0 +1,40 @@
+
+
+
+Home
+
+819226
+This is the home of the MXUnit Public Wiki space.
+
+To help you on your way, we've inserted some of our favourite macros on this home
+page. As you start creating pages, adding news items and commenting you'll see the
+macros below fill up with all the activity in your space. 
+{section}
+{column:width=60%}
+{recently-updated}
+{column}
+{column:width=5%}
+{column}
+{column:width=35%}
+h6. Navigate space
+{pagetreesearch}
+{pagetree}
+{column}
+{section}
+
+786459
+
+
+
+Verstion: 1
+
+Created By: virtix
+
+Created On: 2009-01-17 10:51:32.000
+
+Last Update By: virtix
+
+Last Update On: 2009-01-17 10:51:32.000
+
+
+

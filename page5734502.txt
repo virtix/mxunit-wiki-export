@@ -1,0 +1,93 @@
+
+
+
+How cfcomponent output="true"  can affect memory consumption
+
+5767260
+{toc}
+
+h2. Introduction
+
+Bob Silverberg and I were trying to tackle a memory problem in his unit tests for
+ValidateThis. Running CF with 1GB of memory, he'd get Out Of Memory Errors and his
+tests would not complete when run in the browser \-\- i.e. all tests running in a
+single page request. When run through Eclipse \-\- where each test method is run as
+a separate request \-\- he had no troubles.
+
+This is our story.
+
+h2. First Line of Defense
+
+I always suggest these as the first culprits in memory problems:
+# Memory Tracking turned on in the CF Server Monitor
+# Request output debugging turned on in CFAdmin (I'm NOT talking about the Line Debugger...
+just regular old debug output)
+
+In and of themselves neither of these are evil; however, when an application, or a
+particular page, does a tremendous amount of work, both of those can become problems
+in a hurry.
+
+Bob turned both off, and he was still running out of memory.
+
+h2. My first task...
+
+I needed to replicate the issue. I got all his code and ran his tests. Fortunately,
+I, too, received an OOME. I then turned off debugging and, sure enough, the tests
+completed as expected (though slowly).
+
+So, lesson #1 kids: debugging can crash your server
+
+{tip}At this point, I no longer have problems, but Bob still does. Thus, we're not
+done yet{tip}
+
+h2. Meanwhile, Back at Bob's Ranch
+
+I suggested to Bob that he start to troubleshoot this by adding the "excludes" attribute
+onto his DirectoryTestSuite, and initially exclude everything but the first test,
+then incrementally remove tests from the Excludes until he got the error. Then, he'd
+probably know which test was causing troubles.&amp;nbsp;
+
+Normally, this is a fine approach. It turns out that it wouldn't have helped anyway.
+But hey, this stuff is hit and miss.
+
+h2. Gathering data
+
+My next step was to get a heap dump of ColdFusion as it was running the tests... I
+needed to see what was consuming all the memory. To do so, I used the java "jmap"
+command to get the dump and Eclipse MAT to analyze the dump. This is not nearly as
+complicated as it sounds, and I wrote up [full instructions here|http://blog.mxunit.org/2010/01/using-eclipse-mat-to-track-down.html]
+.
+
+h2. Inspecting data
+
+I used Eclipse MAT to inspect the heap dump. When I first loaded it, I opened the
+"Dominator Tree" and saw the following two entries sucking up a combined 200+MB of
+RAM:
+* coldfusion.filter.FusionContext
+* coldfusion.bootstrat.BoostrapClassLoader
+
+Let's look at the first few consumers for each of these: !memory1.png|align=center!
+Now, looking at the BootstrapClassLoader, I see a FontSetBuilder taking up a whole
+lot of memory. I have no idea what the hell that is, so I ignore it. I figure I can't
+do anything about it anyway, so....
+
+Let's look at the big old HashMap in the FusionContext. That looks like something
+I might be able to do something about. Why? Well, I don't know... I just imagine that
+any variables my app is creating live in there.
+
+5734502
+
+
+
+Verstion: 2
+
+Created By: marcesher
+
+Created On: 2010-09-16 16:27:31.000
+
+Last Update By: marcesher
+
+Last Update On: 2010-09-16 16:41:12.000
+
+
+

@@ -1,0 +1,25 @@
+
+
+
+CFObjective 2010 -- Continuous Integration with Hudson, ANT, and MXUnit
+
+5767247
+[Download Presentation Materials|http://mxunit.s3.amazonaws.com/doc/zip/CFO_2010_DemoSetup.zip]
+. These include pretty and print-friendly pdfs of the slides as well as all the code
+
+5734486
+
+
+
+Verstion: 2
+
+Created By: marcesher
+
+Created On: 2010-04-21 11:46:52.000
+
+Last Update By: marcesher
+
+Last Update On: 2010-04-21 11:48:12.000
+
+
+

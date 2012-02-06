@@ -1,0 +1,128 @@
+
+
+
+
+
+
+
+Using injectPropety for simple property overrides
+
+5374076
+As a follow-on to the injectMethod functionality, we bring you injectProperty. Sometimes,
+you have a private variable that you'd like to override for the purpose of a test,
+but you don't want to expose a public setter, and you don't want to put the variable
+into the 'this' scope just to expose it. This is where injectProperty comes in. It's
+quite simple. You have a variable in your component that you want to override, and
+a value to set. Here's how.
+Simple Example
+
+Let's assume you have a component and it has a variable named "foo":
+
+{code}
+&lt;cfcomponent&gt;
+
+	&lt;cfset foo = "hi, from mxunit"&gt;
+
+	&lt;cffunction name="doSomethingWithFoo"&gt;
+		&lt;cfset foo = ". and the horse you road in on."&gt;
+	&lt;/cffunction&gt;
+
+&lt;/cfcomponent&gt;
+{code}
+
+And just for the purposes of the test, you want to override foo. To do so, simply
+do:
+{code}
+&lt;cfcomponent extends="mxunit.framework.TestCase"&gt;
+
+	&lt;cffunction name="testDoSomethingWithFoo"&gt;
+		&lt;cfset obj = createObject("component","Foo")&gt;
+		&lt;cfset injectProperty(obj,"foo","hola to you")&gt;
+		&lt;cfset actual = obj.doSomethingWithFoo()&gt;
+		&lt;cfset assertEquals("hola to you. and the horse you road in on.",actual)&gt;
+	&lt;/cffunction&gt;
+
+&lt;/cfcomponent&gt;
+{code}
+
+By default, this will put your property into the Variables and This scope. However,
+if you want to put it into another scope, say "variables.local" or "variables.instance",
+just use the optional 4th argument to injectProperty:
+
+{code}
+&lt;cfcomponent&gt;
+	&lt;cfset instance = StructNew()&gt;
+	&lt;cfset instance.foo = "hi, from mxunit"&gt;
+
+	&lt;cffunction name="doSomethingWithFoo"&gt;
+		&lt;cfset instance.foo = ". and the horse you road in on."&gt;
+	&lt;/cffunction&gt;
+
+&lt;/cfcomponent&gt;
+{code}
+
+
+{code}
+&lt;cfcomponent extends="mxunit.framework.TestCase"&gt;
+
+	&lt;cffunction name="testDoSomethingWithFoo"&gt;
+		&lt;cfset obj = createObject("component","Foo")&gt;
+		&lt;cfset injectProperty(obj,"foo","hola to you","instance")&gt;
+		&lt;cfset actual = obj.doSomethingWithFoo()&gt;
+		&lt;cfset assertEquals("hola to you. and the horse you road in on.",actual)&gt;
+	&lt;/cffunction&gt;
+
+&lt;/cfcomponent&gt;
+{code}
+
+*Real-World examples*\*
+
+Imagine a SearchService component that provides search capabilities to clients connecting
+to it.
+
+Internally it has a ConfigLoader object that loads and tests configuration data and
+gets connectivity data from the DB. The service also has a StorageFacade object that
+determines the storage of the service in a permanent storage (with reload capabilities,
+etc).
+
+The search service public API is very simple, just to offer search capabilities. I
+needed a way to test reloading of the search factory by mocking values coming from
+the configloader private property. ConfigLoader.isRestartNeded() needed to come back
+as true.
+
+Then another test case was that the StorageScope needed to tell me the factory was
+removed, so the search service could reload it, requiring another mocking: StorageFacade.isFactoryLoaded()
+needed to come back as false.
+
+In each of these cases, an alternative approach would've been to provide for the Config
+and Facade objects to be injected rather than created internally. In that case, simple
+mocking with MXUnit's injectMethod -- or using ColdMock or CFEasyMock -- would've
+sufficed. However, in this case we didn't want to provide a facility for injecting
+these dependencies and didn't want to expose them publicly at all. Thus, a method
+was needed for getting at the object's private properties -- from within in a test
+-- without compromising their visibility in the "real" application.
+
+Bottom line: It's a good thing to keep your data as shy as possible. Fortunately,
+with functions like this, you can keep your data shy but still open it up when you
+need to for unit tests.
+
+\*Special thanks to [Luis Majano|http://www.coldboxframework.com/] for inspiring this
+functionality, contributing code, and supplying examples of its usefulness.
+
+5341322
+
+
+
+
+
+Verstion: 1
+
+Created By: virtix
+
+Created On: 2010-03-26 15:17:11.000
+
+Last Update By: virtix
+
+Last Update On: 2010-03-26 15:17:11.000
+
+

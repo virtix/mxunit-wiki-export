@@ -1,0 +1,72 @@
+
+
+
+
+
+
+Creating a Custom HTTPAntRunner.cfc
+
+5374221
+Often, your build.xml file will use the default HttpAntRunner.cfc inside of the mxunit
+package:
+{code:title=Common use of MXUnit ANT Task|controls=true} &lt;mxunittask server="${server.name}"
+port="${server.port}"
+defaultrunner="/mxunit/runner/HttpAntRunner.cfc"
+verbose="true"
+haltonfailure="true"
+haltonerror="true"&gt;
+
+&lt;directory runner="/mxunit/runner/HttpAntRunner.cfc"
+remoteMethod="run"
+path="${component.path}\mxunit\tests\framework"
+packageName="mxunit.tests.framework"
+componentPath="mxunit.tests.framework"
+recurse="false"
+/&gt;
+
+&lt;/mxunittask&gt;
+{code}
+
+However, it's possible that your tests need to be run under the context of your application.
+This is certainly true if you're using CF's built-in ORM functionality. It's also
+true if your tests or the code under test access application-scoped variables. Finally,
+this is probably true if you're testing controllers in a framework such as ColdBox.
+
+Fortunately, you can solve this in two simple steps:
+# Create a custom HttpAntRunner.cfc and put it in your application. Perhaps it's at
+c:/apps/MyBadassApp/tests/HttpAntRunner.cfc
+# In your ANT file, point your mxunit defaultRunner to this new CFC
+{code:title=Your custom HttpAntRunner.cfc|controls=true|linenumbers=true}&lt;cfcomponent
+extends="mxunit.runner.HttpAntRunner"&gt;&lt;/cfcomponent&gt;{code}
+then:
+{code:title=ANT task points to the location of your new runner} &lt;mxunittask server="${server.name}"
+port="${server.port}"
+defaultrunner="/MyBadassApp/tests/HttpAntRunner.cfc"
+verbose="true"
+haltonfailure="true"
+haltonerror="true"&gt;
+
+....
+
+&lt;/mxunittask&gt;{code}
+
+{tip}I do this for every application I create{tip}
+
+5341519
+
+
+
+
+Verstion: 2
+
+Created By: marcesher
+
+Created On: 2010-06-03 12:23:11.000
+
+Last Update By: marcesher
+
+Last Update On: 2010-06-03 12:23:55.000
+
+
+
+

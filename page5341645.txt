@@ -1,0 +1,48 @@
+
+
+
+Known Issues and things to look out for
+
+5374346
+If your mocked object returns an MXUnit MightyMock object rather than what you intended,
+this is likely due to an incorrect parameter in the definition. 
+
+For example, if you mock an object like this:
+
+{code}
+
+myMock = mock("foo");
+myMock.bar("{string}").returns(true);
+
+{code}
+
+And it's subsequently invoked like this:
+
+
+{code}
+
+some_bool = myMock.bar(2);
+assert(some_bool);
+
+{code}
+
+This will fail because myMock.foo(...) is expecting a string, which the integer 2
+is not. What's happening is that when you call myMock.bar(2), MXUnit thinks you're
+defining a new mock rather than executing it.
+
+5341645
+
+
+
+Verstion: 2
+
+Created By: virtix
+
+Created On: 2010-04-05 02:15:05.000
+
+Last Update By: virtix
+
+Last Update On: 2010-04-05 02:15:26.000
+
+
+

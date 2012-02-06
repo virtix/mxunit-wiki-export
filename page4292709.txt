@@ -1,0 +1,60 @@
+
+
+
+MXUnit Documentation
+
+4325458
+This is the home of the MXUnit Public Wiki space.
+
+
+The idea, maybe, is that this would be the public home for tech docs, blogs, musings,
+"the book", etc. Maybe use feedburner to publish the various parts ... content taxonomies?
+
+mxunit.org may still be the landing point, maybe make static html pages for blog,
+wiki, support, etc. This would allow for google webmaster tools to create a site map.
+
+
+
+
+
+
+{section}
+
+
+
+
+{column:width=50%}
+
+{recently-updated-dashboard}
+{column}
+{column:width=5%}
+
+
+
+
+{column}
+{column:width=45%}
+
+h6. Navigate space
+{pagetreesearch}
+{pagetree:startDepth=2}
+{column}
+{section}
+
+4292709
+
+
+
+
+Verstion: 7
+
+Created By: virtix
+
+Created On: 2009-01-17 10:51:32.000
+
+Last Update By: zoramite
+
+Last Update On: 2009-10-31 22:58:23.000
+
+
+

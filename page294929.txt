@@ -1,0 +1,47 @@
+
+
+
+
+
+
+Hi, I'm Marc
+
+425997
+{toc}
+
+h1. Who?
+
+Marc
+
+h1. What?
+
+Dude
+
+h1. Say Hi
+
+{code:title=Hi}
+&lt;cfcomponent&gt;
+
+	&lt;cffunction name="hi"&gt;
+		&lt;cfreturn "hi"&gt;
+	&lt;/cffunction&gt;
+
+&lt;/cfcomponent&gt;
+{code}
+
+294929
+
+
+
+
+Verstion: 1
+
+Created By: marcesher
+
+Created On: 2009-01-11 13:55:35.000
+
+Last Update By: marcesher
+
+Last Update On: 2009-01-11 13:55:35.000
+
+

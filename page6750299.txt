@@ -1,0 +1,238 @@
+
+
+
+Using injectMethod for simple mocking
+
+6783065
+{toc}
+h1. Introduction
+
+
+A while back, I (Marc) wrote about using coldfusion's "mix-in" functionality to achieve
+simple mocking. The usefulness here is where you have a function that "does something",
+but you want to change the thing that it does for the purpose of a test. This is particularly
+handy when you're testing functionA(), and functionA() calls functionB() and functionC().
+Maybe functionA() depends on the results of functionB() to do certain work, and then
+it calls functionC() to do other work. In code, it might look like:
+
+{code}	&lt;cfcomponent name=MyComponent&gt;
+		&lt;cffunction name="functionA"&gt;
+			&lt;cfargument name="someArg" required="true"&gt;
+			&lt;cfif listlen(functionB(someArg) GTE 1)&gt;
+				&lt;cfreturn functionC(someArg)&gt;
+			&lt;/cfif&gt;
+			&lt;cfreturn false&gt;
+		&lt;/cffunction&gt;
+
+		&lt;cffunction name="functionB"&gt;
+			.... maybe i'll return a number ... or a list of numbers
+		&lt;/cffunction&gt;
+
+		&lt;cffunction name="functionC"&gt;
+			.... i think i'll go and run a bunch of database updates
+			&lt;cfreturn true&gt;
+		&lt;/cffunction&gt;
+	&lt;/cfcomponent&gt;
+{code}And here might be some tests for functionA:
+
+{code}	&lt;cfcomponent extends="mxunit.framework.TestCase"&gt;
+
+		&lt;cffunction name="setUp"&gt;
+			&lt;cfset obj = createObject("component","MyComponent")&gt;
+		&lt;/cffunction&gt;
+
+		&lt;cffunction name="functionAShouldReturnFalseForASingleListElement"&gt;
+			&lt;cfset ret = obj.functionA(SomeID)&gt;
+			&lt;cfset assertFalse(ret,"a single list should've been returned for SomeID and functionA
+should have returned false")&gt;
+		&lt;/cffunction&gt;
+
+		&lt;cffunction name="functionAShouldReturnFalseForMultipleListElements"&gt;
+			&lt;cfset ret = obj.functionA(SomeOtherID)&gt;
+			&lt;cfset assertFalse(ret,"multiple list elements should've been returned for SomeID
+and functionA should have returned false")&gt;
+		&lt;/cffunction&gt;
+
+		&lt;cffunction name="functionAShouldReturnTrueForNoElements"&gt;
+			&lt;cfset ret = obj.functionA(AndYetAnotherID)&gt;
+			&lt;cfset assertTrue(ret,"NO list elements should've been returned for SomeID and
+functionA should have returned true")&gt;
+		&lt;/cffunction&gt;
+	&lt;/cfcomponent&gt;
+{code}
+h1. Using injectMethod()
+
+
+Now, let's say functionB() queries the database or whatever, based on the passed-in
+someArg argument. The problem is obvious: your database is in an unknown state, because
+data change all day long. And you want to do a number of tests: you want to test the
+condition where functionB() returns a single list element, and also when it returns
+more than 1 list element. Which means you need at least two known inputs for someArg:
+one that will ensure functionB() returns a single element, and one that ensures it'll
+return more than one. What a pain\! Wouldn't it be great if you could say "for the
+purposes of this test, I want functionB() to return a single list element". and then
+in another test, say "And for this test, I want it to return 2 list elements"? Or,
+to put it another way, wouldn't it be nice to override functionB for this test, but
+without a lot of work?
+
+This is why injectMethod() was born. To make it a little easier to override functions
+for the purpose of testing. Now, you're not overriding the function under test\! You're
+overriding functions that the function under test calls, in order to make it easier
+to test the function under test.
+
+Here's the method signature for injectMethod():
+{code}&lt;cffunction name="injectMethod" output="false" access="public" returntype="void"
+hint="injects the method from giver into receiver. This is helpful for quick and dirty
+mocking"&gt;
+	&lt;cfargument name="Receiver" type="any" required="true" hint="the object receiving
+the method"/&gt;
+	&lt;cfargument name="Giver" type="any" required="true" hint="the object giving the method"/&gt;
+	&lt;cfargument name="FunctionName" type="string" required="true" hint="the function
+to be injected from the giver into the receiver"/&gt;
+	&lt;cfargument name="FunctionNameInReceiver" type="string" required="false" default="#arguments.functionName#"
+hint="the function name that you will call. this is useful when you want to inject
+giver.someFunctionXXX but have it be called as someFunction in your receiver object"&gt;
+
+&lt;/cffunction&gt;{code}{*}Almost always:*
+* "Receiver" is your component under test
+* "Giver" is your test itself since that's where the overriding function will be declared,
+so you'll use "this"
+* "functionName" will the name of the overriding function you've defined in your test
+that will be used to overwrite the function in the component under test
+* "functionNameInReceiver" is the function you're overriding
+
+Let's have a look at our new set of tests:
+{code}	&lt;cfcomponent extends="mxunit.framework.TestCase"&gt;
+
+		&lt;cffunction name="setUp"&gt;
+			&lt;cfset obj = createObject("component","MyComponent")&gt;
+		&lt;/cffunction&gt;
+
+		&lt;!---  DEFINE PRIVATE METHODS TO OVERRIDE FUNCTIONB AND FUNCTIONC  ---&gt;
+
+		&lt;cffunction name="returnsSingleListElement" access="private"&gt;
+			&lt;cfreturn "1"&gt;
+		&lt;/cffunction&gt;
+
+		&lt;cffunction name="returnsMultipleListElements" access="private"&gt;
+			&lt;cfreturn "1,2,3"&gt;
+		&lt;/cffunction&gt;
+
+		&lt;cffunction name="returnsNoListElement" access="private"&gt;
+			&lt;cfreturn ""&gt;
+		&lt;/cffunction&gt;
+
+		&lt;!---  and our tests, again  ---&gt;
+		&lt;cffunction name="functionAShouldReturnFalseForASingleListElement"&gt;
+			&lt;!--- pass in our returnSingleListElement function into the object and name it
+functionB (i.e., override functionB) inside the object under test ---&gt;
+			&lt;cfset injectMethod(obj, this, "returnSingleListElement", "functionB")&gt;
+			&lt;cfset ret = obj.functionA(SomeID)&gt;
+			&lt;cfset assertFalse(ret,"a single list should've been returned for SomeID and functionA
+should have returned false")&gt;
+		&lt;/cffunction&gt;
+
+		&lt;cffunction name="functionAShouldReturnFalseForMultipleListElements"&gt;
+			&lt;!--- pass in our returnMultipleListElements function into the object and name
+it functionB ---&gt;
+			&lt;cfset injectMethod(obj, this, "returnMultipleListElements", "functionB")&gt;
+			&lt;cfset ret = obj.functionA(SomeOtherID)&gt;
+			&lt;cfset assertFalse(ret,"multiple list elements should've been returned for SomeID
+and functionA should have returned false")&gt;
+		&lt;/cffunction&gt;
+
+		&lt;cffunction name="functionAShouldReturnTrueForNoElements"&gt;
+			&lt;!--- pass in our returnNoListElement function into the object and name it functionB
+---&gt;
+			&lt;cfset injectMethod(obj, this, "returnNoListElement", "functionB")&gt;
+			&lt;cfset ret = obj.functionA(AndYetAnotherID)&gt;
+			&lt;cfset assertTrue(ret,"NO list elements should've been returned for SomeID and
+functionA should have returned true")&gt;
+		&lt;/cffunction&gt;
+	&lt;/cfcomponent&gt;
+{code}As this illustrates, we've now created a very easy way to test functionA with
+the 3 cases we need to happen with functionB: a single list, multiple list, and no-element
+returns. Now, to take this one step further, you could override functionC -- which,
+if you remember, updates the database -- with a simple function that simply returns
+"true". Remember, we're not testing functionC so ideally we wouldn't touch the database
+at all in this case
+
+{code}	&lt;cfcomponent extends="mxunit.framework.TestCase"&gt;
+
+		&lt;cffunction name="setUp"&gt;
+			&lt;cfset obj = createObject("component","MyComponent")&gt;
+		&lt;/cffunction&gt;
+
+		&lt;!---  DEFINE PRIVATE METHODS TO OVERRIDE FUNCTIONB AND FUNCTIONC  ---&gt;
+
+		....
+
+		&lt;cffunction name="functionC_Replacement" access="private"&gt;
+			&lt;cfreturn true&gt;
+		&lt;/cffunction&gt;
+
+		&lt;!---  and our tests, again  ---&gt;
+		&lt;cffunction name="functionAShouldReturnTrueForNoElements"&gt;
+			&lt;!--- pass in our returnNoListElement function into the object and name it functionB
+					in addition, overwrite functionC with our new, spoof functionC	 ---&gt;
+			&lt;cfset injectMethod(obj, this, "returnNoListElement", "functionB")&gt;
+			&lt;cfset injectMethod(obj, this, "functionC_Replacement", "functionC")&gt;
+			&lt;cfset ret = obj.functionA(SomeID)&gt;
+			&lt;cfset assertTrue(ret,"NO list elements should've been returned for SomeID and
+functionA should have returned true")&gt;
+		&lt;/cffunction&gt;
+
+		....
+
+	&lt;/cfcomponent&gt;
+
+{code}There you go: you can pass in functions to achieve exactly the conditions you
+want to achieve in order to fully test your logic. And you pass in functions that
+"spoof" the DB-updating function that would slow down your test and potentially corrupt
+your data.
+
+h1. Difference from Mocking
+
+
+I can't stress enough that this solves a different than mock objects solve. Mocks
+solve the problem of spoofing collaborator objects. But in this case, we're not spoofing
+functions in a dependent component. We're spoofing functions in the same component
+we're trying to test.
+
+h1. Using restoreMethod()
+
+{warning}We *strongly* encourage you to write tests that use freshly-created instances
+in your setUp() method.{warning}
+If you have tests that reuse the same component instance, injectMethod() can wreak
+havoc. Usually you wind up in this situation if you're using coldspring-managed objects
+inside your TestCase. To undo a method overwrite resulting from injectMethod(), you
+can use *restoreMethod( object, "functionName" )*. This will restore the original
+function back into the component.
+
+MXUnit will NOT automatically restore methods for you. You must do so deliberately.
+I advise doing it in tearDown, like so:
+
+{code}&lt;cffunction name="tearDown"&gt;
+
+&lt;cfset restoreMethod( someObject, "someFunction" )&gt;
+
+&lt;/cffunction&gt;
+
+{code}
+
+6750299
+
+
+
+Verstion: 5
+
+Created By: virtix
+
+Created On: 2010-03-26 15:12:44.000
+
+Last Update By: marcesher
+
+Last Update On: 2010-11-19 12:08:21.000
+
+
+

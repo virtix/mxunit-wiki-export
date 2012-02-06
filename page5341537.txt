@@ -1,0 +1,33 @@
+
+
+
+Recommended Reading on Testing
+
+5374238
+Here are some references that Los Hombres have found useful:
+
+&lt;a href="http://www.amazon.com/gp/product/0521880386?ie=UTF8&amp;tag=mx06-20&amp;linkCode=as2&amp;camp=1789&amp;creative=9325&amp;creativeASIN=0521880386"&gt;Introduction
+to Software Testing&lt;/a&gt;&lt;img src="http://www.assoc-amazon.com/e/ir?t=mx06-20&amp;l=as2&amp;o=1&amp;a=0521880386"
+width="1" height="1" border="0" alt="" style="border:none !important; margin:0px !important;"
+/&gt;
+
+
+
+
+
+5341537
+
+
+
+Verstion: 5
+
+Created By: virtix
+
+Created On: 2010-06-18 10:53:25.000
+
+Last Update By: virtix
+
+Last Update On: 2010-06-18 10:57:20.000
+
+
+

@@ -1,0 +1,25 @@
+
+
+
+Screencast - Using MXUnit and Ant for Build,Test, and Integration Automation - 8 min.
+
+5374030
+{html-include:url=http://mxunit.s3.amazonaws.com/video/mxunit_ant_automation_demo.swf}
+
+5341274
+
+
+
+
+Verstion: 2
+
+Created By: virtix
+
+Created On: 2010-03-26 11:50:50.000
+
+Last Update By: virtix
+
+Last Update On: 2010-03-26 11:53:06.000
+
+
+

@@ -1,0 +1,36 @@
+
+
+
+Running Adobe ColdFusion on Amazon EC2
+
+6193188
+[Creating an account|Creating an AWS Account]
+
+[Launching your first instance|Launching you first EC2 Instance]
+
+[Creating your first ColdFusion AMI|Creating an EC2 ColdFusion AMI]
+
+Launching your ColdFusion AMI as a new Instance
+
+Deploying to multiple instances
+
+Managing Configuration Changes
+
+Spot Requests
+
+6160422
+
+
+
+Verstion: 2
+
+Created By: marcesher
+
+Created On: 2010-10-18 01:03:59.000
+
+Last Update By: marcesher
+
+Last Update On: 2010-10-18 01:19:07.000
+
+
+

@@ -1,0 +1,184 @@
+
+
+
+What to put in your tests (Assertion Patterns)
+
+819253
+h2. What to put in your tests \-\- or, patterns for your assertions
+
+Components are a mix of state and behavior. Thus, when we test, we typically want
+to know:
+* Did the state of the object change as expected?
+* Did the behavior occur that I expected?
+
+Sometimes we want to know one or the other; sometimes we want to know both.
+
+Here are some "assertion patterns"\* to help you get started.
+
+h3. Resulting-State Assertion
+
+The resulting-state assertion tests data. It says "I'm doing something to my object
+that will change that object's data, or 'state'. I'm going to test that the resulting
+state of my object is as I expect". A simple example is the common "bank account"
+or "transaction" example: You have two accounts, you transfer $20 from one account
+to another, and you test that the first account is 20 bucks shorter and the second
+account has that 20 bucks. Here's a different example, using a typical "User" object:
+
+
+
+{code:title=Resulting-State Assertion}
+&lt;cffunction name="testAddPrivilegeGroup"&gt;
+	&lt;cfset user.addPrivilegeGroup("admin")&gt;
+	&lt;!--- verify the internal state of the user ---&gt;
+	&lt;cfset assertTrue(user.belongsToGroup("admin"))&gt;
+&lt;/cffunction&gt;
+
+&lt;cffunction name="testAddPrivilege"&gt;
+	&lt;cfset user.addPrivilege("DeleteOtherUsers")&gt;
+	&lt;!--- verify the internal state of the user ---&gt;
+	&lt;cfset assertTrue(user.hasPrivilegeTo("DeleteOtherUsers"))&gt;
+&lt;/cffunction&gt;
+{code}
+
+h3. Guard Assertion
+
+The guard assertion is simply a slight variant on the resulting state assertion; typically,
+the difference is that toward the top of the test, before you get into the "guts"
+of your assertion(s), you check the object for some condition that you want to ensure
+exists before proceeding with the meat of your tests. Think of it as "If this condition
+isn't true, I want to fail right now because the rest of the tests don't matter".
+Usually the "guard" is just a simple assertion for equality, often to check that a
+"default" condition exists. In our example here, we're simply checking that our user
+object always starts without the privileges we're adding. IF the user object already
+had those privileges, then that means something tinkered with our object (perhaps
+indicating a problem in our setup function) and we got a problem here, Houston, and
+we want to fail right now. 
+
+{code:title=Guard Assertion}
+&lt;cffunction name="testAddPrivilegeGroup"&gt;
+	&lt;!--- our  'guard': ensure we are starting fresh ---&gt;
+	&lt;cfset assertFalse(user.belongsToGroup("admin"))&gt;
+	&lt;cfset user.addPrivilegeGroup("admin")&gt;
+	&lt;!--- verify the internal state of the user ---&gt;
+	&lt;cfset assertTrue(user.belongsToGroup("admin"))&gt;
+&lt;/cffunction&gt;
+
+&lt;cffunction name="testAddPrivilege"&gt;
+	&lt;!--- our  'guard': ensure we are starting fresh ---&gt;
+	&lt;cfset assertFalse(user.hasPrivilegeTo("DeleteOtherUsers"))&gt;	
+	&lt;cfset user.addPrivilege("DeleteOtherUsers")&gt;
+	&lt;!--- verify the internal state of the user ---&gt;
+	&lt;cfset assertTrue(user.hasPrivilegeTo("DeleteOtherUsers"))&gt;
+&lt;/cffunction&gt;
+{code}
+
+h3. Different instances, same data
+
+The different-instances, same-data pattern is common in DAO testing. Essentially,
+we're asserting that two objects are different instances but contain the same data.
+In MXUnit, you can test for "different instance" by using the assertNotSame() assertion.
+
+
+{code:title=Different instances, same data}
+&lt;cffunction name="testSaveWithRead"&gt;
+	&lt;cfset dao.save(user)&gt;		
+	&lt;cfset user2 = dao.read(user.getUserID())&gt;
+	&lt;!--- assert they're not the same instance ---&gt;
+	&lt;cfset assertNotSame(user,user2)&gt;
+	&lt;!--- one final check... assert the UUIDs aren't the same ---&gt;
+	&lt;cfset assertTrue( user.getUUID() neq user2.getUUID(), "user UUID and user2 UUID
+should not be the same but are")&gt;
+			
+	&lt;cfset assertEquals(user.getUserID(),user2.getUserID())&gt;
+	&lt;cfset assertEquals(user.getCreateTS(),user2.getCreateTS())&gt;
+			
+	&lt;!--- is there an easier way? could we use any of the functions in the baseobject
+for comparisons so we don't have to test all these fields? ---&gt;
+	&lt;cfset assertEquals(user.XXXXX,user2.XXXXX)&gt;
+&lt;/cffunction&gt;
+{code}
+
+
+h3. "Delta" Assertion
+
+Sometimes you can't assert an absolute equality (like "My list is now 5 elements long").
+Sometimes, you have to assert equality relative to some previous state. In the example
+below, imagine you're hooking into some scheduling mechanism (this would be for an
+integration test, for example). We don't know exactly what getTotalScheduled() will
+return at any given test run. Maybe it's 1. Maybe it's 30. Who knows. What we want
+to test is that when we schedule one additional thing, our scheduler's "totalScheduled"
+count increases by 1. Again, the result could be 2 or it could be 31. We don't know.
+This type of assertion, where we compare the state right before and right after performing
+some task, is called "delta", or difference, assertion. [view plain|http://mxunit.org/doc/index.cfm?doc=assertionpatterns#][copy
+to clipboard|http://mxunit.org/doc/index.cfm?doc=assertionpatterns#][print|http://mxunit.org/doc/index.cfm?doc=assertionpatterns#][?|http://mxunit.org/doc/index.cfm?doc=assertionpatterns#]
+# &lt;cffunction&amp;nbsp;name="testScheduleSomething"&gt;
+# &amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&lt;cfset&amp;nbsp;obj&amp;nbsp;=&amp;nbsp;createObject("component","SchedulableObject")&gt;
+# &amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&lt;cfset&amp;nbsp;currentlyScheduled&amp;nbsp;=&amp;nbsp;scheduler.getTotalScheduled()&gt;
+# &amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&lt;cfset&amp;nbsp;scheduler.scheduleSomething(obj)&gt;
+# &amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&lt;cfset&amp;nbsp;assertEquals(currentlyScheduled+1,&amp;nbsp;scheduler.getTotalScheduled())&gt;
+# &lt;/cffunction&gt;&amp;nbsp;&amp;nbsp;&lt;cffunction name="testScheduleSomething"&gt;
+&lt;cfset obj = createObject("component","SchedulableObject")&gt;
+&lt;cfset currentlyScheduled = scheduler.getTotalScheduled()&gt;
+&lt;cfset scheduler.scheduleSomething(obj)&gt;
+&lt;cfset assertEquals(currentlyScheduled+1, scheduler.getTotalScheduled())&gt;
+&lt;/cffunction&gt;
+And here's what it might look like for our User object:[view plain|http://mxunit.org/doc/index.cfm?doc=assertionpatterns#][copy
+to clipboard|http://mxunit.org/doc/index.cfm?doc=assertionpatterns#][print|http://mxunit.org/doc/index.cfm?doc=assertionpatterns#][?|http://mxunit.org/doc/index.cfm?doc=assertionpatterns#]
+# &lt;cffunction&amp;nbsp;name="testPrivilegeCount"&gt;
+# &amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&lt;cfset&amp;nbsp;currentPrivilegeCount&amp;nbsp;=&amp;nbsp;user.getPrivilegeCount()&gt;
+# &amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&lt;cfset&amp;nbsp;user.addPrivilege("ChangeOwnPassword")&gt;
+# &amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&lt;cfset&amp;nbsp;assertEquals(currentPrivilegeCount+1,&amp;nbsp;user.getPrivilegeCount())&gt;
+# &lt;/cffunction&gt;&amp;nbsp;&amp;nbsp;&lt;cffunction name="testPrivilegeCount"&gt;
+&lt;cfset currentPrivilegeCount = user.getPrivilegeCount()&gt;
+&lt;cfset user.addPrivilege("ChangeOwnPassword")&gt;
+&lt;cfset assertEquals(currentPrivilegeCount+1, user.getPrivilegeCount())&gt;
+&lt;/cffunction&gt;
+
+h3. Interaction Assertion
+
+With interaction assertions, we're testing to make sure an object and a collaborator
+worked together as we expected. A great example of an interaction is a "bean" style
+object, like perhaps a "User", and the DAO for that object, like a UserDAO: [view
+plain|http://mxunit.org/doc/index.cfm?doc=assertionpatterns#][copy to clipboard|http://mxunit.org/doc/index.cfm?doc=assertionpatterns#][print|http://mxunit.org/doc/index.cfm?doc=assertionpatterns#][?|http://mxunit.org/doc/index.cfm?doc=assertionpatterns#]
+# &lt;cffunction&amp;nbsp;name="testSave"
+# &amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&lt;cfset&amp;nbsp;origUUID&amp;nbsp;=&amp;nbsp;user.getUUID()&gt;
+# &amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&lt;cfset&amp;nbsp;dao.save(user)&gt;
+# &amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&lt;cfset&amp;nbsp;newUserID&amp;nbsp;=&amp;nbsp;user.getUserID()&gt;
+# &amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&lt;\!-\--&amp;nbsp;&amp;nbsp;Assert&amp;nbsp;that&amp;nbsp;our&amp;nbsp;DAO&amp;nbsp;updated&amp;nbsp;our&amp;nbsp;user&amp;nbsp;object&amp;nbsp;with&amp;nbsp;its&amp;nbsp;ID&amp;nbsp;after&amp;nbsp;saving&amp;nbsp;&amp;nbsp;-\--&gt;
+# &amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&lt;cfset&amp;nbsp;assertTrue(newUserID&amp;nbsp;GT&amp;nbsp;0)&gt;
+# &amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&lt;cfset&amp;nbsp;user.setEmail("somethingnew@somethingnew.com")&gt;
+# &amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&lt;cfset&amp;nbsp;dao.save(user)&gt;
+# &amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&lt;\!-\--&amp;nbsp;We&amp;nbsp;don't&amp;nbsp;care&amp;nbsp;about&amp;nbsp;testing&amp;nbsp;the&amp;nbsp;update&amp;nbsp;here...&amp;nbsp;just&amp;nbsp;that&amp;nbsp;the&amp;nbsp;insert&amp;nbsp;didn't&amp;nbsp;change&amp;nbsp;the&amp;nbsp;user&amp;nbsp;object's&amp;nbsp;key&amp;nbsp;-\--&gt;
+# &amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&lt;cfset&amp;nbsp;assertEquals(newUserID,user.getUserID())&gt;
+# &amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&lt;cfset&amp;nbsp;assertEquals(origUUID,user.getUUID())&gt;
+# &lt;/cffunction&gt;&amp;nbsp;&amp;nbsp;&lt;cffunction name="testSave"
+&lt;cfset origUUID = user.getUUID()&gt;
+&lt;cfset dao.save(user)&gt;
+&lt;cfset newUserID = user.getUserID()&gt;
+&lt;\!\--\-  Assert that our DAO updated our user object with its ID after saving  --\-&gt;
+&lt;cfset assertTrue(newUserID GT 0)&gt;
+&lt;cfset user.setEmail("somethingnew@somethingnew.com")&gt;
+&lt;cfset dao.save(user)&gt;
+&lt;\!\--\- We don't care about testing the update here... just that the insert didn't
+change the user object's key --\-&gt;
+&lt;cfset assertEquals(newUserID,user.getUserID())&gt;
+&lt;cfset assertEquals(origUUID,user.getUUID())&gt;
+&lt;/cffunction&gt;
+\\
+
+786488
+
+
+
+Verstion: 2
+
+Created By: marcesher
+
+Created On: 2009-01-18 13:43:45.000
+
+Last Update By: marcesher
+
+Last Update On: 2009-01-18 13:46:25.000
+
+
+

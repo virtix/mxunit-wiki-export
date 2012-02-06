@@ -1,0 +1,36 @@
+
+
+
+Features &amp; Engine Support Info
+
+5767221
+{note}
+:: DRAFT ::
+*This is a new work in progress.*
+Comments and suggestions encouraged\!
+{note}
+
+
+||Feature||CF9||CF8||CF7||Railo||OBD|
+|Ant|&amp;#9745;|&amp;#9745;|&amp;#9745;|&amp;#9745;|&amp;#9745;|
+|Assertions|&amp;#9745;|&amp;#9745;|&amp;#9745;|&amp;#9745;|&amp;#9745;|
+|Dataproviders|&amp;#9745;|&amp;#9745;| | | |
+|Mocking|&amp;#9745;|&amp;#9745;| | | |
+|Plugin|&amp;#9745;|&amp;#9745;|&amp;#9745;|&amp;#9745;| |
+
+5734457
+
+
+
+Verstion: 1
+
+Created By: virtix
+
+Created On: 2010-07-28 12:12:26.000
+
+Last Update By: virtix
+
+Last Update On: 2010-07-28 12:12:26.000
+
+
+

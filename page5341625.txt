@@ -1,0 +1,37 @@
+
+
+
+How to use it
+
+5374326
+In general the steps will follow this simple pattern:
+# Create the mock
+# Define behaviour
+# Inject the mock into the component under test
+# Run the component under test
+# Optionally verify how the mock was called
+
+{pagetree:root=How to use it}
+
+There's a subtle yet important difference between mocking and stubbing. Stubbing typically
+involves faking what _data_ is returned by an object, while mocking is faking the
+_behaviour_. See the next pages on [Stubbing] and [Mocking] for examples.
+
+
+
+5341625
+
+
+
+Verstion: 4
+
+Created By: virtix
+
+Created On: 2010-03-26 10:02:24.000
+
+Last Update By: bob.silverberg@gmail.com
+
+Last Update On: 2010-06-21 15:38:10.000
+
+
+

@@ -1,0 +1,232 @@
+
+
+
+Custom Assertions
+
+4718635
+h2. Custom Assertions - How To
+
+Sometimes you need complex and/or repetitive assertions. This can put a damper on
+any TDD effort. So, we provide you an easy way to add custom assertions to your tests
+without having to change the mxunit core.
+
+The steps for creating your custom assertion are as follows:
+# Write a test for your assertion
+# Write the assertion
+# Decide how you want to load it: Always or only on selected tests.
+
+Assertion Rules:
+
+# Your assertion will need to throw mxunit.exception.AssertionFailedError or use an
+existing     assertion that throws this exception.
+# If you want to have optional first or last parameter message, you will need to call
+normalizeArguments(arguments) in your code.
+
+*Custom Assertion Example:* Say you need to frequently validate email addresses. You
+can do this with a pretty regular expression such as this :
+^[A-Za-z0-9](([_\.\-]?[a-zA-Z0-9]+)*)@([A-Za-z0-9]+)(([\.\-]?[a-zA-Z0-9]+)*)\.([A-Za-z]{2,})$The
+code for this might look like:[|http://mxunit.org/doc/index.cfm?doc=customassertions#][
+|http://mxunit.org/doc/index.cfm?doc=customassertions#]
+# &lt;cffunction&amp;nbsp;name="testValidEmailAddress"&gt;&amp;nbsp;&amp;nbsp;
+# &amp;nbsp;&amp;nbsp;&lt;cfscript&gt;&amp;nbsp;&amp;nbsp;
+# &amp;nbsp;&amp;nbsp;&amp;nbsp;var&amp;nbsp;emailRegEx&amp;nbsp;=&amp;nbsp;"^\[A-Za-z0-9\]((\[_\.\-\]?\[a-zA-Z0-9\]+)*)@(\[A-Za-z0-9\]+)((\[\.\-\]?\[a-zA-Z0-9\]+)*)\.(\[A-Za-z\]{2,})$";&amp;nbsp;&amp;nbsp;
+# &amp;nbsp;&amp;nbsp;&amp;nbsp;var&amp;nbsp;emailAddress&amp;nbsp;=&amp;nbsp;"somebody@somewhere.com";&amp;nbsp;&amp;nbsp;
+# &amp;nbsp;&amp;nbsp;&amp;nbsp;assertTrue(refind(emailRegEx,emailAddress)&amp;nbsp;lt&amp;nbsp;1,"Invalid&amp;nbsp;email&amp;nbsp;address&amp;nbsp;format");&amp;nbsp;&amp;nbsp;
+# &amp;nbsp;&amp;nbsp;&lt;/cfscript&gt;&amp;nbsp;&amp;nbsp;
+# &lt;/cffunction&gt;&amp;nbsp;&amp;nbsp;&lt;cffunction name="testValidEmailAddress"&gt;
+&lt;cfscript&gt;
+var emailRegEx = "^[A-Za-z0-9](([_\.\-]?[a-zA-Z0-9]+)*)@([A-Za-z0-9]+)(([\.\-]?[a-zA-Z0-9]+)*)\.([A-Za-z]{2,})$";
+var emailAddress = "somebody@somewhere.com";
+assertTrue(refind(emailRegEx,emailAddress) lt 1,"Invalid email address format");
+&lt;/cfscript&gt;
+&lt;/cffunction&gt;
+This is fine, but you could save yourself some typing and some Ctrl+C/Ctrl+V errors.
+How about something that looks like this instead?[|http://mxunit.org/doc/index.cfm?doc=customassertions#][
+|http://mxunit.org/doc/index.cfm?doc=customassertions#]
+# &lt;cffunction&amp;nbsp;name="testValidEmailAddress"&gt;&amp;nbsp;&amp;nbsp;
+# &amp;nbsp;&amp;nbsp;&lt;cfscript&gt;&amp;nbsp;&amp;nbsp;
+# &amp;nbsp;&amp;nbsp;&amp;nbsp;var&amp;nbsp;emailAddress&amp;nbsp;=&amp;nbsp;"somebody@somewhere.com";&amp;nbsp;&amp;nbsp;
+# &amp;nbsp;&amp;nbsp;&amp;nbsp;assertIsValidEmail(emailAddress);&amp;nbsp;&amp;nbsp;
+# &amp;nbsp;&amp;nbsp;&lt;/cfscript&gt;&amp;nbsp;&amp;nbsp;
+# &lt;/cffunction&gt;&amp;nbsp;&amp;nbsp;&lt;cffunction name="testValidEmailAddress"&gt;
+&lt;cfscript&gt;
+var emailAddress = "somebody@somewhere.com";
+assertIsValidEmail(emailAddress);
+&lt;/cfscript&gt;
+&lt;/cffunction&gt;
+Much better\! And this has the added bonus of _not_ having to find a replace hundreds
+of complex regular expressions in your code; you would just do that in one place.
+Here's how:
+
+
+1. Write a test for your assertion:[|http://mxunit.org/doc/index.cfm?doc=customassertions#][
+|http://mxunit.org/doc/index.cfm?doc=customassertions#]
+# &lt;cfcomponent&amp;nbsp;name="ValidEmailAssertionTest"&amp;nbsp;extends="mxunit.framework.TestCase"&amp;nbsp;&gt;&amp;nbsp;&amp;nbsp;
+# &amp;nbsp;&amp;nbsp;
+# &lt;cffunction&amp;nbsp;name="testAssertIsValidEmail"&gt;&amp;nbsp;&amp;nbsp;
+# &amp;nbsp;&amp;nbsp;&lt;cfscript&gt;&amp;nbsp;&amp;nbsp;
+# &amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;var&amp;nbsp;goodEmailAddress&amp;nbsp;=&amp;nbsp;"somebody@somewhere.com";&amp;nbsp;&amp;nbsp;
+# &amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;var&amp;nbsp;badEmailAddress&amp;nbsp;=&amp;nbsp;"so&amp;nbsp;~~/\/\/\/\/\~~&amp;nbsp;m=+ebod$y@someplace.zombie";&amp;nbsp;&amp;nbsp;
+# &amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;addAssertDecorator("mxunit.framework.ext.ValidEmailAssertion");&amp;nbsp;&amp;nbsp;
+# &amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;assertIsValidEmail(goodEmailAddress);&amp;nbsp;&amp;nbsp;
+# &amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;try{&amp;nbsp;&amp;nbsp;
+# &amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;//expect&amp;nbsp;failure&amp;nbsp;&amp;nbsp;
+# &amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;assertIsValidEmail(badEmailAddress);&amp;nbsp;&amp;nbsp;
+# &amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;}&amp;nbsp;&amp;nbsp;
+# &amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;catch(mxunit.exception.AssertionFailedError&amp;nbsp;e){}&amp;nbsp;&amp;nbsp;
+# &amp;nbsp;&amp;nbsp;&lt;/cfscript&gt;&amp;nbsp;&amp;nbsp;
+# &lt;/cffunction&gt;&amp;nbsp;&amp;nbsp;
+# &amp;nbsp;&amp;nbsp;
+# &lt;/cfcomponent&gt;&amp;nbsp;&amp;nbsp;&lt;cfcomponent name="ValidEmailAssertionTest" extends="mxunit.framework.TestCase"
+&gt;
+
+&lt;cffunction name="testAssertIsValidEmail"&gt;
+&lt;cfscript&gt;
+var goodEmailAddress = "somebody@somewhere.com";
+var badEmailAddress = "so ~~/\/\/\/\/\~~ m=+ebod$y@someplace.zombie";
+addAssertDecorator("mxunit.framework.ext.ValidEmailAssertion");
+assertIsValidEmail(goodEmailAddress);
+try{
+//expect failure
+assertIsValidEmail(badEmailAddress);
+}
+catch(mxunit.exception.AssertionFailedError e){}
+&lt;/cfscript&gt;
+&lt;/cffunction&gt;
+
+&lt;/cfcomponent&gt;
+The above fails because we do not yet have ValidEmailAssertion written. *Note{*}the
+addAssertDecorator("mxunit.framework.ext.ValidEmailAssertion") statement. This tells
+the MXUnit framework to load your assertion at runtime.
+
+2. Write the assertion[|http://mxunit.org/doc/index.cfm?doc=customassertions#][
+|http://mxunit.org/doc/index.cfm?doc=customassertions#]
+# &lt;cfcomponent&amp;nbsp;name="ValidEmailAssertion"&amp;nbsp;&gt;&amp;nbsp;&amp;nbsp;
+# &amp;nbsp;&amp;nbsp;
+# &lt;cffunction&amp;nbsp;name="assertIsValidEmail"&amp;nbsp;returntype="boolean"&amp;nbsp;&gt;&amp;nbsp;&amp;nbsp;
+# &amp;nbsp;&amp;nbsp;&lt;cfargument&amp;nbsp;name="email"&amp;nbsp;type="string"&amp;nbsp;/&gt;&amp;nbsp;&amp;nbsp;
+# &amp;nbsp;&amp;nbsp;&lt;cfargument&amp;nbsp;name="message"&amp;nbsp;type="string"&amp;nbsp;required="false"&amp;nbsp;default="Email&amp;nbsp;address&amp;nbsp;does&amp;nbsp;not&amp;nbsp;appear&amp;nbsp;valid."&amp;nbsp;/&gt;&amp;nbsp;&amp;nbsp;
+# &amp;nbsp;&amp;nbsp;
+# &amp;nbsp;&amp;nbsp;&lt;cfscript&gt;&amp;nbsp;&amp;nbsp;
+# &amp;nbsp;&amp;nbsp;&amp;nbsp;arguments&amp;nbsp;=&amp;nbsp;normalizeArguments(arguments);&amp;nbsp;&amp;nbsp;
+# &amp;nbsp;&amp;nbsp;&amp;nbsp;emailRegEx&amp;nbsp;=&amp;nbsp;"^\[A-Za-z0-9\]((\[_\.\-\]?\[a-zA-Z0-9\]+)*)@(\[A-Za-z0-9\]+)((\[\.\-\]?\[a-zA-Z0-9\]+)*)\.(\[A-Za-z\]{2,})$";&amp;nbsp;&amp;nbsp;
+# &amp;nbsp;&amp;nbsp;&amp;nbsp;actual&amp;nbsp;=&amp;nbsp;refind(emailRegEx,arguments.email);&amp;nbsp;&amp;nbsp;
+# &amp;nbsp;&amp;nbsp;&amp;nbsp;&lt;/cfscript&gt;&amp;nbsp;&amp;nbsp;
+# &amp;nbsp;&amp;nbsp;
+# &amp;nbsp;&amp;nbsp;&lt;cfif&amp;nbsp;actual&amp;nbsp;lt&amp;nbsp;1&gt;&amp;nbsp;&amp;nbsp;
+# &amp;nbsp;&amp;nbsp;&lt;cfthrow&amp;nbsp;type="mxunit.exception.AssertionFailedError"&amp;nbsp;message="#arguments.message#"&amp;nbsp;/&gt;&amp;nbsp;&amp;nbsp;
+# &amp;nbsp;&amp;nbsp;&lt;/cfif&gt;&amp;nbsp;&amp;nbsp;
+# &amp;nbsp;&amp;nbsp;&lt;cfreturn&amp;nbsp;true&amp;nbsp;/&gt;&amp;nbsp;&amp;nbsp;
+# &lt;/cffunction&gt;&amp;nbsp;&amp;nbsp;
+# &amp;nbsp;&amp;nbsp;
+# &lt;/cfcomponent&gt;&amp;nbsp;&amp;nbsp;&lt;cfcomponent name="ValidEmailAssertion" &gt;
+
+&lt;cffunction name="assertIsValidEmail" returntype="boolean" &gt;
+&lt;cfargument name="email" type="string" /&gt;
+&lt;cfargument name="message" type="string" required="false" default="Email address does
+not appear valid." /&gt;
+
+&lt;cfscript&gt;
+arguments = normalizeArguments(arguments);
+emailRegEx = "^[A-Za-z0-9](([_\.\-]?[a-zA-Z0-9]+)*)@([A-Za-z0-9]+)(([\.\-]?[a-zA-Z0-9]+)*)\.([A-Za-z]{2,})$";
+actual = refind(emailRegEx,arguments.email);
+&lt;/cfscript&gt;
+
+&lt;cfif actual lt 1&gt;
+&lt;cfthrow type="mxunit.exception.AssertionFailedError" message="#arguments.message#"
+/&gt;
+&lt;/cfif&gt;
+&lt;cfreturn true /&gt;
+&lt;/cffunction&gt;
+
+&lt;/cfcomponent&gt;
+You could also leverage existing assertions and write the following instead:[|http://mxunit.org/doc/index.cfm?doc=customassertions#][
+|http://mxunit.org/doc/index.cfm?doc=customassertions#]
+# &lt;cfcomponent&amp;nbsp;name="ValidEmailAssertion"&amp;nbsp;&gt;&amp;nbsp;&amp;nbsp;
+# &amp;nbsp;&amp;nbsp;
+# &lt;cffunction&amp;nbsp;name="assertIsValidEmail"&amp;nbsp;returntype="boolean"&amp;nbsp;&gt;&amp;nbsp;&amp;nbsp;
+# &amp;nbsp;&amp;nbsp;&lt;cfargument&amp;nbsp;name="email"&amp;nbsp;type="string"&amp;nbsp;/&gt;&amp;nbsp;&amp;nbsp;
+# &amp;nbsp;&amp;nbsp;&lt;cfargument&amp;nbsp;name="message"&amp;nbsp;type="string"&amp;nbsp;required="false"&amp;nbsp;default="Email&amp;nbsp;address&amp;nbsp;does&amp;nbsp;not&amp;nbsp;appear&amp;nbsp;valid."&amp;nbsp;/&gt;&amp;nbsp;&amp;nbsp;
+# &amp;nbsp;&amp;nbsp;
+# &amp;nbsp;&amp;nbsp;&lt;cfscript&gt;&amp;nbsp;&amp;nbsp;
+# &amp;nbsp;&amp;nbsp;&amp;nbsp;arguments&amp;nbsp;=&amp;nbsp;normalizeArguments(arguments);&amp;nbsp;&amp;nbsp;
+# &amp;nbsp;&amp;nbsp;&amp;nbsp;emailRegEx&amp;nbsp;=&amp;nbsp;"^\[A-Za-z0-9\]((\[_\.\-\]?\[a-zA-Z0-9\]+)*)@(\[A-Za-z0-9\]+)((\[\.\-\]?\[a-zA-Z0-9\]+)*)\.(\[A-Za-z\]{2,})$";&amp;nbsp;&amp;nbsp;
+# &amp;nbsp;&amp;nbsp;&amp;nbsp;actual&amp;nbsp;=&amp;nbsp;refind(emailRegEx,arguments.email);&amp;nbsp;&amp;nbsp;
+# &amp;nbsp;&amp;nbsp;&amp;nbsp;assertTrue(refind(emailRegEx,arguments.email)&amp;nbsp;lt&amp;nbsp;1,&amp;nbsp;arguments.message);&amp;nbsp;&amp;nbsp;
+# &amp;nbsp;&amp;nbsp;&lt;/cfscript&gt;&amp;nbsp;&amp;nbsp;
+# &amp;nbsp;&amp;nbsp;
+# &amp;nbsp;&amp;nbsp;&amp;nbsp;&lt;cfreturn&amp;nbsp;true&amp;nbsp;/&gt;&amp;nbsp;&amp;nbsp;
+# &lt;/cffunction&gt;&amp;nbsp;&amp;nbsp;
+# &amp;nbsp;&amp;nbsp;
+# &lt;/cfcomponent&gt;&amp;nbsp;&amp;nbsp;&lt;cfcomponent name="ValidEmailAssertion" &gt;
+
+&lt;cffunction name="assertIsValidEmail" returntype="boolean" &gt;
+&lt;cfargument name="email" type="string" /&gt;
+&lt;cfargument name="message" type="string" required="false" default="Email address does
+not appear valid." /&gt;
+
+&lt;cfscript&gt;
+arguments = normalizeArguments(arguments);
+emailRegEx = "^[A-Za-z0-9](([_\.\-]?[a-zA-Z0-9]+)*)@([A-Za-z0-9]+)(([\.\-]?[a-zA-Z0-9]+)*)\.([A-Za-z]{2,})$";
+actual = refind(emailRegEx,arguments.email);
+assertTrue(refind(emailRegEx,arguments.email) lt 1, arguments.message);
+&lt;/cfscript&gt;
+
+&lt;cfreturn true /&gt;
+&lt;/cffunction&gt;
+
+&lt;/cfcomponent&gt;
+Note the arguments = normalizeArguments(arguments) statement. This allows for the
+flexibility if you want to be able to pass the message parameter first or last.
+
+Ok. Now when we run our test, we're in the green. Our new assertion works as expected.
+Wahoo\!
+
+3. Decide how you want to load the new code. The options are for each test or for{_}all_
+tests. You've already seen how to load custom assertions in your code. This can also
+be done in setUp().[|http://mxunit.org/doc/index.cfm?doc=customassertions#][
+|http://mxunit.org/doc/index.cfm?doc=customassertions#]
+# &lt;cfcomponent&amp;nbsp;name="ValidEmailAssertionTest"&amp;nbsp;extends="mxunit.framework.TestCase"&amp;nbsp;&gt;&amp;nbsp;&amp;nbsp;
+# &amp;nbsp;...&amp;nbsp;&amp;nbsp;
+# &lt;cffunction&amp;nbsp;name="setUp"&gt;&amp;nbsp;&amp;nbsp;
+# &amp;nbsp;&amp;nbsp;&lt;cfscript&gt;&amp;nbsp;&amp;nbsp;
+# &amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;addAssertDecorator("mxunit.framework.ext.ValidEmailAssertion");&amp;nbsp;&amp;nbsp;
+# &amp;nbsp;&amp;nbsp;&lt;/cfscript&gt;&amp;nbsp;&amp;nbsp;
+# &lt;/cffunction&gt;&amp;nbsp;&amp;nbsp;
+# &amp;nbsp;&amp;nbsp;
+# &lt;/cfcomponent&gt;&amp;nbsp;&amp;nbsp;&lt;cfcomponent name="ValidEmailAssertionTest" extends="mxunit.framework.TestCase"
+&gt;
+...
+&lt;cffunction name="setUp"&gt;
+&lt;cfscript&gt;
+addAssertDecorator("mxunit.framework.ext.ValidEmailAssertion");
+&lt;/cfscript&gt;
+&lt;/cffunction&gt;
+
+&lt;/cfcomponent&gt;
+What if you want your new assertion to _always_ be available? Edit the mxunit-config.xml
+file located in {mxunit install}/mxunit/framework/ Add the following line :[|http://mxunit.org/doc/index.cfm?doc=customassertions#][
+|http://mxunit.org/doc/index.cfm?doc=customassertions#]
+# &lt;?xml&amp;nbsp;version="1.0"&amp;nbsp;encoding="UTF-8"&amp;nbsp;?&gt;&amp;nbsp;&amp;nbsp;
+# &amp;nbsp;&lt;mxunit-config&gt;&amp;nbsp;&amp;nbsp;
+# &amp;nbsp;&amp;nbsp;...&amp;nbsp;&amp;nbsp;
+# &amp;nbsp;&amp;nbsp;&lt;config-element&amp;nbsp;type="assertionExtension"&amp;nbsp;path="mxunit.framework.ext.ValidEmailAssertion"&amp;nbsp;autoload="true"&amp;nbsp;override="false"&amp;nbsp;/&gt;&amp;nbsp;&amp;nbsp;
+# &amp;nbsp;&amp;nbsp;...&amp;nbsp;&amp;nbsp;
+# &amp;nbsp;&lt;/mxunit-config&gt;&amp;nbsp; 
+
+4685869
+
+
+
+Verstion: 1
+
+Created By: virtix
+
+Created On: 2010-01-15 16:18:50.000
+
+Last Update By: virtix
+
+Last Update On: 2010-01-15 16:18:50.000
+
+
+

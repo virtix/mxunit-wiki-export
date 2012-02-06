@@ -1,0 +1,64 @@
+
+
+
+Configure and Test the Plugin
+
+4325514
+*NOTE: You've already downloaded the mxunit framework. For the example below to work,
+create a new project in eclipse named &amp;quot;mxunit&amp;quot; (or whatever) and point it
+to your mxunit framework install location (c:\inetpub\wwwroot\mxunit for example)*
+
+
+*When Eclipse has restarted configure and test the MXUnit Eclipse Plugin installation*
+
+h3. Finding Tests
+
+# In Eclipse, go to Window &gt; Preferences &gt; MXUnit. 
+Make sure the paths listed point to your MXUnit intallation and follow the directions
+listedand click OK.
+!plugin-install-12.png!
+# Open the MXUnit View 
+!plugin-install-13.png!
+# Click the "Search" icon (or hit CTRL-F):  
+!plugin-install-14.png!
+# Type "PluginDemoTests". Click OK  
+!plugin-install-15.png!
+# It'll take a few seconds to start up if this is the first time running the tests.
+You'll then get an eclipse Error. This is expected, because InvalidMarkupTest.cfc
+is a bad file.Click OK on the error message.  
+!plugin-install-16.png!
+# Each of the test cases in the entire directory of tests will load into the tree.
+It does &lt;em&gt;not&lt;/em&gt; run the tests. 
+!plugin-install-17.png!
+
+h3. Running the tests:
+
+# Click the green "Play" button (or hit Enter).The tests will run. 
+!plugin-install-18.png!
+# To see any output from the tests, right click in the tree and select "Open test
+case results in browser". or hit "F8". or hit "b".
+# To run all tests again, hit the green play arrow.
+# To run just the failures, hit the red play arrow 
+# To run just one test or a group of tests, select each test and hold the Ctrl key,
+then press the green plat arrow.
+# You can can also doublee-click  individual tests or top level tests to run those.
+# To clear all results, click the "refresh" icon or hit "F5" 
+
+
+4292771
+
+
+
+
+Verstion: 6
+
+Created By: marcesher
+
+Created On: 2009-01-18 14:20:42.000
+
+Last Update By: zoramite
+
+Last Update On: 2009-11-01 01:24:14.000
+
+
+

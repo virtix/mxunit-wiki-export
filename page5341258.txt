@@ -1,0 +1,51 @@
+
+
+
+
+
+
+Wildcard Pattern Matching
+
+5374015
+
+
+A lot of times, especially while creating stubs, you will just want to mimic some
+desired behavior and not be concerned about about what parameters are being passed
+to the mock. This is easily accomplished by using wildcard patterns. Example:
+
+{*} is 0 or more parameters of any type and {+} is one or more parameters of any type.
+
+{code}&lt;cfset myMock.doSomething ('{*}').returns(myQuery) /&gt;{code}
+
+
+This says that any call made to doSomething that has zero or more parameters will
+return myQuery. Likewise,
+
+{code}&lt;cfset myMock.doSomething ('{+}').returns(myQuery) /&gt;{code}
+
+Says that any call made to doSomething with one or more parameters will return myQuery.
+
+It's important to note that the distinction of this call:
+
+{code}&lt;cfset myMock.doSomething () /&gt;{code}
+
+This means that doSomthing() expects exactly 0 parameters.
+
+
+5341258
+
+
+
+
+Verstion: 1
+
+Created By: virtix
+
+Created On: 2010-03-26 10:45:01.000
+
+Last Update By: virtix
+
+Last Update On: 2010-03-26 10:45:01.000
+
+
+

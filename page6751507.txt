@@ -1,0 +1,300 @@
+
+
+
+Built-In Assertions
+
+6784221
+{toc}
+This document outlines the core of unit testing, i.e. Assertions. Assertions are simple:
+You assert something, and if that assertion does not result in your expectation, the
+test fails. All code AFTER a failed assertion will NOT execute. Repeat: A failed assertion
+means the end of that test.
+
+This is why it's best practice to not load your test functions with lots of assertions.
+A single failed assertion means that any subsequent assertions in a test will not
+execute and thus you won't know if those assertions indicate further problems in your
+code.
+
+Need an assertion you don't see here? [Roll your own ...|Custom Assertions]
+
+Without further delay, our players, The Assertions:
+
+
+h3. assertTrue(boolean condition \[,String message\])
+
+assertTrue is one of the two "bread and butter" assertions in any testing framework.
+The philosophy is simple: you assert something to be true; if it's not, the test fails
+
+{code:title=assertTrue()}&lt;cffunction name="clearPrivilegesShouldClearPrivilegesFromObject"&gt;
+	&lt;cfset  obj = createObject("component","myObject")&gt;
+	&lt;cfset obj.addPrivilege("EditUsers")&gt;
+	&lt;cfset assertTrue( StructCount(obj.getPrivileges()),  "Guard assertion: Ensure we're
+starting out with privileges before testing clearPrivileges()")&gt;
+	&lt;cfset  result = obj.clearPrivileges()&gt;
+	&lt;cfset assertTrue( StructIsEmpty(obj.getPrivileges()), "clearPrivileges Should Have
+Emptied The Structure of privileges but didn't" )&gt;
+&lt;/cffunction&gt;
+{code}
+assertTrue has an opposite, assertFalse:
+
+h3. assertFalse(boolean condition \[, String message\])\*
+
+{code:title=assertFalse}&lt;cffunction name="clearPrivilegesShouldClearPrivilegesFromObject"&gt;
+	&lt;cfset  obj = createObject("component","myObject")&gt;
+	&lt;cfset obj.addPrivilege("EditUsers")&gt;
+	&lt;cfset assertFalse( StructIsEmpty(obj.getPrivileges()),  "Guard assertion: Ensure
+we're starting out with privileges before testing clearPrivileges()")&gt;
+	&lt;cfset  result = obj.clearPrivileges()&gt;
+	&lt;cfset assertTrue( StructIsEmpty(obj.getPrivileges()), "clearPrivileges Should Have
+Emptied The Structure of privileges but didn't" )&gt;
+&lt;/cffunction&gt;
+
+{code}
+
+h3. assert(boolean condition \[,String message\])
+
+assert is semantically equivalent to assertTrue, providing a shorter form :
+
+{code:title=assert()}&lt;cffunction name="testAssert"&gt;
+	&lt;cfset assert( 1 eq 1,  "Testing a true expression")&gt;
+	&lt;cfset assert( not 1 eq 2,  "Testing negated expression")&gt;
+&lt;/cffunction&gt;
+{code}
+
+h3. assertEquals*(any expected, any actual \[, String message\])
+
+assertEquals is the other core assertion. Here, you're asserting that some result
+equals some expected result. This could be two numbers, two strings, two structs,
+whatever. For now, MXUnit follows the JUnit pattern of using a single assertEquals
+to compare any type of data.
+
+{code:title=assertEquals()}&lt;cffunction name="clearPrivilegesShouldClearPrivilegesFromObject"&gt;
+	&lt;cfset  obj = createObject("component","myObject")&gt;
+	&lt;cfset obj.addPrivilege("EditUsers")&gt;
+	&lt;cfset assertEquals(1, StructCount(obj.getPrivileges()),  "Guard assertion: Ensure
+we're starting out with privileges before testing clearPrivileges()")&gt;
+	&lt;cfset  result = obj.clearPrivileges()&gt;
+	&lt;cfset assertEquals(0, StructCount(obj.getPrivileges()), "clearPrivileges Should
+Have Emptied The Structure of privileges but didn't" )&gt;
+&lt;/cffunction&gt;
+{code}
+
+h2. Comparing Arrays, Queries, and Structures
+
+MXUnit will do a deep compare for arrays, queries, and structures. It is *not* fail-fast,
+meaning that an assertEquals( struct1, struct2 ) will compare every key in the struct,
+including any nested structures or arrays, accumulating mismatches. Once every key
+is visited, the existence of mismatches will signal an assertion failure. Array, Query,
+and Struct comparisons will add a Structure result into the debug output if the assertion
+fails, and you can view the full set of differences from there.
+
+In addition, when using the Eclipse plugin, you can toggle the "Compare Dialog" to
+pop up Eclipse's comparison tool, which enables you to step through all the differences.
+
+Here's an example
+!CompareDialog.PNG|thumbnail!
+
+h3. fail*(String message)
+
+fail() is used to actively fail a test. It's useful when you're stubbing a test and
+you want to ensure it fails, like so:
+
+{code:title=fail()}&lt;cffunction name="addPrivilegeShouldHaveNoEffectIfPrivilegeExists"&gt;
+	&lt;cfset fail("test not yet implemented")&gt;
+&lt;/cffunction&gt;
+{code}
+
+It's also useful when you're testing an "error path", like so:
+
+{code:title=fail() to test Error Paths}&lt;cffunction name="addPrivilegesWithPunctuationShouldThrowError"&gt;
+	&lt;cfset var obj = createObject("component","myObject")&gt;
+	&lt;cftry&gt;
+		&lt;cfset obj.addPrivilege("Edit.User")&gt;
+		&lt;cfset fail("Should not get here. Function under test should've thrown an error")&gt;
+	&lt;cfcatch type="mxunit.exception.AssertionFailedError"&gt;
+		&lt;cfrethrow&gt;
+	&lt;/cfcatch&gt;
+	&lt;cfcatch type="any"&gt;&lt;!--- expect to get here ---&gt;&lt;/cfcatch&gt;
+	&lt;/cftry&gt;
+&lt;/cffunction&gt;
+{code}
+
+h3. failNotEquals*(any value, any value2  \[,String message\])
+
+Used to fail when two values do not equal. This doesn't perform any assertion... it's
+simply a convenience method for providing a specific type of failure message
+
+{code:title=failNotEquals()}&lt;cffunction name="demoFailNotEquals"&gt;
+	&lt;cfset failNotEquals(myObject1,myOtherObject, "These should not have the same value")&gt;
+&lt;/cffunction&gt;
+{code}
+
+h3. assertSame*(any obj1, any obj2  \[,String message\])
+
+Used to determine if the obj1 and obj2 refer to the same instance.
+Note that arrays in Adobe ColdFusion are passed by value, so, this will always fail
+for arrays.
+{code:title=assertSame()}&lt;cffunction name="initShouldReturnSelf"&gt;
+	&lt;cfset var obj = createObject("component","myObject")&gt;
+	&lt;cfset assertSame(obj,obj.init(), "These should be the same thang since init should
+return 'this'")&gt;
+&lt;/cffunction&gt;
+{code}
+
+h3. assertNotSame*(any obj1, any obj2  \[,String message\])
+
+Used to determine if the obj1 and obj2 _do not_ refer to the same instance.
+Note that arrays in Adobe ColdFusion are passed by value, so, this will always pass
+for arrays.
+
+{code:title=assertNotSame()}&lt;cffunction name="newInstanceShouldNotReturnSelf"&gt;
+	&lt;cfset var obj = createObject("component","myObjectFactory")&gt;
+	&lt;cfset assertNotSame(obj,obj.newInstance(), "These should not be the same thang since
+newInstance should return a new instance from the factory")&gt;
+&lt;/cffunction&gt;
+{code}
+
+h2. MXUnit Assertion Extensions
+
+These are extensions to the base set of assertions and are specific to ColdFusion.Note,
+that these are quite simple, can be easily implemented using the base assertions above,
+but are provided for convenience.
+
+*Note:* These extensions can be disabled at runtime by editing the mxunit-config.xml
+located in /mxunit/framework/ directory. Simply remove or comment out these line:
+
+{code:title=assertionExtension config-extension in mxunit-config.xml}	&lt;config-element
+type="assertionExtension" path="MXUnitAssertionExtensions" autoload="true" override="false"
+/&gt;
+	&lt;config-element type="assertionExtension" path="HamcrestAssert" autoload="true" override="false"
+/&gt;
+	&lt;config-element type="assertionExtension" path="XPathAssert" autoload="true" override="false"
+/&gt;
+{code}
+
+h3. assertXPath*(String xpath, any data, \[String text\], \[String message\])
+
+Searches data using xpath. If text is specified, it tries to match the exact text
+to  the xpath expression. Otherwise ,it returns true if any nodes are found that match
+the xpath expression. Note that, unlike most assertions, assertXPath returns an xml
+dom representation of any nodes found. This can be useful for further inspection.
+
+*Parameters* String xpath:    string representing an xpath expression
+any data:    String or URL to search; e.g.,  ..., [http://google.com], [file://c:/path/to/my.html]
+\[string text\]: The text to match against the xpath expression. If omitted, this
+assertion returns true if any elements of the xpath expression are found. Not required.
+Defaults to ""
+\[string message\]: The message to display when this assertion fails Not required.
+Defaults to The XPath expression, #arguments.xpath#, did not match the data.
+
+{code:title=assertXPath()}&lt;cffunction name="testFindGoogleInTitle"&gt;
+	&lt;cfscript&gt;
+	nodes = assertXpath('/html/head/title', "http://google.com", "Google");
+	debug(nodes);
+	nodes = assertXPath("/html/head/title", "file:///coldfusion8/wwwroot/mxunit/tests/framework/fixture/xpath/mxunit.org.html");
+	nodes = assertXPath("/root/foo/bar[@id='123abc']", someXmlOrHtml);
+	&lt;/cfscript&gt;
+&lt;/cffunction&gt;
+{code}
+The above parses the results from urls and strings and searches the parsed results
+for the XPath expression.
+Try it. Really, it works\!
+
+h3. assertIsTypeOf*(component obj, String type)
+
+Determines if obj is of type. type needs to be fully qualified.
+{code:title=assertIsTypeOf()}&lt;cffunction name="demoAssertIsTypeOf"&gt;
+&lt;cfset assertIsTypeOf(obj,"my.type.Of.Object")&gt;
+&lt;/cffunction&gt;
+{code}
+
+h3. assertIsXMLDoc*(any xml \[, String message\])
+
+Determines if xml is a valid XML DOM object.
+{code:title=assertIsXMLDoc()}&lt;cffunction name="demoAssertIsXMLDoc"&gt;
+&lt;cfset assertIsXMLDoc(xml)&gt;
+&lt;/cffunction&gt;
+{code}
+
+h3. assertIsArray*(any obj1)
+
+Determines if the obj1 is a valid array.
+{code:title=assertIsArray()}&lt;cffunction name="demoAssertIsArray"&gt;
+&lt;cfset assertIsArray(myObject1)&gt;
+&lt;/cffunction&gt;
+{code}
+
+h3. assertIsDefined*(any obj1)
+
+Determines if the obj1 has been defined in the available scope.
+{code:title=assertIsDefined()}&lt;cffunction name="demoAssertIsDefined"&gt;
+&lt;cfset assertIsDefined("myObject1")&gt;
+&lt;/cffunction&gt;
+{code}
+
+h3. assertIsEmpty*(any obj1)
+
+Determines if the obj1 is a 0 length string or NULL equivalent.
+{code:title=assertIsEmpty()}&lt;cffunction name="demoAssertIsEmpty"&gt;
+&lt;cfset assertIsEmpty(myObject1)&gt;
+&lt;/cffunction&gt;
+{code}
+
+h3. assertIsEmptyArray*(any obj1,\[String message\])
+
+Determines if the obj1 is an array with no elements.
+{code:title=assertIsEmptyArray()}&lt;cffunction name="demoAssertIsEmptyArray"&gt;
+&lt;cfset assertIsEmptyArray(myObject1)&gt;
+&lt;/cffunction&gt;
+{code}
+
+h3. assertIsEmptyQuery*(any obj1,\[String message\])
+
+Determines if the obj1 is a query with no rows.
+{code:title=assertIsEmptyQuery()}&lt;cffunction name="demoAssertIsEmptyQuery"&gt;
+&lt;cfset assertIsEmptyQuery(myObject1)&gt;
+&lt;/cffunction&gt;
+{code}
+
+h3. assertIsEmptyStruct*(any obj1,\[String message\])
+
+Determines if the obj1 is a struct with no keys or values.
+{code:title=assertIsEmptyStruct()}&lt;cffunction name="demoAssertIsEmptyStruct"&gt;
+&lt;cfset assertIsEmptyStruct(myObject1)&gt;
+&lt;/cffunction&gt;
+{code}
+
+h3. assertIsQuery*(any q)
+
+Determines if q is a valid ColdFusion query.
+{code:title=assertIsQuery()}&lt;cffunction name="demoAssertIsQuery"&gt;
+&lt;cfset assertIsQuery(q)&gt;
+&lt;/cffunction&gt;
+{code}
+
+h3. assertIsStruct*(any obj)
+
+Determines if obj is a valid ColdFusion structure.
+{code:title=assertIsStruct()}&lt;cffunction name="demoAssertIsStruct"&gt;
+&lt;cfset assertIsStruct(obj)&gt;
+&lt;/cffunction&gt;
+{code}
+----
+Need more? [Build your own ...|Custom Assertions]
+
+6751507
+
+
+
+Verstion: 13
+
+Created By: marcesher
+
+Created On: 2009-01-18 12:44:08.000
+
+Last Update By: marcesher
+
+Last Update On: 2011-11-12 19:56:41.979
+
+
+

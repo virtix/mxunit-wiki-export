@@ -1,0 +1,63 @@
+
+
+
+
+
+
+Running a single method in a test
+
+5374077
+When implementing new functionality or fixing a bug in an existing component, you
+often want to focus exclusively on that task. You may want to code what you need to
+code, see what you need to see, without the noise of your other tests in the same
+test case. Typically, this is tough when unit testing CF if the framework doesn't
+support method-level testing.
+
+MXUnit makes testing at the method level a core concept. The eclipse plugin for MXUnit
+and the browser runners all make it easy to test single methods.
+
+h4. Eclipse Plugin
+
+Using the eclipse plugin is documented elsewhere very thoroughly. In addition, there
+is a help icon in the MXUnit view that will take you to the appropriate documentation.
+So I don't want to repeat all that.
+
+In a nutshell, in the plugin, browse to any test (hit CTRL-F to search for tests).
+The test and its test methods will load. Select any combination of methods and hit
+Enter. Voila... method-level tests.
+
+{note}If your tests, or the components under test, access Application or Session variables
+or use CF ORM, you will need a custom RemoteFacade.cfc (easy). In the Plugin, click
+the Green Question Mark, then click the "Talking to ColdFusion" link.{note}
+
+
+!http://mxunit.s3.amazonaws.com/images/mx_screenshots/EclipseRunnerSingleMethod.png!
+
+h4. Browser Runner
+
+Run any test in the browser runner. All tests will run and you'll get a list of test
+methods.
+
+!https://mxunit.s3.amazonaws.com/images/mx_screenshots/BrowserRunnerWithTestLinks.png!
+
+When the results load, click the link for any test method. This is what you'll see:
+
+!https://mxunit.s3.amazonaws.com/images/mx_screenshots/BrowserRunnerWithTestLinks_SingleRun.png!
+
+5341324
+
+
+
+
+Verstion: 2
+
+Created By: virtix
+
+Created On: 2010-03-26 15:24:42.000
+
+Last Update By: marcesher
+
+Last Update On: 2010-12-08 13:48:25.235
+
+
+

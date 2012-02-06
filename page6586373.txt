@@ -1,0 +1,30 @@
+
+
+
+
+
+
+RIAUnleashed 2010 -- Introduction to MongoDB for CFML Developers
+
+6619139
+I presented MongoDB for CFML Developers at RIAUnleashed in November, 2010. Here's
+the deck: http://slidesix.com/view/MongoDB-at-RIAUnleashed
+
+6586373
+
+
+
+
+
+Verstion: 2
+
+Created By: marcesher
+
+Created On: 2010-11-06 17:38:06.000
+
+Last Update By: marcesher
+
+Last Update On: 2010-11-06 18:22:09.000
+
+
+

@@ -1,0 +1,41 @@
+
+
+
+MXUnit TestResult Output Formats
+
+819337
+h2. *MXUnit TestResult output formats*
+
+MXUnit provides a high level of flexibility by providing    test results in various
+output formats. Some of these are   preformatted, such as HTML, and others are _raw_
+to   allow developers to generate customizable output formats.
+
+The available TestResult output formats are:
+# HTML Format
+# ExtJs Format
+# XML Format
+# JUnit Report XML
+# ColdFusion Query Format
+# ColdFusion Array format
+We will use the MXUnit example found in  the installation package mxunit/samples/MyTestSuite.cfm
+as the   base TestResults.    You may want to refer to your local TestResult API for
+details; e.g., http://localhost:8500/mxunit/doc/api/
+
+The syntax for generating the various types of output is:
+
+786586
+
+
+
+Verstion: 2
+
+Created By: marcesher
+
+Created On: 2009-01-18 15:59:53.000
+
+Last Update By: marcesher
+
+Last Update On: 2009-01-18 16:03:27.000
+
+
+

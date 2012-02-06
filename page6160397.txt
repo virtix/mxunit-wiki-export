@@ -1,0 +1,43 @@
+
+
+
+Creating an AWS Account
+
+6193164
+{toc}
+
+h1. Creating an AWS Account
+
+
+To get started with EC2, you'll need an Amazon Web Services (AWS) account. Don't worry...
+you can play around for a while without spending much money at all. Get out a credit
+card b/c you'll need it, but as you're configuring your first instances and doing
+some testing, you'll be paying pennies.
+
+*First, go here: http://aws.amazon.com/about-aws/*
+
+You will go through an account signup. If you are prompted to download any files,
+do it. Save them somewhere you won't forget them. Do not publish them on your blog.
+Do not put them in your public Dropbox share. Keep them secret. Keep them safe. I
+keep all AWS-related files in my private DropBox so that I can access them on multiple
+machines.
+
+{note}You will not be charged anything until you create instances and run them. There
+is no charge for creating an account{note}
+
+6160397
+
+
+
+Verstion: 2
+
+Created By: marcesher
+
+Created On: 2010-10-18 01:06:24.000
+
+Last Update By: marcesher
+
+Last Update On: 2010-10-18 01:17:19.000
+
+
+

@@ -1,0 +1,137 @@
+
+
+
+View Debug Output
+
+5767250
+h2. Viewing Output
+
+When writing unit tests, particularly with TDD, sometimes you need to see your data.
+Maybe you're working on a complex regular expression and you're building it up iteratively,
+watching the string mutate as you change the regex. Maybe you need to visualize the
+structure of a complex, uh, structure. Maybe when an error occurs, you actually want
+to see the entire cfcatch struct because you have so far failed in your mission to
+jack into the ether  and absorb the bits and bytes into your neurons. Maybe you just
+want to see the damn query.
+
+Typically, this is pretty annoying to do in unit tests. Sometimes, it's just not possible
+if the framework doesn't make it easy for you. So you end up writing little tester
+files that create the object you're working with, do a cfdump or something, and then
+throw that work away when you've seen what you need to see. Icckkkkkk.
+
+MXUnit makes seeing your data easy. In fact, making things easier is one of our core
+tenets. With MXUnit, you can use CFOUTPUT and CFDUMP inside the test cases themselves.
+But there's an even better way to see your data: debug().
+
+Why is it better? If you use cfoutput and cfdump inside your tests, you'll only see
+that output if the test passes. But with debug(), you're guaranteed to see the output
+of any debug() calls, even if the test fails! Of course, any calls to debug() after
+a failed assertion won't show up, because as soon as an assertion fails the test method
+stops executing.
+
+h3. How to use debug()
+
+{code:title=Debugging Example}
+&lt;cfcomponent extends="mxunit.framework.TestCase"&gt;
+	&lt;cffunction name="testExecuteTestCase" returntype="void" hint=""&gt;
+		&lt;cfset var name = "mxunit.PluginDemoTests.DoubleMethodTest"&gt;
+		&lt;cfset var methods = ""&gt;
+		&lt;cfset var results = ""&gt;
+		
+		&lt;cfset results = rf.executeTestCase(name,methods,"")&gt;
+		&lt;cfset methods = rf.getComponentMethods(name)&gt;
+		
+		&lt;cfset debug(results)&gt;
+		
+		&lt;cfset assertTrue(isStruct(results),"results should be struct")&gt;
+		&lt;cfset assertEquals(ArrayLen(methods),ArrayLen(StructKeyArray(results[name])),"")&gt;
+	&lt;/cffunction&gt;
+&lt;/cfcomponent&gt;
+{code}
+
+*You can use debug() anywhere you'd normally use CFDUMP.*
+
+# Caveat: No promises on how it'll behave if you try to call debug() on components
+and then run the test in the Eclipse plugin. You're bound to get an axis/webservice/xml
+parse error of some form or another.
+# Caveat: if you're calling debug() on big data, like a big old struct, it's going
+to make your tests run slower! This is because CFDUMP, starting after CF 6.1, turned
+into a massive bloated slow pig of a tag, and debug() simply calls cfdump on whatever
+you're passing into it. I think there are a few stray Thread.sleep(2000) calls in
+the source code somewhere that they forgot to take out.
+
+# Tip: I keep debug() calls on during iterative development because I probably want
+to see the data. When I'm finished, it's not uncommon for me to go comment them out
+so that they won't affect performance. Do what you want. If you don't mind a bit of
+a performance penalty, then don't bother.
+
+h3. Using CFDUMP and CFOUTPUT in your tests
+
+You can use cfdump and cfoutput in your tests, and the output will show up in the
+test output.
+
+*BIG NOTE:* If your test fails, i.e. an error occurs or an assertion returns false,
+the output will not show up. This is why we recommend using debug().
+
+h3. Viewing this output in the Eclipse Plugin
+
+In the eclipse plugin, run a test (or a single method of a single test, or multiple
+methods, or everything in the test tree... whatever it is you want to run) When the
+test completes, hit &amp;quot;b&amp;quot; on the keyboard. &amp;quot;b&amp;quot; for Browser. Or hit
+F8. Or right click in the test view and select {{Open test case results in browser}}
+This will open up a browser view with the debug() and cfoutput/cfdumps from the selected
+tests/methods. If your eclipse preference is set to use the internal browser by default,
+then this will open up Eclipse's internal browser. If your preference is set to use
+an external browser, it'll pop open a new browser window (or tab, depending on your
+system setup).
+
+The output will look like this: 
+
+!plugin-install-19.png!
+
+h3. Viewing this output in the web browser
+
+When you run tests using the html or extjs browser runners, you get a column at the
+far right that says &amp;quot;output&amp;quot; or &amp;quot;expand&amp;quot;. Just click the link
+and you get your stuff.
+
+Here's what it looks like when you click the &amp;quot;view output&amp;quot; link when using
+the extjs runner:
+
+!extjsrunnerViewOutput.png!
+
+Here's what it looks like when you click the &amp;quot;expand&amp;quot; link in the 'normal'
+html output runner: 
+
+!normalhtmloutput.png!
+
+{anchor:cfcatch}
+
+h3. Viewing CFCATCH info when errors occur
+
+When a test errors (for reasons other than a failed assertion), you often want to
+see the dump of the cfcatch struct. MXUnit automatically puts the cfcatch info into
+the debug dump when an error occurs. Thus, when a test errors, just hit &amp;quot;b&amp;quot;
+in the eclipse plugin when the test returns, or click &amp;quot;view output&amp;quot; in the
+browser runner, to see your cfcatch dump.
+
+Here's what that looks like in Eclipse:
+
+!cfcatchInPlugin.png! 
+
+5734489
+
+
+
+Verstion: 3
+
+Created By: zoramite
+
+Created On: 2009-10-31 23:19:57.000
+
+Last Update By: zoramite
+
+Last Update On: 2009-10-31 23:34:28.000
+
+
+

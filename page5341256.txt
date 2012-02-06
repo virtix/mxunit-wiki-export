@@ -1,0 +1,58 @@
+
+
+
+
+
+
+
+Argument Matching
+
+5374014
+
+MXUnit allows you to mock using literal arguments or argument patterns. Imagine you
+have a component that sets a dozen HTTP headers. You have the option of explicitly
+mocking each setHeader call literaly or you can match all by specifying a pattern:
+
+Explicit literals:
+{code}
+&lt;cfset mock.setHeader('X-Foo','Bar').returns() /&gt;
+
+&lt;cfset mock.setHeader('X-Bar','Foo').returns() /&gt;
+
+&lt;cfset mock.setHeader('X-Name','Mouse').returns() /&gt;
+
+&lt;cfset mock.setHeader('X-Value','Cheese').returns() /&gt;
+{code}
+...
+
+Using argument matching, you can mock the above like so:
+{code}
+&lt;cfset mock.myCollaborator.setHeader('{string}','{string}').returns() /&gt;
+{code}
+MXUnit will invoke and record and calls made to setHeader(...) that have exactly two
+string parameters. So, you can verify that specific setHeader calls were made:
+{code}
+&lt;cfset mock.verify().setHeader('X-Value','Cheese') /&gt;
+{code}
+
+*To Do*: Implement recording of BOTH the pattern and literal. Currently, only the
+pattern is recorded so verification is not possible.
+
+
+5341256
+
+
+
+
+Verstion: 1
+
+Created By: virtix
+
+Created On: 2010-03-26 10:42:03.000
+
+Last Update By: virtix
+
+Last Update On: 2010-03-26 10:42:03.000
+
+
+

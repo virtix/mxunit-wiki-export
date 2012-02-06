@@ -1,0 +1,56 @@
+
+
+
+Install the Eclipse Plugin
+
+5767190
+*Eclipse Update Site URL:* [http://mxunit.org/update]
+
+h2. Detailed Instructions
+
+Doesn't get much easier\! Install, Configure, Run ...
+
+# Make sure the [MXUnit Framework|Install MXUnit] is installed.
+# Get [Eclipse|http://www.eclipse.org/] if you haven't already
+# In Eclipse, go to {{Help &gt; Software Updates &gt; Find and Install}}
+!plugin-install-1.png!
+# Select the {{Search for new features}} radio button. Click Next
+!plugin-install-2.png!
+# Click the {{New Remote Site}} button.
+!plugin-install-3.png!
+# Add the url [http://mxunit.org/update] to the URL field. Give it any Name; e.g,
+MXUnit Plugin. Click OK.
+!plugin-install-4.png!
+# Select All features to be installed. Click Next.
+!plugin-install-5.png!
+# Accept License Agreement. Click Next.
+!plugin-install-6.png!
+# Click Finish on the Install Dialogue.
+!plugin-install-7.png!
+# The plugin will download ...
+!plugin-install-8.png!
+# Click Install All.
+!plugin-install-9.png!
+# Allow the plugin to install ...
+!plugin-install-10.png!
+# Click Yes when prompted to restart Eclipse ...
+!plugin-install-11.png!
+
+*Next - [Configure and Test the Plugin|Configure and Test the Plugin]*
+
+5734422
+
+
+
+Verstion: 9
+
+Created By: marcesher
+
+Created On: 2009-01-18 14:10:44.000
+
+Last Update By: zoramite
+
+Last Update On: 2009-10-31 23:57:13.000
+
+
+

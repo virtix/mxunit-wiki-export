@@ -1,0 +1,63 @@
+
+
+
+Continuous Integration -- ANT - The Glue between Jenkins and your Tests
+
+6783139
+{section}
+{column:width=60%}
+
+{toc:maxLevel=5}
+h1. Why ANT?
+
+
+You won't get far using Jenkins and ColdFusion without ANT. ANT is the Hub. It's the
+glue.
+
+Your ANT build will run your MXUnit Tests. Jenkins will run your ANT build, record
+the results of the tests, and perform post-build actions (notifications, etc) based
+on the results of those tests.
+
+h1. Assumptions
+
+We assume you have some tests and can successfully run them via either the Eclipse
+plugin or your web browser
+
+We assume that if you are not familiar with ANT that you're willing to learn enough
+of it to get your CI environment set up. If you're not up for that, perhaps [simpler
+automation is for you|default:Simple Test Scheduling].
+
+
+h1. A thorough treatment
+
+Bill's [original walkthrough|default:Using the Ant Task to Generate JUnit Reports]
+is very thorough. In addition, please see Bill's fantastic [8-minute video|default:Screencast
+- Using MXUnit and Ant for Build,Test, and Integration Automation - 8 min.] showing
+exactly how to run your MXUnit tests with ANT
+{column}
+{column:width=5%}
+
+{column}
+{column:width=35%}
+
+h6. Navigate space
+{pagetree:searchBox=true|expandCollapseAll=true|startDepth=1}
+{column}
+{section}
+
+6750377
+
+
+
+Verstion: 5
+
+Created By: marcesher
+
+Created On: 2011-03-08 11:22:51.383
+
+Last Update By: marcesher
+
+Last Update On: 2011-03-08 12:00:09.890
+
+
+

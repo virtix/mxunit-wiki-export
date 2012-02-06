@@ -1,0 +1,110 @@
+
+
+
+
+
+
+Continuous Integration -- Starting and Stopping Windows services in your build
+
+6783300
+{section}
+
+{column:width=60%}
+
+{toc:maxLevel=5}
+
+h1. Introduction
+
+For [CFMongoDB|https://github.com/marcesher/cfmongodb] , I wanted to run all tests
+on a schedule, either when a source code change was detected on github, or every day.
+I didn't want to have Mongo running all the time \-\- just when the tests needed to
+run. Ideally, my CI process would start Mongo, run the tests, and stop Mongo when
+finished.&amp;nbsp;
+
+Here's how I accomplished that.
+
+
+h1. Installing MongoDB as a service
+
+
+It was easiest for me to achieve this workflow by starting MongoDB as&amp;nbsp; a Windows
+service because then I could simply use NET START and NET STOP commands rather than
+spinning up Mongod.exe and killing it.
+
+Installing mongod as a service is as simple as:
+
+{code}
+mongod --install --logpath c:\path\to\some\logfile.log
+
+{code}
+
+h1. How you will be able to run this service in Jenkins, but can't quite yet
+
+Long heading, I know. In Jenkins, configuring the "Build Steps" *should* look like
+this:
+# Invoke Windows Batch Command \--&amp;nbsp; "NET START 'Mongo DB'"
+# ANT \-\- runtests
+# Invoke Windows Batch Command \-\- "NET STOP 'Mongo DB'"
+
+However, [due to this bug|https://jira.mongodb.org/browse/SERVER-1434] , stopping
+the mongo service throws an error which will cause the Jenkins build to fail. And
+that won't do.
+
+h1. How to use ANT to start and stop the MongoDB Windows Service
+
+Fortunately, you can add ANT targets to start and stop these services which won't
+throw errors when start/stop fails, which is the behavior I need.
+
+{code:language=xml|title=build.xml|controls=true|linenumbers=true}
+&lt;target name="startMongoService" depends="init"&gt;
+	&lt;echo message="starting ${MongoDBService}"/&gt;
+	&lt;exec executable="cmd.exe"&gt;
+		&lt;arg line="/c"/&gt;
+		&lt;arg line="net"/&gt;
+		&lt;arg line="start"/&gt;
+		&lt;arg line="${MongoDBService}"/&gt;
+	&lt;/exec&gt;
+&lt;/target&gt;
+
+&lt;target name="stopMongoService" depends="init"&gt;
+	&lt;echo message="stopping ${MongoDBService}"/&gt;
+	&lt;exec executable="cmd.exe"&gt;
+		&lt;arg line="/c"/&gt;
+		&lt;arg line="net"/&gt;
+		&lt;arg line="stop"/&gt;
+		&lt;arg line="${MongoDBService}"/&gt;
+	&lt;/exec&gt;
+&lt;/target&gt;
+{code}
+
+&amp;nbsp;Then, in the Jenkins config, I simply specify *"startMongoService runtests stopMongoService"*
+as the ANT targets to run.
+
+{column}
+{column:width=5%}
+
+{column}
+{column:width=35%}
+
+h6. Navigate space
+{pagetree:searchBox=true|expandCollapseAll=true|startDepth=1}
+{column}{section}
+
+6750546
+
+
+
+
+
+Verstion: 3
+
+Created By: marcesher
+
+Created On: 2011-04-17 17:25:35.601
+
+Last Update By: marcesher
+
+Last Update On: 2011-04-18 02:14:08.368
+
+
+

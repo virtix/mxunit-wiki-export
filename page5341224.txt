@@ -1,0 +1,36 @@
+
+
+
+Mocking and Stubbing
+
+5373986
+(Status:DRAFT)
+
+!http://i905.photobucket.com/albums/ac259/virtix/customLogo.png!
+
+Formerly known as MightyMock, MXUnit offier a built-in, simple, lightweight framework
+for mocking component interactions. It provides you the ability to easily and quickly
+define behaviors for dependencies, including both mocking and stubbing. When mocking,
+selective verification is possible, and when stubbing you can define return data or
+throw exceptions.
+
+One slick feature is the ability to match invocations by argument pattern. This gives
+you the flexibility to specify either literal arguments or patterns in your mock.
+More on this in the next section. 
+
+5341224
+
+
+
+Verstion: 4
+
+Created By: virtix
+
+Created On: 2010-03-26 09:53:13.000
+
+Last Update By: virtix
+
+Last Update On: 2010-03-26 09:57:11.000
+
+
+

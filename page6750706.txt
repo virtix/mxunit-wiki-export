@@ -1,0 +1,77 @@
+
+
+
+Continuous Integration -- Using git as your SCM
+
+6783457
+{section}
+{column:width=60%}
+
+{toc:maxLevel=5}
+
+h1. Introduction
+
+If you're using git as your SCM, you'll need to install the Jenkins [git plugin|https://wiki.jenkins-ci.org/display/JENKINS/Git+Plugin]
+, potentially configure it, and properly configure your git projects.
+
+
+h1. Prerequisites
+
+I'm assuming you know what git is, and that you have a git environment installed.
+If you're on Windows, this means either msysgit or cygwin with git installed. Bottom
+line: from a command line, you should be able to type "git" and get something other
+than "unrecognized command". If you have git installed, and your cmd doesn't recognize
+it, it should simply be a matter of adding the path to the "bin" directory to your
+system's path variable. If you don't have a clue about what I just said, send a note
+to the mxunit google group and we'll walk you through it.
+
+
+h1. Installing and configuring the git plugin in Jenkins
+
+In the Jenkins plugin section, find the "git plugin" and install it. This is NOT the
+github plugin, which is merely a decorator. You need the git plugin to communicate
+with your git projects regardless of where you host them.
+
+Once installed, and you've restarted Jenkins, head to "Manage Jenkins" and find the
+config section for git. By default it'll show something like "git.exe" in the git
+path. This may or may not work for you. In addition, *if you don't have git installed,
+it'll give you an option to download it*.
+
+In that field, I entered the full path to my git.exe, which on windows was "C:\cygwin\bin\git.exe"
+
+
+
+h1. Configuring your Jenkins job
+
+
+
+
+{column}
+{column:width=5%}
+
+
+{column}
+{column:width=35%}
+
+h6. Navigate space
+{pagetree:searchBox=true|expandCollapseAll=true|startDepth=1}
+{column}
+{section}
+
+
+6750706
+
+
+
+Verstion: 3
+
+Created By: marcesher
+
+Created On: 2011-04-17 17:07:24.504
+
+Last Update By: marcesher
+
+Last Update On: 2011-04-18 02:51:31.887
+
+
+

@@ -1,0 +1,115 @@
+
+
+
+
+
+
+How cfloop query= killed a ColdFusion server
+
+6783067
+{toc}
+
+h1. Executive Summary
+
+*How changing a cfloop from a query loop to an index loop eliminated this application's
+memory problem*
+
+A process in one of our internal tools takes a while to run. In this case, a specific
+instance was crashing due to Java Heap Space errors. The image on the top shows the
+heap \-\- with a snapshot taken while the application was in its death throes \-\-
+prior to fixing the problem. The image on the bottom shows the heap \-\- with a snapshot
+taken at roughly the same time during the application's run \-\- after making 2 small
+code changes. One server is dead; the other is alive. This is our story.
+
+!https://s3.amazonaws.com/marc.esher/blogimages/deadserver_1.png!
+
+h1. The code, before
+
+This particular process works in two parts that both do the same kind of thing
+# Query another database and fetch around 350k rows. Loop over those rows and "do
+stuff"
+# Query another database and fetch around 950k rows. Loop over those rows and "do
+other stuff"
+
+The app was crashing in that second part, right around 770k rows. Here's a snippet:
+{code:title=The Killing Code}&lt;cfloop query="records" startrow="#startRow#" endrow="#endRow#"&gt;
+	&lt;cfset recCount++ /&gt;
+	&lt;cfset row = doStuff(records, records.currentrow, recCount)&gt;
+	&lt;cfset arrayAppend( rows, row )&gt;
+&lt;/cfloop&gt;
+{code}It's your standard cfloop over a query.
+
+h1. Heap memory, before
+
+Here's what it looked like in Eclipse MAT
+
+As the app was dying, I took a heap dump (*[described here... it's easy|http://blog.mxunit.org/2010/01/using-eclipse-mat-to-track-down.html]*)
+and saw that a thing called coldfusion.runtime.CFDummyComponent was consuming over
+800MB of Ram. Drilling down a few levels, I saw thousands of "coldfusion.tagext.lang.LoopTag".
+Drilling into one of those, I saw that for each loop tag, there were 5000 coldfusion.sql.imq.Row
+objects. 5000 because that's how many records we were looping over in that cfloop.
+
+!https://s3.amazonaws.com/marc.esher/blogimages/deadserver_looptags.png!
+
+h1. The code, after
+
+After seeing that all of the memory was being consumed inside of loop tags, I looked
+at the two cfloops that were running. My thought process was something like, "If we're
+doing a cfloop query='', and if the memory analyzer is telling me that each loop is
+retaining thousands of objects related to that query, then how can I perform the same
+loop without giving the query to the loop?" It should come as no surprise that the
+answer was:
+
+{code:language=cf|title=PartnerMigrationCommand.cfc|controls=true|linenumbers=true}&lt;cfloop
+from="#startRow#" to="#endRow#" index="i"&gt;
+	&lt;cfset recCount++ /&gt;
+	&lt;cfset row = doStuff(records, i, recCount)&gt;
+	&lt;cfset arrayAppend( rows, row )&gt;
+&lt;/cfloop&gt;
+{code}
+
+
+h1. Heap memory, after
+
+As proof that this code change had the intended effect, I ran the app again and took
+a heap snapshot at roughly the same point. The results were not surprising... not
+a single "looptag" in sight.
+
+What's more, during the running of the application, *retained heap dropped from 882
+MB to 52 MB*, simply by changing the cfloop style.
+
+!https://s3.amazonaws.com/marc.esher/blogimages/deadserver_No_looptags.png!
+
+h1. Conclusion
+
+I'm not suggesting that you should go change your loops. Here's what I want you to
+takeaway:
+# When debugging, don't go flailing about, changing code willy nilly. *Get proof*
+# Try to think creatively about the information you see. In this case, I saw a bunch
+of loop tags, leading me to ask, "what could be going on with these loops?". Assume
+nothing
+# Make small changes. Change one thing at a time, run the app, take measurements,
+and see their effects
+
+I do believe this is a bug. If you agree, [please vote|http://cfbugs.adobe.com/cfbugreport/flexbugui/cfbugtracker/main.html#bugId=86444]
+.
+
+6750302
+
+
+
+
+
+Verstion: 5
+
+Created By: marcesher
+
+Created On: 2011-02-22 11:24:02.000
+
+Last Update By: marcesher
+
+Last Update On: 2011-02-22 12:26:03.000
+
+
+
+

@@ -1,0 +1,53 @@
+
+
+
+
+
+
+
+Running Adobe ColdFusion on Amazon EC2
+
+6193160
+{tip}This documentation is a result of the work I did [presenting at Adobe MAX 2010|default:Adobe
+MAX 2010 -- ColdFusion Skunkworks] with Joe Rinehart.{tip}
+
+
+[Creating an account|Creating an AWS Account]
+
+[Launching your first instance|Launching your first EC2 Instance]
+
+[Creating your first ColdFusion AMI|Creating an EC2 ColdFusion AMI]
+
+[Launching your ColdFusion AMI as a new Instance|Launching your ColdFusion AMI as
+a new Instance]
+
+[A quick tip for Security Groups|Amazon EC2 Security Groups]
+
+Using the Amazon Tools for Eclipse
+
+
+[Deploying to multiple instances|Deploying code to multiple ColdFusion EC2 instances]
+
+Managing Configuration Changes
+
+Spot Requests
+
+6160392
+
+
+
+
+
+Verstion: 7
+
+Created By: marcesher
+
+Created On: 2010-10-18 01:03:59.000
+
+Last Update By: marcesher
+
+Last Update On: 2010-10-27 14:13:53.000
+
+
+
+

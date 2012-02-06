@@ -1,0 +1,91 @@
+
+
+
+Getting Started -- First Tutorial
+
+819316
+h2. Getting Started with MXUnit
+
+We built MXUnit to make it as easy as possible to write tests. The framework   is
+designed to facilitate, not get in the way. So, let's write some code.
+
+*Setup*: [|http://mxunit.org/download.cfm]
+* [Download|http://mxunit.org/download.cfm] and    install MXUnit directly under your
+webroot; e.g.; [http://localhost:8500/mxunit/]
+* Create a directory in /mxunit/doc/tutorial and call it mytests
+
+Following Kent Beck's Test Driven Development (TDD) we will follow this simple method:
+# Write the test _first_
+# Watch the test fail
+# Write the component
+# Watch the test pass
+
+*1.Write the test* *{_}first{_}*.
+
+Type the following code into a new file called MyComponentTest.cfc and save it to
+/mxunit/doc/tutorial/mytests[|http://mxunit.org/doc/index.cfm?doc=firsttestcase#]
+
+{code:title=MyComponentTest.cfc}
+&lt;cfcomponent displayname="MyComponentTest"  extends="mxunit.framework.TestCase"&gt;
+&lt;cffunction name="testAdd" access="public" returntype="void"&gt;
+&lt;cfscript&gt;
+mycomponent = createObject("component","MyComponent");
+expected = 2;
+actual = mycomponent.add(1,1);
+assertEquals(expected,actual);
+&lt;/cfscript&gt;  
+&lt;/cffunction&gt;
+&lt;/cfcomponent&gt;
+
+{code}
+
+*2. Watch the test fail.*
+
+[http://localhost:8500/mxunit/doc/tutorial/mytests/MyComponentTest.cfc?method=runTestRemote|http://localhost:8500/mxunit/doc/tutorial/mytests/MyComponentTest.cfc?method=runTestRemote]
+Change the server name and port as needed.
+You should see this:
+
+Believe it or not, this is good\! This error is exactly what we expect. This tells
+us that our component, MyComponent, does not exist.
+
+*3. Write the component.*
+
+Type the following code into a new file called MyComponent.cfc and save it to /mxunit/doc/tutorial/mytests[|http://mxunit.org/doc/index.cfm?doc=firsttestcase#]
+
+{code:title=MyComponent.cfc}
+&lt;cfcomponent displayname="MyComponent" &gt;
+&lt;cffunction name="add" access="public" returntype="numeric"&gt;
+&lt;cfargument name="num1" type="numeric" /&gt;
+&lt;cfargument name="num2" type="numeric" /&gt;
+&lt;cfreturn num1+num2&gt;
+&lt;/cffunction&gt;
+&lt;/cfcomponent&gt;
+
+{code}
+
+*4. Watch the test pass.*
+
+[http://localhost:8500/mxunit/doc/tutorial/mytests/MyComponentTest.cfc?method=runTestRemote|http://localhost:8500/mxunit/doc/tutorial/mytests/MyComponentTest.cfc?method=runTestRemote]
+You should see this:
+
+\[[Next - More TestCases|http://mxunit.org/doc/index.cfm?doc=secondtestcase]\]
+
+----
+[http://mxunit.org/license.txt]
+
+786562
+
+
+
+Verstion: 2
+
+Created By: marcesher
+
+Created On: 2009-01-18 15:28:59.000
+
+Last Update By: marcesher
+
+Last Update On: 2009-01-18 15:33:31.000
+
+
+

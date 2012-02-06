@@ -1,0 +1,27 @@
+
+
+
+Advanced Configuration
+
+5767194
+Placeholder intended to describe ways to install and configure MXUnit when not installed
+directly under the web root. This could also address issues such as custom Ant and
+HTTP runners. Lastly, this could also present ideas for configuring and running MXUnit
+with various frameworks.
+
+5734426
+
+
+
+Verstion: 1
+
+Created By: virtix
+
+Created On: 2010-07-03 19:49:34.000
+
+Last Update By: virtix
+
+Last Update On: 2010-07-03 19:49:34.000
+
+
+

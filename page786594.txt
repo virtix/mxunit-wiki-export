@@ -1,0 +1,48 @@
+
+
+
+Getting Started -- Setting up your Tests Directory
+
+819344
+h2. Setting up your environment
+
+So you've downloaded mxunit. Now What? How do you set up your own project? Where do
+you put your tests?
+
+Everyone hates to hear this, but there's no one right answer. However, we're not gonna
+leave you hangin' with that lame answer. Here's what we've done (and still do):
+* put your tests in a directory named "tests" parallel to your components
+*pros:*** in the same place so they're easy to find
+** separated so you have no danger of accidentally running a "real" component as a
+test case *cons:*** if it matters to you, you probably don't want to deploy your tests
+to prod, so you'd need to filter them out somehow (ANT\!)
+* put your tests in a directory named "tests" underneath your components directory
+*pros*** same as above{*}cons*** same as above
+* put your tests in a directory named "tests" outside your project
+*pros*** centralize all your tests in one place
+** forces you to find problems where your tests rely on data they shouldn't be able
+to see (session info, etc)*cons*** potentially not as intuitive to find tests for
+a project when getting started initially
+** makes it harder to access application-specific data (that might be a good thing
+though)
+* put your tests in the same directory as your components
+*pros*** extremely easy to see your tests and components together{*}cons*** you probably
+don't want to deploy tests to production so you'd need to use ANT or some other tool
+to pull those files out during deployments
+
+786594
+
+
+
+Verstion: 1
+
+Created By: marcesher
+
+Created On: 2009-01-18 16:15:02.000
+
+Last Update By: marcesher
+
+Last Update On: 2009-01-18 16:15:02.000
+
+
+

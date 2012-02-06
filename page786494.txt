@@ -1,0 +1,188 @@
+
+
+
+
+
+
+TDD Example -- Fixing a bug in the plugin
+
+819258
+{toc}
+
+h2. TDD Example: Fixing a Bug in the Plugin
+
+Note: This example uses a bug I found in the MXUnit Eclipse plugin. The code examples
+are java but they're simple and accessible and, honestly, the code doesn't matter
+here. What matters is the approach.
+
+h3. The Bug
+
+You have a filesystem path like this: C:\inetpub\wwwroot\sandbox\cfc\MyTest.cfc
+
+You try to open that CFC in the MXUnit View
+
+*Expected:* The view loads sandbox.cfc.MyTest and displays its methods
+
+*Actual:* The view loads sandbox.MyTest and gives an error that the component is not
+found
+
+*Analysis:* Something in the plugin code is stripping ".cfc" from the Component path
+
+h3. Finding the Bug
+
+*Step 1:* I know that the code responsible for deriving component paths is in PathUtils.java.
+So... Open PathUtilsTest.java (_That's right... I open the test case first_)
+
+*Step 2:* Run all tests and confirm everything passes
+
+*Step 3:* Spend a few minutes figuring out why my existing tests don't catch this
+bug. The answer is easy: no tests check explicitly for a directory with "cfc" in the
+path
+
+*Step 4:* Add a new test
+
+{code}
+	public void testDeriveComponentPathWithCFCInDirectory(){
+		String root = "c:\\cfusionmx7\\wwwroot";
+		String component = "C:\\cfusionmx7\\WWWroot\\cfc\\TestMyCFC.cfc";
+		File rootFile = new File(root);
+		File componentFile = new File(component);
+		String componentPath = PathUtils.deriveComponentPath(rootFile.getAbsolutePath(),
+componentFile.getAbsolutePath());
+		assertEquals("cfc.TestMyCFC",componentPath);
+	}
+{code}
+
+
+
+*Step 5:* Run the test. It PASSES\! Rats... My test isn't finding the bug. OK, what's
+different between this test and the behavior I'm seeing??? Hmmmm....
+
+*Step 6:* Revise the test. I'm not changing any code until I can verify a failure:
+
+
+
+{code}
+	public void testDeriveComponentPathWithCFCInDirectory(){
+		String root = "c:\\cfusionmx7\\wwwroot";
+		String component = "C:\\cfusionmx7\\WWWroot\\sandbox\\cfc\\TestMyCFC.cfc";
+		File rootFile = new File(root);
+		File componentFile = new File(component);
+		String componentPath = PathUtils.deriveComponentPath(rootFile.getAbsolutePath(),
+componentFile.getAbsolutePath());
+		assertEquals("sandbox.cfc.TestMyCFC",componentPath);
+	}
+{code}
+
+{color:#ff0000}{*}SWEET{*}{color}: It fails as I expected it to. I get sandbox.TestMyCFC
+instead of sandbox.cfc.TestMyCFC
+
+h3. Fixing the Bug
+
+\*Step 7:*Open PathUtils.java and find out what's going on in deriveComponentPath
+that isn't jiving with the path i'm sending it. deriveComponentPath is pretty simple
+stuff: it takes the webroot, the full path to the component, knocks the webroot out
+of the string, and converts the remainder to dot notation. It's literally like 5 or
+6 lines of code, and it could probably be shortened down to 2 or 3. But it works,
+so I'm not messing with it.
+
+*Step 8*: find something that looks like it's stripping ".cfc". Well... that was easy:
+
+{code}
+	//strip extension
+	path = path.replaceFirst("(?i)\\.cfc", "");
+{code}
+
+
+Blindingly easy. So, how to fix? Well... understand that by the time it gets to this
+code, the \sandbox\cfc\TestMyCFC.cfc part of the path now looks like this: sandbox.cfc.TestMyCFC.cfc
+
+*Step 9:* try to fix it
+
+So what I really need is just a "replaceLast". But there is no replaceLast in java.
+Still, as you can see, I'm using replaceFirst, and replaceFirst takes a regex as its
+first arg, and since I'm no regex dummy, I simply do this:
+
+{code}
+	//strip extension
+	path = path.replaceFirst("(?i)\\.cfc$", "");
+{code}
+
+The $ means "only if it's at the end". i.e., replace Last.
+
+*Step 10:* run all my tests. Green\!
+
+Technically, at this point, i'm done. But I had a few minutes to kill so I thought
+I'd tinker. replaceFirst() and then doing just the last .cfc seems kind of wonky to
+me. Why not just run "replace".
+
+*Step 11:* change replaceFirst() to replace() and run my tests again. {color:#ff0000}{*}RED\!*{color}
+
+*Step 12:* Say "WTF?"
+
+*Step 13:* Open up API docs for String.replace()
+
+DOH\! replace() doesn't take a regex, it takes a CharSequence
+
+*Step 14:* change back to replaceFirst(), run tests again just to be safe.
+
+\*Step 15:*All tests pass. I fire up a new eclipse debug session and try to run a
+test in a directory named "sandbox.cfc". Everything now works as expected.
+
+*Step 16:* Tests Pass. App works as expected. Call it a day.
+
+h3. How this saved me time
+
+One of the things you hear from the TDD evangelists is that testing is supposed to
+save you time, not add time. It's supposed to help you become more productive. But
+it seems nonsensical: {color:#ff0000}{*}How can I write more code and be more productive?*{color}
+That's like drinking more Dalwhinnie 15 and being less -drunk- happy. It doesn't make
+sense.
+
+Especially when you're starting out with TDD, you're likely to find that it does in
+fact add some time onto your programming. You're still getting in the groove of writing
+tests; maybe you don't have snippets for jamming out test cases and test methods quickly.
+Quite possibly the code itself simply doesn't lend itself to testing because it's
+all one monster self-contained component and it doesn't return any data and how the
+hell do you test that? And you're running up against project deadlines, project managers
+are sending you emails every 5 minutes asking if you're done yet (because that's what
+they're good at. That, and changing requirements at the last minute... but i digress).
+Executives are concocting diabolical schemes to Turn that January 1 deadline into
+a December 15 deadline because "our whizbang isn't-he-so-smart programmer just started
+this STD or DTT or some thing and it's gonna make him 5 times more productive in half
+the time" (?boggle?)
+
+It takes time. Hang in there.
+
+Oh, so how did this save me time. Got off track for a second.
+* I didn't have to bother opening new debug instances of eclipse until I was pretty
+sure the code worked well. I didn't have to actually use the plugin view, trying to
+load my sandbox.cfc.MyTest.cfc until I got it right.
+* My confidence was high that I didn't have to manually test all the other normal
+component paths. All my unit tests that test that stuff passed, so I felt good about
+that. One of the things TDD is supposesd to do is decrease regression test time. In
+this case, it did that for me.
+* I felt confident spending a couple minutes monkeying with replaceFirst(), changing
+it to replace(). It literally took like 30 seconds and when I saw that other tests
+failed, I ditched it and went back.
+* I could stay in the IDE. this is really an offshoot from point 1 I suppose. Nonetheless,
+for me, the more time I can spend in the IDE, the faster I program. There's something
+about not having to jump out to other applications that keeps me focused and fast.
+
+786494
+
+
+
+
+Verstion: 3
+
+Created By: marcesher
+
+Created On: 2009-01-18 13:52:34.000
+
+Last Update By: marcesher
+
+Last Update On: 2009-01-18 13:56:34.000
+
+
+

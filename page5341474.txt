@@ -1,0 +1,25 @@
+
+
+
+CFObjective 2010 -- Continuous Integration with Hudson, ANT, and MXUnit
+
+5374189
+Download Presentation Materials. These include pretty and print-friendly pdfs of the
+slides as well as all the code
+
+5341474
+
+
+
+Verstion: 1
+
+Created By: marcesher
+
+Created On: 2010-04-21 11:46:52.000
+
+Last Update By: marcesher
+
+Last Update On: 2010-04-21 11:46:52.000
+
+
+

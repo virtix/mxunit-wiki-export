@@ -1,0 +1,95 @@
+
+
+
+Eclipse Plugin Troubleshooting
+
+4980789
+In general, problems with the plugin come in two varieties:
+* The plugin can't figure out the correct "cfc path" for a file
+* The plugin can't communicate with the RemoteFacade URL
+
+h2. CFC Path
+
+If you've read the Help documentation in the plugin and you still can't figure out
+how to get the plugin to correctly derive the CFC path for your components, then please
+follow these steps:
+# Close Eclipse
+# Open eclipse.ini in the eclipse install directory, and add "-debug" on a separate
+line, toward the top of the file. For example, it might look like this:
+# {code}-startup
+plugins/org.eclipse.equinox.launcher_1.0.200.v20090520.jar
+--launcher.library
+plugins/org.eclipse.equinox.launcher.win32.win32.x86_1.0.200.v20090519
+-product
+org.eclipse.epp.package.rcp.product
+--launcher.XXMaxPermSize
+256M
+-showsplash
+-debug
+org.eclipse.platform
+--launcher.XXMaxPermSize
+256m
+-vmargs
+-Dosgi.requiredJavaVersion=1.5
+-Xms40m
+-Xmx512m{code}
+# (Note the \-debug on a line by itself)
+# Start Eclipse
+# Try running your test. This will now put a bunch of stuff into Eclipse's error log
+view
+# Open the Error Log View (window \-\- show view \-\- general \-\- Error Log)
+# You'll see a number of entries with an "i" (Information) Icon in the top few rows.
+Copy the contents of those rows and email them to the MXUnit google group with an
+explanation of what the plugin should be doing that it's not doing
+# Alternately, you can open the raw law and copy the appropriate lines which you'll
+find toward the bottom of the file. To get to the Eclipse error log: Help \-\- About
+Eclipse \-\- Installation Details \-\- View Error Log
+
+After you do that, you can remove the \-debug from your eclipse.ini file
+
+
+
+h2. RemoteFacade
+
+* Ensure you can hit the URL in a browser. If not, there's your problem.
+* If you can access the URL in a browser, but the plugin still can't talk to your
+URL, try opening that URL in Eclipse's internal browser
+* If you're still getting "could not connect to facade URL" and can't figure it out,
+ensure that you don't have any onError stuff in your Application.cfc. Perhaps the
+errors are being swallowed?
+* Try looking at the coldfusion error logs to see if anything in there sheds light
+on the problem
+
+
+h2. Using the RemoteFacadeTester.cfm
+
+
+As a last resort, open a file named "RemoteFacadeTester.cfm" in the mxunit/samples
+directory. This file is included in the distribution. At the top of the file, you'll
+see this content:
+{code:controls=true}&lt;!--- change these as necessary ---&gt;
+&lt;cfset mycomponent = "mxunit.PluginDemoTests.HodgePodgeTest"&gt;
+&lt;cfset myfunction = "testNotEquals"&gt;
+&lt;cfset remoteURL = "http://localhost/mxunit/framework/RemoteFacade.cfc?wsdl"&gt;{code}Replace
+the variables with the component, function, and URL you're trying to invoke. Run that
+RemoteFacadeTester.cfm in your browser and inspect the output. Look at the CFDumps.
+It'll show you the result of running the test when run directly, when run through
+a testsuite, and when run through the RemoteFacade.cfc URL. All 3 results should be
+roughly the same.
+
+4948024
+
+
+
+Verstion: 6
+
+Created By: marcesher
+
+Created On: 2009-12-27 18:18:08.000
+
+Last Update By: marcesher
+
+Last Update On: 2009-12-27 23:50:21.000
+
+
+

@@ -1,0 +1,68 @@
+
+
+
+Stubbing
+
+5374212
+Suppose you have a component you want to test and that component calls a method on
+another component which returns a number needed by the 1st component:
+
+{code}
+&lt;cfcomponent hint="Example Component To Mock" output="false"&gt;
+&lt;cffunction name="myMethod"&gt;
+&lt;cfargument name="foo" /&gt;
+&lt;cfset myData = myOtherComponent.doSomething('foo') /&gt;
+&lt;!--- Do something with myData ---&gt;
+&lt;cfreturn true /&gt;
+&lt;/cffunction&gt;
+&lt;/cfcomponent&gt;
+{code}
+
+Using MightyMock, you can mock MyOtherComponent like this:
+
+{code}
+&lt;cfcomponent extends="mxunit.framework.TestCase" output="false"&gt;
+&lt;cffunction name="testMyComponentInteractions"&gt;
+&lt;!--- Create the mock ---&gt;
+&lt;cfset mock = createObject('component','MightyMock').init('MyOtherComponent') /&gt;
+&lt;!--- Define Behavior ---&gt;
+&lt;cfset mock.doSomething('foo').returns( 123456 ) /&gt;
+&lt;!--- Inject into component ---&gt;
+&lt;cfset myComponent.setMyOtherComponent(mock) /&gt;
+&lt;!--- Exercise MyComponent ---&gt;
+&lt;cfset myComponent.myMethod('foo') /&gt;
+&lt;/cffunction&gt;
+&lt;/cfcomponent&gt;
+{code}
+
+Side Bar The init('component.name') statement above is optional. It's only required
+if your component under test requires an exact type; e.g.,
+
+{code}
+
+
+
+&lt;cffunction name="setMyOtherComponent"&gt;
+&lt;cfargument name='aCollaborator' type='MyOtherComponent' /&gt;
+...
+&lt;/cffunction&gt;
+
+{code}
+
+
+5341506
+
+
+
+Verstion: 2
+
+Created By: virtix
+
+Created On: 2010-03-26 10:04:19.000
+
+Last Update By: virtix
+
+Last Update On: 2010-05-26 10:16:04.000
+
+
+

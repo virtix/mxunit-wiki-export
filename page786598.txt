@@ -1,0 +1,389 @@
+
+
+
+
+
+
+
+TDD Example -- Implementing New Functionality
+
+819348
+{html}
+&lt;H2&gt;TDD Example: Implementing new functionality&lt;/H2&gt;
+&lt;P&gt;This case study will demonstrate how I implemented new functionality into MXUnit
+itself using a test-driven approach. I took screenshots at virtually every step in
+the process. At the end of the case study, I'll explain the changes that took place
+between the first iteration of the code and a subsequent change a few days later,
+although I won't document that in pictures. To see the current implementation and
+the test case that tests the functionality, &lt;A href="http://mxunit.org/download.cfm"&gt;download
+MXUnit&lt;/A&gt; and open mxunit/framework/PublicProxyMaker.cfc and mxunit/tests/framework/PublicProxyMakerTest.cfc
+&lt;/P&gt;
+&lt;P&gt;The voice is in the present tense so that you can see what I was thinking as it
+was happening. &lt;/P&gt;
+&lt;H3&gt;The Functionality&lt;/H3&gt;
+&lt;P&gt;I wanted to add a way into MXUnit for more easily testing private methods. A discussion
+on this topic &lt;A href="index.cfm?doc=testprivate" mce_href="index.cfm?doc=testprivate"&gt;is
+here&lt;/A&gt; so I won't go into it again. My goal was to create testable private methods
+in a line of code, inside the test case itself, without the need for the person writing
+the tests to create any more components.&lt;/P&gt;
+&lt;H3&gt;How I intend to implement it&lt;/H3&gt;
+&lt;P&gt;I intend to make a new component named PublicProxyMaker.cfc. This will contain
+a function named makePublic(objectWithPrivateMethod, privateMethodUnderTest, optional
+name for new public method).&lt;/P&gt;
+&lt;P&gt;makePublic() will create a new throwaway component that contains a public function
+that will itself call the private function. it will then inject this new public function
+into the object with the private method. the new public method will be named either
+whatever it was the programmer passed in as the third arg OR it will be the same as
+the private function itself, but prefixed with a "_".&lt;/P&gt;
+&lt;P&gt;I will then add a passthrough call to makePublic() into TestCase itself as a convenience
+to the programmer so that the test programmer doesn't have to know about the PublicProxyMaker
+component. All they need to know is that there's a function named makePublic() that
+they can use. &lt;/P&gt;
+&lt;P&gt;Thus, the programmer should be able to call this new functionality like this:&lt;/P&gt;
+&lt;P&gt;&lt;CFSET component objwithprivate="createObject("&gt;&lt;/CFSET&gt;&lt;/P&gt;
+&lt;P&gt;&lt;CFSET makepublic&gt;&lt;/CFSET&gt;&lt;/P&gt;
+&lt;P&gt;&lt;CFSET objwithprivate.somepublicproxyfortheprivate&gt;&lt;/CFSET&gt;&lt;/P&gt;
+&lt;P&gt;OR &lt;/P&gt;
+&lt;P&gt;&lt;CFSET makepublic&gt;&lt;/CFSET&gt;&lt;/P&gt;
+&lt;P&gt;&lt;CFSET objwithprivate._someprivate&gt;&lt;/CFSET&gt;&lt;/P&gt;
+&lt;P&gt;My approach will be to implement the functionality in the PublicProxyMaker and
+then, finally, to add the passthrough into the TestCase.cfc component. Thus, the test
+case I myself write for this new functionality will call maker.makePublic(), but in
+the end the programmer using MXUnit would not have to work directly with PublicProxyMaker&lt;/P&gt;
+&lt;P&gt;&lt;BR&gt;&lt;/BR&gt;&lt;BR&gt;&lt;/BR&gt;&lt;/P&gt;
+&lt;H3&gt;The case study, in Pictures &lt;/H3&gt;
+&lt;P&gt;&lt;B&gt;Step 1:&lt;/B&gt; Run all existing tests first&lt;/P&gt;
+&lt;P&gt;&lt;A href="http://mxunit.org/doc/images/TDDNewFunctionality/1%20-%20run%20all%20tests%20first.png"
+mce_href="http://mxunit.org/doc/images/TDDNewFunctionality/1%20-%20run%20all%20tests%20first.png"&gt;&lt;IMG
+border="0" height="261" mce_src="http://mxunit.org/doc/images/TDDNewFunctionality/thumbs/1%20-%20run%20all%20tests%20first.jpg"
+src="http://mxunit.org/doc/images/TDDNewFunctionality/thumbs/1%20-%20run%20all%20tests%20first.jpg"
+width="325"&gt;&lt;/IMG&gt;&lt;/A&gt;&lt;/P&gt;
+&lt;P&gt;&lt;B&gt;Step 2: &lt;/B&gt;View problems-only mode for easier reading&lt;/P&gt;
+&lt;P&gt;&lt;A href="http://mxunit.org/doc/images/TDDNewFunctionality/2%20-%20problems-only%20mode.png"
+mce_href="http://mxunit.org/doc/images/TDDNewFunctionality/2%20-%20problems-only%20mode.png"&gt;&lt;IMG
+border="0" height="261" mce_src="http://mxunit.org/doc/images/TDDNewFunctionality/thumbs/2%20-%20problems-only%20mode.jpg"
+src="http://mxunit.org/doc/images/TDDNewFunctionality/thumbs/2%20-%20problems-only%20mode.jpg"
+width="325"&gt;&lt;/IMG&gt;&lt;/A&gt;&lt;/P&gt;
+&lt;P&gt;&lt;B&gt;Step 3&lt;/B&gt;: FOR MYLYN USERS: Open the issue in the Eclipse mylyn browser and
+activate it (push the blue button). This filters out all the nonessential junk from
+the navigator view and adds only relevant files as I open them. In the navigator,
+the "filtering" can be turned on and off by toggling the 3-dot button in that view
+without needing to deactivate the issue &lt;/P&gt;
+&lt;P&gt;&lt;A href="http://mxunit.org/doc/images/TDDNewFunctionality/3%20-%20Issue%20in%20mylyn%20browser.png"
+mce_href="http://mxunit.org/doc/images/TDDNewFunctionality/3%20-%20Issue%20in%20mylyn%20browser.png"&gt;&lt;IMG
+border="0" height="222" mce_src="http://mxunit.org/doc/images/TDDNewFunctionality/thumbs/3%20-%20Issue%20in%20mylyn%20browser.jpg"
+src="http://mxunit.org/doc/images/TDDNewFunctionality/thumbs/3%20-%20Issue%20in%20mylyn%20browser.jpg"
+width="365"&gt;&lt;/IMG&gt;&lt;/A&gt;&lt;/P&gt;
+&lt;P&gt;&lt;B&gt;Step 4: &lt;/B&gt;Create new test case. I intend to name the component that contains
+my new functionality "PublicProxyMaker", so my test case will be named "PublicProxyMakerTest.cfc".
+Note that I haven't yet created PublicProxyMaker.cfc&lt;/P&gt;
+&lt;P&gt;&lt;A href="http://mxunit.org/doc/images/TDDNewFunctionality/4%20-%20create%20new%20test%20case.png"
+mce_href="http://mxunit.org/doc/images/TDDNewFunctionality/4%20-%20create%20new%20test%20case.png"&gt;&lt;IMG
+border="0" height="222" mce_src="http://mxunit.org/doc/images/TDDNewFunctionality/thumbs/4%20-%20create%20new%20test%20case.jpg"
+src="http://mxunit.org/doc/images/TDDNewFunctionality/thumbs/4%20-%20create%20new%20test%20case.jpg"
+width="365"&gt;&lt;/IMG&gt;&lt;/A&gt;&lt;/P&gt;
+&lt;P&gt;&lt;B&gt;Step 5:&lt;/B&gt; Add new tests that better fail. Run them in the MXUnit view. What
+I expect here is a "component not found" error since I haven't built the components
+i'm testing yet. So... these should fail in setUp() and never even make it into the
+actual test. &lt;/P&gt;
+&lt;P&gt;NOTE: you'll notice that my Test Case name is PublicProxyMakerTest.cfc. And you'll
+notice that I'm creating an object called "sanity" on the component "PublicProxyMakerTest".
+WTF???? Basically this is my lazy way of creating an object that I know has a private
+function. I know it might seem weird to be creating another instance of itself. Ignore
+it. It's another instance ... it's not testing "this". So it's safe to do this. Also
+you'll see later on when I change the name "sanity" to something else because it kept
+tripping me up. &lt;/P&gt;
+&lt;P&gt;&lt;A href="http://mxunit.org/doc/images/TDDNewFunctionality/5%20-%20add%20some%20stuff%20sure%20to%20fail%20and%20run.png"
+mce_href="http://mxunit.org/doc/images/TDDNewFunctionality/5%20-%20add%20some%20stuff%20sure%20to%20fail%20and%20run.png"&gt;&lt;IMG
+border="0" height="222" mce_src="http://mxunit.org/doc/images/TDDNewFunctionality/thumbs/5%20-%20add%20some%20stuff%20sure%20to%20fail%20and%20run.jpg"
+src="http://mxunit.org/doc/images/TDDNewFunctionality/thumbs/5%20-%20add%20some%20stuff%20sure%20to%20fail%20and%20run.jpg"
+width="365"&gt;&lt;/IMG&gt;&lt;/A&gt;&lt;/P&gt;
+&lt;P&gt;&lt;B&gt;Step 6:&lt;/B&gt; Create component to test this on. this is just a stub so that I
+can get past setUp() and into my test functions. My new component is named "PublicProxyMaker".
+&lt;/P&gt;
+&lt;P&gt;Note that those test functions aren't actually implemented yet. So technically
+I'm not following strict TDD here. But that's OK. This is kind of how I work.....
+chip away at things. I find that I like the momentum that comes with tiny little incremental
+successes. &lt;/P&gt;
+&lt;P&gt;&lt;A href="http://mxunit.org/doc/images/TDDNewFunctionality/6%20-%20Create%20Component%20to%20test.png"
+mce_href="http://mxunit.org/doc/images/TDDNewFunctionality/6%20-%20Create%20Component%20to%20test.png"&gt;&lt;IMG
+border="0" height="222" mce_src="http://mxunit.org/doc/images/TDDNewFunctionality/thumbs/6%20-%20Create%20Component%20to%20test.jpg"
+src="http://mxunit.org/doc/images/TDDNewFunctionality/thumbs/6%20-%20Create%20Component%20to%20test.jpg"
+width="365"&gt;&lt;/IMG&gt;&lt;/A&gt;&lt;/P&gt;
+&lt;P&gt;&lt;B&gt;Step 7: &lt;/B&gt;Implement a sanity check test. this is the testSanity function in
+this test case. Basically, it just confirms that I can't test a private method directly.
+If that test were to not pass, that would mean either the function i'm trying to run
+isn't private or something else weird is going on. I like to start knowing that all
+is working as expected. In this case, what I expect is that trying to run a private
+function will fail. My expectation is proven correct, so I can proceed. &lt;/P&gt;
+&lt;P&gt;&lt;A href="http://mxunit.org/doc/images/TDDNewFunctionality/7%20-%20implement%20sanity%20check%20test.png"
+mce_href="http://mxunit.org/doc/images/TDDNewFunctionality/7%20-%20implement%20sanity%20check%20test.png"&gt;&lt;IMG
+border="0" height="222" mce_src="http://mxunit.org/doc/images/TDDNewFunctionality/thumbs/7%20-%20implement%20sanity%20check%20test.jpg"
+src="http://mxunit.org/doc/images/TDDNewFunctionality/thumbs/7%20-%20implement%20sanity%20check%20test.jpg"
+width="365"&gt;&lt;/IMG&gt;&lt;/A&gt;&lt;/P&gt;
+&lt;P&gt;&lt;B&gt;Step 8:&lt;/B&gt; Implement first test. this is the "testMakePublicNamedArgs" function.
+This new functionality needs to work both with passing in named args and also not
+naming the arguments. This one I suspect will be the easiest to confirm so that's
+where I start. NOTE: the test fails because the function under test doesn't exist
+yet! &lt;/P&gt;
+&lt;P&gt;Thus, I wrote my test first that tests the behavior I expect out of the function
+that I haven't even written yet. This is classic TDD: you test the behavior you want,
+and when the test passes, you're done. &lt;/P&gt;
+&lt;P&gt;&lt;A href="http://mxunit.org/doc/images/TDDNewFunctionality/8%20-%20implement%20first%20test.png"
+mce_href="http://mxunit.org/doc/images/TDDNewFunctionality/8%20-%20implement%20first%20test.png"&gt;&lt;IMG
+border="0" height="222" mce_src="http://mxunit.org/doc/images/TDDNewFunctionality/thumbs/8%20-%20implement%20first%20test.jpg"
+src="http://mxunit.org/doc/images/TDDNewFunctionality/thumbs/8%20-%20implement%20first%20test.jpg"
+width="365"&gt;&lt;/IMG&gt;&lt;/A&gt;&lt;/P&gt;
+&lt;P&gt;&lt;B&gt;Step 9:&lt;/B&gt; Stub the function under test. Confirm Failure&lt;/P&gt;
+&lt;P&gt;Here, I just get the function in place, but it doesn't do anything. I run my test
+again because if it passes, then my test is bad! It fails, which is a good thing.
+&lt;/P&gt;
+&lt;P&gt;&lt;A href="http://mxunit.org/doc/images/TDDNewFunctionality/9%20-%20stub%20the%20function%20under%20test;%20confirm%20failure.png"
+mce_href="http://mxunit.org/doc/images/TDDNewFunctionality/9%20-%20stub%20the%20function%20under%20test;%20confirm%20failure.png"&gt;&lt;IMG
+border="0" height="222" mce_src="http://mxunit.org/doc/images/TDDNewFunctionality/thumbs/9%20-%20stub%20the%20function%20under%20test;%20confirm%20failure.jpg"
+src="http://mxunit.org/doc/images/TDDNewFunctionality/thumbs/9%20-%20stub%20the%20function%20under%20test;%20confirm%20failure.jpg"
+width="365"&gt;&lt;/IMG&gt;&lt;/A&gt;&lt;/P&gt;
+&lt;P&gt;&lt;B&gt;Step 10:&lt;/B&gt; Implement the second test. Rather than work to get the first test
+passing, I'm going to implement the second test, which is to test what happens when
+arguments to my new function are not named, i.e. calling maker.makePublic(arg1, arg2,
+arg3) instead of maker.makePublic(arg1=blah, arg2=blah, arg3=blah) .&lt;/P&gt;
+&lt;P&gt;Again, it fails, as it should because I haven't actually implemented the functionality.
+&lt;/P&gt;
+&lt;P&gt;&lt;BR&gt;&lt;/BR&gt;&lt;BR&gt;&lt;/BR&gt;&lt;BR&gt;&lt;/BR&gt;&lt;BR&gt;&lt;/BR&gt;&lt;/P&gt;
+&lt;P&gt;&lt;A href="http://mxunit.org/doc/images/TDDNewFunctionality/10%20-%20implement%20second%20test.png"
+mce_href="http://mxunit.org/doc/images/TDDNewFunctionality/10%20-%20implement%20second%20test.png"&gt;&lt;IMG
+border="0" height="222" mce_src="http://mxunit.org/doc/images/TDDNewFunctionality/thumbs/10%20-%20implement%20second%20test.jpg"
+src="http://mxunit.org/doc/images/TDDNewFunctionality/thumbs/10%20-%20implement%20second%20test.jpg"
+width="365"&gt;&lt;/IMG&gt;&lt;/A&gt;&lt;/P&gt;
+&lt;P&gt;&lt;B&gt;BREATHER&lt;/B&gt;: Let's take a second to review where we're at right now:&lt;/P&gt;
+&lt;P&gt;We have a new component named PublicProxyMaker.cfc and a test case component named
+PublicProxyMakerTest.cfc. &lt;/P&gt;
+&lt;P&gt;PublicProxyMakerTest has 3 test functions: testSanity, testMakePublicNamedArgs,
+and testMakePublicNonNamedArgs.&lt;/P&gt;
+&lt;P&gt;testSanity passes. The other two do not because the functionality they test is
+not yet implemented.&lt;/P&gt;
+&lt;P&gt;If you look at those two test methods, you'll see that both will pass if they can
+run a function named "_aPrivateMethod" and that _aPrivateMethod() returns the expected
+result.&lt;BR&gt;&lt;/BR&gt;&lt;BR&gt;&lt;/BR&gt;&lt;BR&gt;&lt;/BR&gt;&lt;BR&gt;&lt;/BR&gt;
+&lt;/P&gt;
+&lt;P&gt;Now, back to the show: &lt;/P&gt;
+&lt;P&gt;&lt;BR&gt;&lt;/BR&gt;&lt;BR&gt;&lt;/BR&gt;&lt;BR&gt;&lt;/BR&gt;&lt;BR&gt;&lt;/BR&gt;&lt;/P&gt;
+&lt;P&gt;&lt;B&gt;Step 11&lt;/B&gt;: Start implementing.&lt;/P&gt;
+&lt;P&gt; I do about 5 minutes of coding, and i'm at a point where I need to see my data.
+I need to find out what the data looks like returned from getMetadata() on my object
+in question. So, I turn off the failure... I need to see some cfdump. I add a cfdump
+into my new makePublic() function and then I comment out the failure in my test case
+so that I can view the output easily in the mxunit plugin view (highlight the test
+and hit "b" on the keyboard. this brings up the internal browser).&lt;/P&gt;
+&lt;P&gt;Note the cfdump in the code and the commented out stuff in the test function.&lt;/P&gt;
+&lt;P&gt;&lt;A href="http://mxunit.org/doc/images/TDDNewFunctionality/11%20-%20turn%20off%20failure;%20need%20to%20see%20dump.png"
+mce_href="http://mxunit.org/doc/images/TDDNewFunctionality/11%20-%20turn%20off%20failure;%20need%20to%20see%20dump.png"&gt;&lt;IMG
+border="0" height="222" mce_src="http://mxunit.org/doc/images/TDDNewFunctionality/thumbs/11%20-%20turn%20off%20failure;%20need%20to%20see%20dump.jpg"
+src="http://mxunit.org/doc/images/TDDNewFunctionality/thumbs/11%20-%20turn%20off%20failure;%20need%20to%20see%20dump.jpg"
+width="365"&gt;&lt;/IMG&gt;&lt;/A&gt;&lt;/P&gt;
+&lt;P&gt;&lt;B&gt;Step 12:&lt;/B&gt; the CF Dump&lt;/P&gt;
+&lt;P&gt;Here's what the cfdump looks like from the code above.That's all i needed to see.
+Back to coding. &lt;/P&gt;
+&lt;P&gt;&lt;A href="http://mxunit.org/doc/images/TDDNewFunctionality/12%20-%20picture%20of%20dump.png"
+mce_href="http://mxunit.org/doc/images/TDDNewFunctionality/12%20-%20picture%20of%20dump.png"&gt;&lt;IMG
+border="0" height="222" mce_src="http://mxunit.org/doc/images/TDDNewFunctionality/thumbs/12%20-%20picture%20of%20dump.jpg"
+src="http://mxunit.org/doc/images/TDDNewFunctionality/thumbs/12%20-%20picture%20of%20dump.jpg"
+width="365"&gt;&lt;/IMG&gt;&lt;/A&gt;&lt;/P&gt;
+&lt;P&gt;&lt;B&gt;Step 13: &lt;/B&gt;Code implementation I think will work&lt;/P&gt;
+&lt;P&gt;I've got the stuff uncommented again in the test case, and I crank out some code
+I think will work in makePublic(). &lt;/P&gt;
+&lt;P&gt;&lt;A href="http://mxunit.org/doc/images/TDDNewFunctionality/13%20-%20code%20implementation%20i%20think%20will%20work.png"
+mce_href="http://mxunit.org/doc/images/TDDNewFunctionality/13%20-%20code%20implementation%20i%20think%20will%20work.png"&gt;&lt;IMG
+border="0" height="222" mce_src="http://mxunit.org/doc/images/TDDNewFunctionality/thumbs/13%20-%20code%20implementation%20i%20think%20will%20work.jpg"
+src="http://mxunit.org/doc/images/TDDNewFunctionality/thumbs/13%20-%20code%20implementation%20i%20think%20will%20work.jpg"
+width="365"&gt;&lt;/IMG&gt;&lt;/A&gt;&lt;/P&gt;
+&lt;P&gt;&lt;B&gt;Step 14:&lt;/B&gt; Dagnabbit. It didn't work&lt;/P&gt;
+&lt;P&gt;I thought I had it, but I guess I didn't. It's giving me function "_aPrivateMethod"
+not found. WTF? I need to see the data again. &lt;/P&gt;
+&lt;P&gt;This time, I just add &lt;CFSET debug&gt; into the test case itself. This yields nothing
+useful. &lt;/CFSET&gt;&lt;/P&gt;
+&lt;P&gt;&lt;A href="http://mxunit.org/doc/images/TDDNewFunctionality/14%20-%20damn%20it%20didnt%20work.png"
+mce_href="http://mxunit.org/doc/images/TDDNewFunctionality/14%20-%20damn%20it%20didnt%20work.png"&gt;&lt;IMG
+border="0" height="222" mce_src="http://mxunit.org/doc/images/TDDNewFunctionality/thumbs/14%20-%20damn%20it%20didnt%20work.jpg"
+src="http://mxunit.org/doc/images/TDDNewFunctionality/thumbs/14%20-%20damn%20it%20didnt%20work.jpg"
+width="365"&gt;&lt;/IMG&gt;&lt;/A&gt;&lt;/P&gt;
+&lt;P&gt;&lt;B&gt;Step 15:&lt;/B&gt; Crap. my variable names caused my problems&lt;/P&gt;
+&lt;P&gt;An AHA moment. my test case was bad! It was calling &lt;CFSET result="maker._aPrivateMethod(...)"&gt;,
+but it should've been calling &lt;CFSET result="sanity._aPrivateMethod(...)"&gt; because
+the whole point of the makePublic() code is to inject a new public function into the
+object that's passed to it, which in this case was the "sanity" object.&lt;/CFSET&gt;&lt;/CFSET&gt;&lt;/P&gt;
+&lt;P&gt;&lt;BR&gt;&lt;/BR&gt;&lt;BR&gt;&lt;/BR&gt;&lt;BR&gt;&lt;/BR&gt;&lt;BR&gt;&lt;/BR&gt;&lt;/P&gt;
+&lt;P&gt;&lt;A href="http://mxunit.org/doc/images/TDDNewFunctionality/15%20-%20CRAP%20--%20my%20dumb%20variable%20names%20caused%20my%20problem.png"
+mce_href="http://mxunit.org/doc/images/TDDNewFunctionality/15%20-%20CRAP%20--%20my%20dumb%20variable%20names%20caused%20my%20problem.png"&gt;&lt;IMG
+border="0" height="222" mce_src="http://mxunit.org/doc/images/TDDNewFunctionality/thumbs/15%20-%20CRAP%20--%20my%20dumb%20variable%20names%20caused%20my%20problem.jpg"
+src="http://mxunit.org/doc/images/TDDNewFunctionality/thumbs/15%20-%20CRAP%20--%20my%20dumb%20variable%20names%20caused%20my%20problem.jpg"
+width="365"&gt;&lt;/IMG&gt;&lt;/A&gt;&lt;/P&gt;
+&lt;P&gt;This teaches me something: use really clear variable names. "sanity" was a dumb
+name to start with. First, I change the test case to be cfset result = sanity._aPrivateMethod.&lt;/P&gt;
+&lt;P&gt;Then I scrap "sanity" entirely and rename the object "objectWithPrivateMethod".
+That's much clearer. I do a search/replace in my test case and I'm back in action.
+In addition, I also fix the code in testMakePublicNonNamedArgs because it, too, was
+calling maker._aPrivateMethod instead of sanity._aPrivateMethod &lt;/P&gt;
+&lt;P&gt;This next screen shot will demonstrate the new variable names and such. &lt;/P&gt;
+&lt;P&gt;&lt;B&gt;Step 16: &lt;/B&gt;Finally, a good error. With my new variable names in place and
+me feeling good that things are finally clearer, I run the test again. And I get a
+new failure message. "PrivateMethodName" is not defined. Some code bug.&lt;/P&gt;
+&lt;P&gt;&lt;A href="http://mxunit.org/doc/images/TDDNewFunctionality/16%20-%20good%20error%20--%20the%20function%20is%20being%20injected.png"
+mce_href="http://mxunit.org/doc/images/TDDNewFunctionality/16%20-%20good%20error%20--%20the%20function%20is%20being%20injected.png"&gt;&lt;IMG
+border="0" height="222" mce_src="http://mxunit.org/doc/images/TDDNewFunctionality/thumbs/16%20-%20good%20error%20--%20the%20function%20is%20being%20injected.jpg"
+src="http://mxunit.org/doc/images/TDDNewFunctionality/thumbs/16%20-%20good%20error%20--%20the%20function%20is%20being%20injected.jpg"
+width="365"&gt;&lt;/IMG&gt;&lt;/A&gt;&lt;/P&gt;
+&lt;P&gt;So I fix the bug in the makePublic() code (it was something dumb... typo or something).
+&lt;/P&gt;
+&lt;P&gt;&lt;B&gt;Step 17:&lt;/B&gt; Works for one but not the other. This means the implementation
+isn't right &lt;/P&gt;
+&lt;P&gt;&lt;A href="http://mxunit.org/doc/images/TDDNewFunctionality/17%20-%20Works%20for%20one%20but%20not%20the%20other.png"
+mce_href="http://mxunit.org/doc/images/TDDNewFunctionality/17%20-%20Works%20for%20one%20but%20not%20the%20other.png"&gt;&lt;IMG
+border="0" height="222" mce_src="http://mxunit.org/doc/images/TDDNewFunctionality/thumbs/17%20-%20Works%20for%20one%20but%20not%20the%20other.jpg"
+src="http://mxunit.org/doc/images/TDDNewFunctionality/thumbs/17%20-%20Works%20for%20one%20but%20not%20the%20other.jpg"
+width="365"&gt;&lt;/IMG&gt;&lt;/A&gt;&lt;/P&gt;
+&lt;P&gt;&lt;B&gt;Step 18: &lt;/B&gt;Have to change implementation. It's busted. Back to being broken
+for both test cases. &lt;/P&gt;
+&lt;P&gt;&lt;A href="http://mxunit.org/doc/images/TDDNewFunctionality/18%20-%20Have%20to%20change%20implementation;%20Back%20to%20being%20broken.png"
+mce_href="http://mxunit.org/doc/images/TDDNewFunctionality/18%20-%20Have%20to%20change%20implementation;%20Back%20to%20being%20broken.png"&gt;&lt;IMG
+border="0" height="222" mce_src="http://mxunit.org/doc/images/TDDNewFunctionality/thumbs/18%20-%20Have%20to%20change%20implementation;%20Back%20to%20being%20broken.jpg"
+src="http://mxunit.org/doc/images/TDDNewFunctionality/thumbs/18%20-%20Have%20to%20change%20implementation;%20Back%20to%20being%20broken.jpg"
+width="365"&gt;&lt;/IMG&gt;&lt;/A&gt;&lt;/P&gt;
+&lt;P&gt;So back at it. I basically have to completely rewrite a private function inside
+PublicProxyMaker named "constructArgumentsString". At first shot, I was just creating
+a function that did this:&lt;/P&gt;
+&lt;P&gt;&lt;CFFUNCTION access="public" name="#whatever#"&gt;&lt;/CFFUNCTION&gt;&lt;/P&gt;
+&lt;P&gt;&lt;CFRETURN&gt;&lt;/CFRETURN&gt;&lt;/P&gt;
+&lt;P&gt;&lt;BR&gt;&lt;/BR&gt;&lt;/P&gt;
+&lt;P&gt;And that worked fine for the named args but not the unnamed args. &lt;/P&gt;
+&lt;P&gt;So this means I'm going to have to create a proper set of cfargument tags in this
+new public function that will be injected, and it means i'll have to have to properly
+call the privateMethod in question using those named args. &lt;/P&gt;
+&lt;P&gt;So... I do that, then rerun my tests. &lt;/P&gt;
+&lt;P&gt;&lt;B&gt;Step 19:&lt;/B&gt; All Green!&lt;/P&gt;
+&lt;P&gt;&lt;A href="http://mxunit.org/doc/images/TDDNewFunctionality/19%20-%20All%20Green%21.png"
+mce_href="http://mxunit.org/doc/images/TDDNewFunctionality/19%20-%20All%20Green!.png"&gt;&lt;IMG
+border="0" height="222" mce_src="http://mxunit.org/doc/images/TDDNewFunctionality/thumbs/19%20-%20All%20Green!.jpg"
+src="http://mxunit.org/doc/images/TDDNewFunctionality/thumbs/19%20-%20All%20Green%21.jpg"
+width="365"&gt;&lt;/IMG&gt;&lt;/A&gt;&lt;/P&gt;
+&lt;P&gt;&lt;B&gt;Step 20: &lt;/B&gt;Works when adding a file delete (that's a good thing)&lt;/P&gt;
+&lt;P&gt;I want to be sure that this temp component being created gets cleaned up. so I
+add a cffile delete on it. I run the tests again, and all is still well. &lt;/P&gt;
+&lt;P&gt;&lt;A href="http://mxunit.org/doc/images/TDDNewFunctionality/20%20-%20Works%20when%20adding%20delete.png"
+mce_href="http://mxunit.org/doc/images/TDDNewFunctionality/20%20-%20Works%20when%20adding%20delete.png"&gt;&lt;IMG
+border="0" height="222" mce_src="http://mxunit.org/doc/images/TDDNewFunctionality/thumbs/20%20-%20Works%20when%20adding%20delete.jpg"
+src="http://mxunit.org/doc/images/TDDNewFunctionality/thumbs/20%20-%20Works%20when%20adding%20delete.jpg"
+width="365"&gt;&lt;/IMG&gt;&lt;/A&gt;&lt;/P&gt;
+&lt;P&gt;Step 21: Poor behavior for undefined method&lt;/P&gt;
+&lt;P&gt;I want to know how this thing will behave should a programmer try to create a public
+proxy for an undefined method. So I add a test for that. &lt;/P&gt;
+&lt;P&gt;But I don't like the error message I see. Completely unhelpful. &lt;/P&gt;
+&lt;P&gt;&lt;A href="http://mxunit.org/doc/images/TDDNewFunctionality/21%20-%20poor%20behavior%20for%20undefined%20mehtod.png"
+mce_href="http://mxunit.org/doc/images/TDDNewFunctionality/21%20-%20poor%20behavior%20for%20undefined%20mehtod.png"&gt;&lt;IMG
+border="0" height="222" mce_src="http://mxunit.org/doc/images/TDDNewFunctionality/thumbs/21%20-%20poor%20behavior%20for%20undefined%20mehtod.jpg"
+src="http://mxunit.org/doc/images/TDDNewFunctionality/thumbs/21%20-%20poor%20behavior%20for%20undefined%20mehtod.jpg"
+width="365"&gt;&lt;/IMG&gt;&lt;/A&gt;&lt;/P&gt;
+&lt;P&gt;So I add some additional code into makePublic(). &lt;/P&gt;
+&lt;P&gt;Step 22: I like this error better&lt;/P&gt;
+&lt;P&gt;&lt;A href="http://mxunit.org/doc/images/TDDNewFunctionality/22%20-%20I%20like%20this%20error%20better.png"
+mce_href="http://mxunit.org/doc/images/TDDNewFunctionality/22%20-%20I%20like%20this%20error%20better.png"&gt;&lt;IMG
+border="0" height="222" mce_src="http://mxunit.org/doc/images/TDDNewFunctionality/thumbs/22%20-%20I%20like%20this%20error%20better.jpg"
+src="http://mxunit.org/doc/images/TDDNewFunctionality/thumbs/22%20-%20I%20like%20this%20error%20better.jpg"
+width="365"&gt;&lt;/IMG&gt;&lt;/A&gt;&lt;/P&gt;
+&lt;P&gt;Step 23: Make that test proper&lt;/P&gt;
+&lt;P&gt;Now that I know what the error is going to look like and I'm satisified with it,
+I write a proper test for the nonexistent method scenario. &lt;/P&gt;
+&lt;P&gt;Yes, this is backward from TDD. I don't care. Without seeing the actual failure
+behavior first, I couldn't tell what it was going to behave like. &lt;/P&gt;
+&lt;P&gt;&lt;A href="http://mxunit.org/doc/images/TDDNewFunctionality/23%20-%20make%20that%20test%20proper.png"
+mce_href="http://mxunit.org/doc/images/TDDNewFunctionality/23%20-%20make%20that%20test%20proper.png"&gt;&lt;IMG
+border="0" height="222" mce_src="http://mxunit.org/doc/images/TDDNewFunctionality/thumbs/23%20-%20make%20that%20test%20proper.jpg"
+src="http://mxunit.org/doc/images/TDDNewFunctionality/thumbs/23%20-%20make%20that%20test%20proper.jpg"
+width="365"&gt;&lt;/IMG&gt;&lt;/A&gt;&lt;/P&gt;
+&lt;P&gt;Step 24: Test method with no arguments. Make sure that if a private method doesn't
+have any arguments that the code doesn't gack. Just seems like a smart thing to do,
+that's all. &lt;/P&gt;
+&lt;P&gt;&lt;A href="http://mxunit.org/doc/images/TDDNewFunctionality/24%20-%20Test%20for%20method%20with%20no%20args.png"
+mce_href="http://mxunit.org/doc/images/TDDNewFunctionality/24%20-%20Test%20for%20method%20with%20no%20args.png"&gt;&lt;IMG
+border="0" height="222" mce_src="http://mxunit.org/doc/images/TDDNewFunctionality/thumbs/24%20-%20Test%20for%20method%20with%20no%20args.jpg"
+src="http://mxunit.org/doc/images/TDDNewFunctionality/thumbs/24%20-%20Test%20for%20method%20with%20no%20args.jpg"
+width="365"&gt;&lt;/IMG&gt;&lt;/A&gt;&lt;/P&gt;
+&lt;P&gt;Step 25: Almost done -- run all tests again.&lt;/P&gt;
+&lt;P&gt;So far, everything is looking good. Now I want to run all tests again that I ran
+at the outset. This is all tests I have, not just the ones I just wrote. This is a
+habit of mine.&lt;/P&gt;
+&lt;P&gt;Also, as of right now, I still haven't added the passthrough into TestCase.cfc
+yet. &lt;/P&gt;
+&lt;P&gt;&lt;A href="http://mxunit.org/doc/images/TDDNewFunctionality/25%20-%20Almost%20done%20-%20run%20all%20tests%20again.png"
+mce_href="http://mxunit.org/doc/images/TDDNewFunctionality/25%20-%20Almost%20done%20-%20run%20all%20tests%20again.png"&gt;&lt;IMG
+border="0" height="261" mce_src="http://mxunit.org/doc/images/TDDNewFunctionality/thumbs/25%20-%20Almost%20done%20-%20run%20all%20tests%20again.jpg"
+src="http://mxunit.org/doc/images/TDDNewFunctionality/thumbs/25%20-%20Almost%20done%20-%20run%20all%20tests%20again.jpg"
+width="325"&gt;&lt;/IMG&gt;&lt;/A&gt;&lt;/P&gt;
+&lt;P&gt;Now I'm ready to add the passthrough into TestCase.cfc. As with before, start with
+the tests first.... I gotta see stuff fail so I know my tests are good. &lt;/P&gt;
+&lt;P&gt;Step 26: Add test for it in TestCaseTest. Start with a sanity check&lt;/P&gt;
+&lt;P&gt;&lt;A href="http://mxunit.org/doc/images/TDDNewFunctionality/26%20-%20add%20test%20for%20it%20in%20TestCaseTest.%20start%20with%20a%20sanity%20check.png"
+mce_href="http://mxunit.org/doc/images/TDDNewFunctionality/26%20-%20add%20test%20for%20it%20in%20TestCaseTest.%20start%20with%20a%20sanity%20check.png"&gt;&lt;IMG
+border="0" height="222" mce_src="http://mxunit.org/doc/images/TDDNewFunctionality/thumbs/26%20-%20add%20test%20for%20it%20in%20TestCaseTest.%20start%20with%20a%20sanity%20check.jpg"
+src="http://mxunit.org/doc/images/TDDNewFunctionality/thumbs/26%20-%20add%20test%20for%20it%20in%20TestCaseTest.%20start%20with%20a%20sanity%20check.jpg"
+width="365"&gt;&lt;/IMG&gt;&lt;/A&gt;&lt;/P&gt;
+&lt;P&gt;Step 27: Add test first before adding makepublic method&lt;/P&gt;
+&lt;P&gt;&lt;A href="http://mxunit.org/doc/images/TDDNewFunctionality/27%20-%20add%20test%20first%20before%20adding%20makepublic%20method.png"
+mce_href="http://mxunit.org/doc/images/TDDNewFunctionality/27%20-%20add%20test%20first%20before%20adding%20makepublic%20method.png"&gt;&lt;IMG
+border="0" height="222" mce_src="http://mxunit.org/doc/images/TDDNewFunctionality/thumbs/27%20-%20add%20test%20first%20before%20adding%20makepublic%20method.jpg"
+src="http://mxunit.org/doc/images/TDDNewFunctionality/thumbs/27%20-%20add%20test%20first%20before%20adding%20makepublic%20method.jpg"
+width="365"&gt;&lt;/IMG&gt;&lt;/A&gt;&lt;/P&gt;
+&lt;P&gt;Step 28: Add makePublic into TestCase&lt;/P&gt;
+&lt;P&gt;&lt;A href="http://mxunit.org/doc/images/TDDNewFunctionality/28%20-%20add%20makePublic%20into%20testcase.png"
+mce_href="http://mxunit.org/doc/images/TDDNewFunctionality/28%20-%20add%20makePublic%20into%20testcase.png"&gt;&lt;IMG
+border="0" height="222" mce_src="http://mxunit.org/doc/images/TDDNewFunctionality/thumbs/28%20-%20add%20makePublic%20into%20testcase.jpg"
+src="http://mxunit.org/doc/images/TDDNewFunctionality/thumbs/28%20-%20add%20makePublic%20into%20testcase.jpg"
+width="365"&gt;&lt;/IMG&gt;&lt;/A&gt;&lt;/P&gt;
+&lt;P&gt;Step 29a: Run test again. All Green&lt;/P&gt;
+&lt;P&gt;&lt;A href="http://mxunit.org/doc/images/TDDNewFunctionality/29%20-%20run%20test%20again%20-%20Green%20Bar.png"
+mce_href="http://mxunit.org/doc/images/TDDNewFunctionality/29%20-%20run%20test%20again%20-%20Green%20Bar.png"&gt;&lt;IMG
+border="0" height="222" mce_src="http://mxunit.org/doc/images/TDDNewFunctionality/thumbs/29%20-%20run%20test%20again%20-%20Green%20Bar.jpg"
+src="http://mxunit.org/doc/images/TDDNewFunctionality/thumbs/29%20-%20run%20test%20again%20-%20Green%20Bar.jpg"
+width="365"&gt;&lt;/IMG&gt;&lt;/A&gt;&lt;/P&gt;
+&lt;P&gt;Step 29b: Run all tests again &lt;/P&gt;
+&lt;P&gt;&lt;A href="http://mxunit.org/doc/images/TDDNewFunctionality/29b%20-%20run%20all%20tests%20again.png"
+mce_href="http://mxunit.org/doc/images/TDDNewFunctionality/29b%20-%20run%20all%20tests%20again.png"&gt;&lt;IMG
+border="0" height="261" mce_src="http://mxunit.org/doc/images/TDDNewFunctionality/thumbs/29b%20-%20run%20all%20tests%20again.jpg"
+src="http://mxunit.org/doc/images/TDDNewFunctionality/thumbs/29b%20-%20run%20all%20tests%20again.jpg"
+width="325"&gt;&lt;/IMG&gt;&lt;/A&gt;&lt;/P&gt;
+&lt;P&gt;Step 30: Commit changes. This is with the mylyn filter on which is why you only
+see 4 files to commit. &lt;/P&gt;
+&lt;P&gt;&lt;A href="http://mxunit.org/doc/images/TDDNewFunctionality/30%20-%20with%20mylyn%20filter%20on%20commit%20changes.png"
+mce_href="http://mxunit.org/doc/images/TDDNewFunctionality/30%20-%20with%20mylyn%20filter%20on%20commit%20changes.png"&gt;&lt;IMG
+border="0" height="222" mce_src="http://mxunit.org/doc/images/TDDNewFunctionality/thumbs/30%20-%20with%20mylyn%20filter%20on%20commit%20changes.jpg"
+src="http://mxunit.org/doc/images/TDDNewFunctionality/thumbs/30%20-%20with%20mylyn%20filter%20on%20commit%20changes.jpg"
+width="365"&gt;&lt;/IMG&gt;&lt;/A&gt; &lt;/P&gt;
+{html}
+
+h2. Wrap Up
+
+So, this was the initial implementation of the facility in MXUnit that makes it easier
+to test private methods. It did change slightly from this version, but not much. I
+added another "style" of working with the makePublic function. It now also returns
+a brand new object which extends the object you pass into it and overrides the private
+function you're trying to run. Essentially this is a take on the conventional method
+of testing private functions, just made easier. &lt;a href="index.cfm?doc=testprivate"&gt;It's
+all documented here&lt;/a&gt;. 
+
+786598
+
+
+
+
+Verstion: 3
+
+Created By: marcesher
+
+Created On: 2009-01-18 16:21:22.000
+
+Last Update By: marcesher
+
+Last Update On: 2009-01-18 16:23:21.000
+
+
+

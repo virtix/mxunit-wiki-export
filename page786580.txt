@@ -1,0 +1,115 @@
+
+
+
+Getting Started -- Test Suites
+
+819332
+h2. *Getting Started with TestSuites*
+
+A TestSuite is a collection of tests that logically fit together.
+
+*Creating and Running a TestSuite*
+
+MXUnit was built to make it as easy as possible to create tests and test suites.
+For this tutorial we will _incrementally_ rebuild the MXUnit example found in  the
+installation package mxunit/samples/MyTestSuite.cfm.
+
+The steps for creating and running a TestSuite are:
+# Create a ColdFusion page to run the suite
+# Create a TestSuite object
+# Tell the TestSuite what tests to add
+# run() the TestSuite
+# Print the output
+# Run the suite in your web browser
+*1. Create a ColdFusion page to run this example{*}Create an empty ColdFusion page
+and save it as MyTestSuite.cfm in/mxunit/doc/tutorial/mytests
+
+*2. Create a TestSuite object{*}Type the following code into the template:[view plain|http://mxunit.org/doc/index.cfm?doc=testsuites#][copy
+to clipboard|http://mxunit.org/doc/index.cfm?doc=testsuites#][print|http://mxunit.org/doc/index.cfm?doc=testsuites#][?|http://mxunit.org/doc/index.cfm?doc=testsuites#]
+# &lt;cfscript&gt;
+# &amp;nbsp;testSuite&amp;nbsp;=&amp;nbsp;createObject("component","mxunit.framework.TestSuite").TestSuite();
+# &lt;/cfscript&gt;&amp;nbsp;&amp;nbsp;&lt;cfscript&gt;
+testSuite = createObject("component","mxunit.framework.TestSuite").TestSuite();
+&lt;/cfscript&gt;
+*3. Tell the TestSuite what tests to add*[view plain|http://mxunit.org/doc/index.cfm?doc=testsuites#][copy
+to clipboard|http://mxunit.org/doc/index.cfm?doc=testsuites#][print|http://mxunit.org/doc/index.cfm?doc=testsuites#][?|http://mxunit.org/doc/index.cfm?doc=testsuites#]
+# &lt;cfscript&gt;
+# &amp;nbsp;testSuite&amp;nbsp;=&amp;nbsp;createObject("component","mxunit.framework.TestSuite").TestSuite();
+# &amp;nbsp;//Add&amp;nbsp;all&amp;nbsp;runnable&amp;nbsp;methods&amp;nbsp;in&amp;nbsp;MyComponentTest
+# &amp;nbsp;testSuite.addAll("mxunit.samples.MyComponentTest");
+# &amp;nbsp;testSuite.addAll("mxunit.samples.MyOtherComponentTest");&amp;nbsp;//Identical&amp;nbsp;to&amp;nbsp;above
+# &amp;nbsp;//add&amp;nbsp;explicit&amp;nbsp;test&amp;nbsp;cased&amp;nbsp;(don't&amp;nbsp;start&amp;nbsp;with&amp;nbsp;'test').
+# &amp;nbsp;//Note&amp;nbsp;you&amp;nbsp;can&amp;nbsp;add&amp;nbsp;more&amp;nbsp;than&amp;nbsp;one&amp;nbsp;at&amp;nbsp;a&amp;nbsp;time&amp;nbsp;as&amp;nbsp;a&amp;nbsp;list
+# &amp;nbsp;testSuite.add("mxunit.samples.MyOtherComponentTest","aTestFunctionThatDoesNotBeginWithTest,anotherTestFunctionThatDoesNotBeginWithTest");
+# 
+# &lt;/cfscript&gt;&amp;nbsp;&amp;nbsp;&lt;cfscript&gt;
+testSuite = createObject("component","mxunit.framework.TestSuite").TestSuite();
+//Add all runnable methods in MyComponentTest
+testSuite.addAll("mxunit.samples.MyComponentTest");
+testSuite.addAll("mxunit.samples.MyOtherComponentTest"); //Identical to above
+//add explicit test cased (don't start with 'test').
+//Note you can add more than one at a time as a list
+testSuite.add("mxunit.samples.MyOtherComponentTest","aTestFunctionThatDoesNotBeginWithTest,anotherTestFunctionThatDoesNotBeginWithTest");
+
+&lt;/cfscript&gt;
+*4. Run the TestSuite*[view plain|http://mxunit.org/doc/index.cfm?doc=testsuites#][copy
+to clipboard|http://mxunit.org/doc/index.cfm?doc=testsuites#][print|http://mxunit.org/doc/index.cfm?doc=testsuites#][?|http://mxunit.org/doc/index.cfm?doc=testsuites#]
+# &lt;cfscript&gt;
+# &amp;nbsp;testSuite&amp;nbsp;=&amp;nbsp;createObject("component","mxunit.framework.TestSuite").TestSuite();
+# &amp;nbsp;testSuite.addAll("mxunit.samples.MyComponentTest");
+# &amp;nbsp;testSuite.addAll("mxunit.samples.MyOtherComponentTest");
+# &amp;nbsp;testSuite.add("mxunit.samples.MyOtherComponentTest","aTestFunctionThatDoesNotBeginWithTest,anotherTestFunctionThatDoesNotBeginWithTest");
+# &amp;nbsp;//Run&amp;nbsp;the&amp;nbsp;tests&amp;nbsp;and&amp;nbsp;save&amp;nbsp;everything&amp;nbsp;in&amp;nbsp;"results"
+# &amp;nbsp;results&amp;nbsp;=&amp;nbsp;testSuite.run();
+# &lt;/cfscript&gt;&amp;nbsp;&amp;nbsp;&lt;cfscript&gt;
+testSuite = createObject("component","mxunit.framework.TestSuite").TestSuite();
+testSuite.addAll("mxunit.samples.MyComponentTest");
+testSuite.addAll("mxunit.samples.MyOtherComponentTest");
+testSuite.add("mxunit.samples.MyOtherComponentTest","aTestFunctionThatDoesNotBeginWithTest,anotherTestFunctionThatDoesNotBeginWithTest");
+//Run the tests and save everything in "results"
+results = testSuite.run();
+&lt;/cfscript&gt;
+*5. Do something with the output*[view plain|http://mxunit.org/doc/index.cfm?doc=testsuites#][copy
+to clipboard|http://mxunit.org/doc/index.cfm?doc=testsuites#][print|http://mxunit.org/doc/index.cfm?doc=testsuites#][?|http://mxunit.org/doc/index.cfm?doc=testsuites#]
+# &lt;cfscript&gt;
+# &amp;nbsp;testSuite&amp;nbsp;=&amp;nbsp;createObject("component","mxunit.framework.TestSuite").TestSuite();
+# &amp;nbsp;testSuite.addAll("mxunit.samples.MyComponentTest");
+# &amp;nbsp;testSuite.addAll("mxunit.samples.MyOtherComponentTest");&amp;nbsp;//Identical&amp;nbsp;to&amp;nbsp;above
+# &amp;nbsp;testSuite.add("mxunit.samples.MyOtherComponentTest","aTestFunctionThatDoesNotBeginWithTest,anotherTestFunctionThatDoesNotBeginWithTest");
+# &amp;nbsp;results&amp;nbsp;=&amp;nbsp;testSuite.run();
+# &amp;nbsp;//Now&amp;nbsp;print&amp;nbsp;the&amp;nbsp;results.&amp;nbsp;Simple\!
+# &amp;nbsp;writeOutput(results.getResultsOutput('html'));&amp;nbsp;//See&amp;nbsp;next&amp;nbsp;section&amp;nbsp;for&amp;nbsp;other&amp;nbsp;output&amp;nbsp;formats
+# &lt;/cfscript&gt;&amp;nbsp;&amp;nbsp;&lt;cfscript&gt;
+testSuite = createObject("component","mxunit.framework.TestSuite").TestSuite();
+testSuite.addAll("mxunit.samples.MyComponentTest");
+testSuite.addAll("mxunit.samples.MyOtherComponentTest"); //Identical to above
+testSuite.add("mxunit.samples.MyOtherComponentTest","aTestFunctionThatDoesNotBeginWithTest,anotherTestFunctionThatDoesNotBeginWithTest");
+results = testSuite.run();
+//Now print the results. Simple!
+writeOutput(results.getResultsOutput('html')); //See next section for other output
+formats
+&lt;/cfscript&gt;
+
+*6. Run the suite in your web browser*[http://localhost:8500/mxunit/doc/tutorial/mytests/MyTestSuite.cfm|http://localhost:8500/mxunit/doc/tutorial/mytests/MyTestSuite.cfm]
+You should see this:
+
+
+\[Next - [Overview of MXUnit output formats|http://mxunit.org/doc/index.cfm?doc=outputformats]\]
+
+786580
+
+
+
+
+Verstion: 2
+
+Created By: marcesher
+
+Created On: 2009-01-18 15:52:13.000
+
+Last Update By: marcesher
+
+Last Update On: 2009-01-18 15:53:45.000
+
+
+

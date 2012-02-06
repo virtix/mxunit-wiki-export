@@ -1,0 +1,74 @@
+
+
+
+Stubbing
+
+5374210
+Suppose you have a component you want to test and that component calls a method on
+another component which returns a number needed by the 1{^}st^ component:
+
+{color:#800000}&lt;cfcomponent{color}{color:#800000}hint={color}{color:#0000ff}"Example
+Component To Mock"{color}{color:#800000}output={color}{color:#0000ff}"false"{color}{color:#800000}&gt;{color}
+{color:#800000}&amp;nbsp;&amp;nbsp; &amp;nbsp;{color}{color:#800000}&lt;cffunction{color}{color:#800000}name={color}{color:#0000ff}"myMethod"{color}{color:#800000}&gt;{color}
+{color:#800000}&amp;nbsp;&amp;nbsp; &amp;nbsp;{color}{color:#800000}&lt;cfargument{color}{color:#800000}name={color}{color:#0000ff}"foo"{color}{color:#800000}/&gt;{color}
+{color:#800000}&amp;nbsp;&amp;nbsp; &amp;nbsp;{color}{color:#800000}&lt;cfset{color}myData = myOtherComponent.doSomething({color:#0000ff}'foo'{color}){color:#800000}/&gt;{color}
+
+{color:#800000}_&amp;nbsp;&amp;nbsp; &amp;nbsp;_{color}{color:#999999}_&lt;\!--\- Do something with
+myData \---&gt;_{color}{color:#800000}&amp;nbsp;&amp;nbsp; &amp;nbsp;{color}{color:#800000}&lt;cfreturn{color}{color:#0000ff}true{color}{color:#800000}/&gt;{color}
+
+{color:#800000}&lt;/cffunction&gt;{color}
+{color:#800000}&lt;/cfcomponent&gt;{color}
+
+You can mock MyOtherComponentlike this:
+
+{color:#800000}&lt;cfcomponent{color}{color:#800000}extends={color}{color:#0000ff}"mxunit.framework.TestCase"{color}{color:#800000}output={color}{color:#0000ff}"false"{color}{color:#800000}&gt;{color}
+
+{color:#800000}&amp;nbsp;&amp;nbsp; &amp;nbsp;{color}{color:#800000}&lt;cffunction{color}{color:#800000}name={color}{color:#0000ff}"testMyComponentInteractions"{color}{color:#800000}&gt;{color}
+
+{color:#808080}_&amp;nbsp;&amp;nbsp; &amp;nbsp;_{color}{color:#808080}_&lt;\!--\- Create the mock
+\---&gt;_{color}
+
+{color:#800000}&amp;nbsp;&amp;nbsp; &amp;nbsp;{color}{color:#800000}&lt;cfset{color} myMock = mock({color:#0000ff}'MyOtherComponent'{color})
+/&gt;
+
+{color:#800000}_&amp;nbsp;&amp;nbsp; &amp;nbsp;_{color}{color:#666666}_&lt;\!--\- Define Behavior
+\---&gt;_{color}{color:#800000}&amp;nbsp;&amp;nbsp; &amp;nbsp;{color}{color:#800000}&lt;cfset{color}
+myMock.doSomething({color:#0000ff}'foo'{color}).returns({color:#ff0a0a}123456{color})
+{color:#808080}/&gt;{color}
+
+{color:#800000}_&amp;nbsp;&amp;nbsp; &amp;nbsp;_{color}{color:#999999}_&lt;\!--\- Inject into component
+\---&gt;_{color}{color:#800000}&amp;nbsp;&amp;nbsp; &amp;nbsp;{color}{color:#800000}&lt;cfset{color}myComponent.setMyOtherComponent(mock)
+{color:#800000}/&gt;{color}
+
+{color:#800000}_&amp;nbsp;&amp;nbsp; &amp;nbsp;_{color}{color:#666666}_&lt;\!--\- Exercise MyComponent
+\---&gt;_{color}{color:#800000}&amp;nbsp;&amp;nbsp; &amp;nbsp;{color}{color:#800000}&lt;cfset{color}myComponent.myMethod({color:#0000ff}'foo'{color}){color:#800000}/&gt;{color}
+
+&amp;nbsp;&amp;nbsp; {color:#800000}&lt;/cffunction&gt;{color}
+{color:#800000}&lt;/cfcomponent&gt;{color}
+
+*Side Bar* The init('component.name')statement above is optional. It's only required
+if your component under test requires an exact type; e.g.,
+
+{color:#800000}&lt;cffunction{color}{color:#800000}name={color}{color:#0000ff}"setMyOtherComponent"{color}{color:#800000}&gt;{color}
+{color:#800000}&amp;nbsp; &lt;cfargument name={color}{color:#0000ff}'aCollaborator'{color}{color:#800000}type={color}{color:#0000ff}'MyOtherComponent'{color}{color:#800000}/&gt;{color}
+
+{color:#808080}_..._{color}
+
+{color:#800000}&lt;/cffunction&gt;{color}
+
+5341504
+
+
+
+Verstion: 1
+
+Created By: virtix
+
+Created On: 2010-03-26 10:04:19.000
+
+Last Update By: virtix
+
+Last Update On: 2010-03-26 10:04:19.000
+
+
+

@@ -1,0 +1,61 @@
+
+
+
+Adding MXUnit Snippets To CFEclipse
+
+5767170
+[CFEclipse|http://cfeclipse.org] gives you the same snippet functionality you know
+and love from ColdFusion Studio. And now it goes a step further: SnipEx servers. This
+means you can get snippets from other folks simply by pointing to a snipex URL.
+MXUnit uses the CFSnippets.org snipex server created by Todd Sharp.
+
+
+This set of instructions assumes you know how to use snippets in CFEclipse (it does
+not assume you know how to use snipex). Please read about snippets first if you don't
+know what they are. If you're interested in learning more about snipex, please read
+that, too. It's quick and short and good.
+
+*Step 1: Clear your snippet cache*
+NOTE: you can skip this step if you've never set up the cfsnippets.org snipex server
+(From Ray Camden's blog post)
+&amp;nbsp;&amp;nbsp; 1. Change to your Eclipse workspace. Mine was at /Users/ray/Documents/workspace
+&amp;nbsp;&amp;nbsp; 2. Change to .metadata/.plugins/org.cfeclipse.cfml/snipex
+&amp;nbsp;&amp;nbsp; 3. Delete all XML files
+&amp;nbsp;&amp;nbsp; 4. Restart Eclipse
+
+*Step 2: Add the cfsnippets.org snipex server*
+
+&amp;nbsp;&amp;nbsp; 1. Open the Snip Tree View
+&amp;nbsp;&amp;nbsp; 2. Click the little white upside down triangle to the far right
+&amp;nbsp;&amp;nbsp; 3. Select "Edit SnipEx Servers"
+&amp;nbsp;&amp;nbsp; 4. Add [http://cfsnippets.org/model/snippets/snipEx/snipEx.cfc] into
+the first open URL box
+&amp;nbsp;&amp;nbsp; 5. Click Apply
+&amp;nbsp;&amp;nbsp; 6. Restart Eclipse
+
+*Step 3: Try it out*
+&amp;nbsp;&amp;nbsp; 1. Open any existing test case or create a new one. Or just pop open
+the scribble pad.
+&amp;nbsp;&amp;nbsp; 2. Open the snip tree view
+&amp;nbsp;&amp;nbsp; 3. You'll now see "CFSnippets.org" as a new entry in the tree
+&amp;nbsp;&amp;nbsp; 4. Expand the tree. Look in the tree for "MXUnit". Expand it.
+&amp;nbsp;&amp;nbsp; 5. You'll see all available snippets for MXUnit in there.
+&amp;nbsp;&amp;nbsp; 6. To insert a snippet, just double click it\!
+
+5734402
+
+
+
+
+Verstion: 2
+
+Created By: virtix
+
+Created On: 2010-03-26 15:33:38.000
+
+Last Update By: virtix
+
+Last Update On: 2010-03-26 15:34:37.000
+
+
+

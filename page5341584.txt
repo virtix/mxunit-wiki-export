@@ -1,0 +1,85 @@
+
+
+
+MXUnit Documentation
+
+5374285
+{section:border=false}
+
+
+
+{column:width=52%}
+
+h5. MXUnit is a proven and robust test framework and Eclipse plugin used by the some
+of the best ColdFusion developers around the world.
+
+h6. Quick Links
+* [Getting Started|http://wiki.fuseboxframework.com/display/default/Getting+Started]
+* [Download Stable|http://mxunit.org/download.cfm]
+* [Download Nightly Build|http://mxunit.org/downloadNightly.cfm]
+* [Installing The Eclipse Plugin|http://wiki.fuseboxframework.com/display/default/Install+the+Eclipse+Plugin]
+* [The MXUnit Blog|http://blog.mxunit.org]
+* [Eclipse Plugin Update Site|http://mxunit.org/update]
+* [SVN Source Code|http://mxunit.googlecode.com/svn/mxunit/trunk/]
+* [Github Fork|http://github.com/virtix/mxunit]
+
+
+h6. Support
+
+* [MXUnit Google Group|http://groups.google.com/group/mxunit]
+* [Bug Report or Feature Request|http://code.google.com/p/mxunit/issues/list]
+
+{table:border=0 width=100%}
+{table-row}
+
+{table-cell}
+
+h6. Committers
+
+* Marc	Esher  ([blog|http://blog.mxunit.org], Twitter:[@marcesher|http://twitter.com/marcesher])
+* Adam	Haskell  ([blog|http://cfrant.blogspot.com/], Twitter:[@AHaskell|http://twitter.com/ahaskell])
+* Mike	Henke  ([blog|http://www.henke.ws/], Twitter: [@mikehenke|http://twitter.com/mikehenke])
+* Randy	Merril  ([blog|http://forthedeveloper.com/])
+* Mike	Rankin  ([blog|http://mrmx.blogspot.com/], Twitter: [@mike_rankin|http://twitter.com/mike_rankin])
+* Bill	Shelton  ([blog|http://blog.billshelton.me], Twitter:[@virtix|http://twitter.com/virtix])
+* Bob	Silverberg  ([blog|http://www.silverwareconsulting.com/], Twitter: [@elegant_chaos|http://twitter.com/elegant_chaos])
+{table-cell}
+{table-cell} !einstein_coding_mxunit.jpg|thumbnail,align=left!{table-cell}{*}License*
+
+Versions 1.x are licensed under [GPL|http://www.gnu.org/licenses/quick-guide-gplv3.html|Copyleft]
+and versions 2.x are licensed under the [MIT|http://www.opensource.org/licenses/mit-license.php]
+open source license.
+
+{table-row}
+{table}
+{column}
+
+{column:width=3%}
+
+{column}
+
+
+{column:width=45%}
+
+h6. Navigate space{pagetreesearch}{pagetree:startDepth=2}
+{column}
+{section}
+
+{recently-updated-dashboard:types=page,comment}
+
+5341584
+
+
+
+Verstion: 34
+
+Created By: virtix
+
+Created On: 2009-01-17 10:51:32.000
+
+Last Update By: virtix
+
+Last Update On: 2010-06-19 11:00:46.000
+
+
+

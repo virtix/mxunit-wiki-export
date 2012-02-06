@@ -1,0 +1,24 @@
+
+
+
+How cfcomponent output="true"  can affect memory consumption
+
+5767258
+
+
+5734500
+
+
+
+Verstion: 1
+
+Created By: marcesher
+
+Created On: 2010-09-16 16:27:31.000
+
+Last Update By: marcesher
+
+Last Update On: 2010-09-16 16:27:31.000
+
+
+

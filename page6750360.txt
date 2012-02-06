@@ -1,0 +1,33 @@
+
+
+
+
+
+
+
+Automation with Jenkins Continuous Integration Server
+
+6783124
+These were originally published as a series of blog posts on the MXUnit blog. They've
+been brought into the wiki and updated for Jenkins.
+
+
+{children}
+
+6750360
+
+
+
+
+Verstion: 1
+
+Created By: marcesher
+
+Created On: 2011-03-06 23:39:53.924
+
+Last Update By: marcesher
+
+Last Update On: 2011-03-06 23:39:53.924
+
+
+

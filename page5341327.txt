@@ -1,0 +1,95 @@
+
+
+
+Message-First Assertions (CFUnit Style)
+
+5374079
+
+Before I (Marc) began testing with MXUnit, I used CFUnit. It's a fine framework. Its
+assertion style adheres to the JUnit convention, which is "message-first", like so:
+
+{code}
+
+	&lt;cffunction name="testAssertEqualsMessageFirstFailure"&gt;
+		&lt;cfset expected = 1&gt;
+		&lt;cfset actual = 2&gt;
+		&lt;cfset assertEquals("here's my message",expected,actual)&gt;
+	&lt;/cffunction&gt;
+{code}	
+
+This is all fine and good. However, many consider this an inconvenience, particularly
+when testing for equality (as opposed to using assertTrue()). The reason is that your
+assertion kind of negates the need for a message at times, and thus you see code like
+this all over the place:
+
+{code}	&lt;cffunction name="testAssertEqualsMessageFirstFailure"&gt;
+		&lt;cfset expected = 1&gt;
+		&lt;cfset actual = 2&gt;
+		&lt;cfset assertEquals("",expected,actual)&gt;
+	&lt;/cffunction&gt;
+{code}	
+
+Again, no biggie. I got used to it and never paid it much mind. Nonetheless, MXUnit
+does not use message-first but instead uses message-optional assertions by default:
+
+{code}	&lt;cffunction name="testAssertEqualsMessageOptionalFailure"&gt;
+		&lt;cfset expected = 1&gt;
+		&lt;cfset actual = 2&gt;
+		&lt;cfset assertEquals(expected,actual)&gt;
+		&lt;!--- optional message at end ---&gt;
+		&lt;cfset assertEquals(expected,actual,"here's my message")&gt;
+	&lt;/cffunction&gt;
+{code}	
+
+Now, by the time I started using MXUnit, I head a healthy set of tests built, and
+they all used message-first assertions. This created a problem for me: spend a few
+hours modifying all my tests to use message-optional? Or something else. I went with
+something else. MXUnit supports the ability to use message-first style assertions
+for the main assertions: assertEquals and assertTrue. You do this by calling setTestStyle("cfunit")
+in your tests. You can do this in individual tests or in the setUp function. And,
+in addition, you can mix and match if you choose (why you'd do that, I don't know).
+To make a test use message-optional assertions in a test case that is also using message-first
+assertions in other test functions, simply call setTestStyle("default"). Here's an
+example of all this:
+
+{code}	&lt;cffunction name="setUp"&gt;
+		&lt;cfset setTestStyle("cfunit")&gt;
+	&lt;/cffunction&gt;
+	
+	&lt;cffunction name="testAssertEqualsMessageFirstFailure"&gt;
+		&lt;cfset expected = 1&gt;
+		&lt;cfset actual = 2&gt;
+		&lt;cfset assertEquals("my message",expected,actual)&gt;		
+	&lt;/cffunction&gt;
+	
+	&lt;cffunction name="testAssertEqualsMessageOptionalFailure"&gt;
+		&lt;cfset setTestStyle("default")&gt;
+		&lt;cfset expected = 1&gt;
+		&lt;cfset actual = 2&gt;
+		&lt;cfset assertEquals(expected,actual,"my message")&gt;		
+	&lt;/cffunction&gt;
+{code}	
+
+Eventually, I spent that few hours changing my tests to use message-optional assertions.
+Mostly because I think it makes them more maintainable and less confusing. So, please
+understand that setTestStyle("cfunit") is merely a convenience for those with existing
+tests who want to give MXUnit a try! It's not the suggested method of testing with
+MXUnit.
+
+
+5341327
+
+
+
+Verstion: 1
+
+Created By: virtix
+
+Created On: 2010-03-26 15:27:44.000
+
+Last Update By: virtix
+
+Last Update On: 2010-03-26 15:27:44.000
+
+
+

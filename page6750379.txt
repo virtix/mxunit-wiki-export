@@ -1,0 +1,136 @@
+
+
+
+Continuous Integration -- ANT - The Glue between Jenkins and your Tests
+
+6783141
+{section}
+{column:width=60%}
+
+{toc:maxLevel=5}
+h1. Why ANT?
+
+
+You won't get far using Jenkins and ColdFusion without ANT. ANT is the Hub. It's the
+glue.
+
+Your ANT build will run your MXUnit Tests. Jenkins will run your ANT build, record
+the results of the tests, and perform post-build actions (notifications, etc) based
+on the results of those tests.
+
+h1. Assumptions
+
+We assume you have some tests and can successfully run them via either the Eclipse
+plugin or your web browser
+
+We assume that if you are not familiar with ANT that you're willing to learn enough
+of it to get your CI environment set up. If you're not up for that, perhaps [simpler
+automation is for you|default:Simple Test Scheduling].
+
+
+h1. A thorough description of running your tests with ANT
+
+
+Bill's [original walkthrough|default:Using the Ant Task to Generate JUnit Reports]
+is very thorough. In addition, please see Bill's fantastic [8-minute video|default:Screencast
+- Using MXUnit and Ant for Build,Test, and Integration Automation - 8 min.] showing
+exactly how to run your MXUnit tests with ANT.
+
+If you are new to ANT, I&amp;nbsp; implore you to visit those links, especially if you're
+the type who doesn't like flailing about trying to make sense of foreign things.
+
+Even if you simply read Bill's instructions, and watch the video, you'll gain enough
+familiarity with ANT and MXUnit to move on ot the next step
+
+
+h1. Once you're familiar with running your tests with ANT
+
+
+...Or, if you're the type who likes to jump right in
+
+h2. Directory Structure
+
+
+Your final directory structure will look something like the following. If your tests
+live somewhere else inside your app, that's OK... just make sure to adjust the paths
+in the build file to account for their location.
+
+In the example below, files demoted with an asterisk \(*) are files that do not yet
+exist but which will when we're finished
+
+{code}/App
+*build.xml
+/lib
+*mxunit-ant.jar
+other-whatever.jar
+/tests
+*HttpAntRunner.cfc
+/testdir1
+SomeTest.cfc
+/testdir2
+SomeOtherTest.cfc
+{code}
+h2. Copy files from MXUnit to your app
+
+You need the following three files to start:
+# mxunit-ant.jar \-\- ANT will use this to communicate with ColdFusion
+# HttpAntRunner.cfc \-\- This is the "endpoint"... ANT will make HTTP requests to
+this CFC, and that CFC will in turn run the MXUnit framework code which runs your
+tests
+# build.xml \-\- This is your new ANT build file{*}What to put where*\# Create a directory
+in your app called "lib"
+# Copy mxunit/ant/lib/mxunit-ant.jar into that lib directory
+# Copy mxunit/samples/build.xml into your app's root, such that you end up with /app/build.xml
+# Copy mxunit/samples/HttpAntRunner.cfc into your app's test root, such that you end
+up with /app/tests/HttpAntRunner.cfcOpen up that HttpAntRunner.cfc after you copy
+it. Notice that it simply extends the framework version. While you *could* point directly
+to the framework version, you almost always want to point to your custom version,
+especially if you're using ORM, testing framework controllers, or otherwise need access
+to your app's Application scope
+
+h2. Modify build.xml
+
+The sample build.xml file which you copied is meant to be a good-enough skeleton to
+get you running your tests from ANT. It also contains example "svn update" and "dist"
+targets for updating a directory from SVN and creating a zip file, respectively. More
+on those later.
+
+For now, we need to run tests. To do this, you'll modify several of the properties
+in the ANT file to point to the correct names and locations for your project
+
+If you're using Eclipse or another IDE which shows the structure of an ANT file, open
+the ANT view and drag your build file into it. It'll look something like this:
+
+
+
+Change the project name to your project
+
+
+{column}
+{column:width=5%}
+
+
+{column}
+{column:width=35%}
+
+h6. Navigate space
+{pagetree:searchBox=true|expandCollapseAll=true|startDepth=1}
+{column}
+{section}
+
+6750379
+
+
+
+Verstion: 6
+
+Created By: marcesher
+
+Created On: 2011-03-08 11:22:51.383
+
+Last Update By: marcesher
+
+Last Update On: 2011-03-08 12:33:03.294
+
+
+

@@ -1,0 +1,94 @@
+
+
+
+Anatomy of a TestCase
+
+5767188
+* The file is a component (a .cfc file)
+* The filename either starts or ends with "Test"
+* The component extends mxunit.framework.TestCase or extends a component that eventually
+extends mxunit.framework.TestCase
+* The TestCase can contain a setUp() and tearDown() function that will run prior to
+and after each and every test
+* The TestCase can contain any number of public methods. Those public methods are
+considered tests regardless of their name, and MXUnit will run them as tests. Failures
+will be recorded as failures; errors as errors; and successes as successes
+* Inside of your tests, you make assertions on the results of functions that you call
+on your component under test
+* Any private methods are not considered tests and will not be run by MXUnit
+* To very quickly get started, you can run the test by loading it in the browser and
+suffixing it with "?method=runTestRemote", like so:
+** http://localhost/myapp/tests/MyTest.cfc?method=runTestRemote
+* All the other ways of running tests, including in the Eclipse plugin, in a DirectoryTestSuite,
+or with ANT, are covered elsewhere in the docs
+
+*Study this TestCase skeleton to learn more*
+
+
+{code:language=cf|title=MyTest.cfc|controls=true|linenumbers=true}
+&lt;cfcomponent extends="mxunit.framework.TestCase"&gt;
+
+	&lt;!--- this will run before every single test in this test case ---&gt;
+	&lt;cffunction name="setUp" returntype="void" access="public" hint="put things here
+that you want to run before each test"&gt;
+		&lt;cfset obj = createObject("component","ObjectUnderTest")&gt;
+
+	&lt;/cffunction&gt;
+
+	&lt;!--- this will run after every single test in this test case ---&gt;
+	&lt;cffunction name="tearDown" returntype="void" access="public" hint="put things here
+that you want to run after each test"&gt;
+
+	&lt;/cffunction&gt;
+
+	&lt;!--- your test. Name it whatever you like... make it descriptive. ---&gt;
+	&lt;cffunction name="xxx_should_xxxx_When_xxx" returntype="void" access="public"&gt;
+		&lt;!--- exercise your component under test ---&gt;
+		&lt;cfset var result = obj.doSomething()&gt;
+
+		&lt;!--- if you want to "see" your data -- including complex variables, you can pass
+them to debug() and they will be available to you either in the HTML output or in
+the Eclipse plugin via rightclick- "Open TestCase results in browser" ---&gt;
+		&lt;cfset debug(result)&gt;
+
+		&lt;!--- make some assertion based on the result of exercising the component ---&gt;
+		&lt;cfset assertEquals("SomeExpectedValue",result,"result should've been 'SomeExpectedValue'
+but was #result#")&gt;
+
+	&lt;/cffunction&gt;
+
+	&lt;cffunction name="xxx_should_yyy_when_zzz" returntype="void"&gt;
+	&lt;cfset var XX = ""&gt;
+	&lt;cfset fail("xxx_should_yyy_when_zzz not yet implemented")&gt;
+
+
+&lt;/cffunction&gt;
+
+
+
+	&lt;!--- this won't get run b/c it's private ---&gt;
+	&lt;cffunction name="somePrivateFunction" access="private"&gt;
+		&lt;cfset marc.getBankAccount().add("5 meeeeelion dollars")&gt;
+	&lt;/cffunction&gt;
+
+&lt;/cfcomponent&gt;
+
+{code}
+
+5734420
+
+
+
+
+Verstion: 3
+
+Created By: marcesher
+
+Created On: 2010-06-24 21:36:51.000
+
+Last Update By: marcesher
+
+Last Update On: 2010-06-25 00:48:08.000
+
+
+

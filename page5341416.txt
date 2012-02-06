@@ -1,0 +1,85 @@
+
+
+
+
+
+
+Known Issues and things to look out for
+
+5374136
+*If your mocked object returns an MXUnit MightyMock object rather than what you intended,
+this is likely due to an incorrect parameter in the definition.*
+
+For example, if you mock an object like this:
+
+{code}
+
+myMock = mock("foo");
+myMock.bar("{string}").returns(true);
+
+{code}
+
+And it's subsequently invoked like this:
+
+
+{code}
+
+some_bool = myMock.bar(2);
+assert(some_bool);
+
+{code}
+
+This will fail because myMock.foo(...) is expecting a string, which the integer 2
+is not. What's happening is that when you call myMock.bar(2), MXUnit thinks you're
+defining a new mock rather than executing it.
+----
+_Named vs. Ordered Parameters_
+
+*The definition of parameters in a mock must match how it's invoked.&amp;nbsp;* MXUnit's
+MIghtyMock does not (yet) support both forms of parameters concurrently.
+
+For example, if in your CUT, a component to be mocked is invoked like this:
+
+{code}
+//Component under test
+
+theCollaborator = createObject('component', 'com.foo.Bar');
+
+function doSomething(){
+...
+theCollaborator.someService( param1='xyz', param2=123 );
+..
+}
+{code}
+Then, your mock also needs to use the same parameter invocation method:
+{code}
+//TestCase
+
+function testSomething(){
+myMockedObect = mock('com.foo.Bar');
+myMockedObject.someService( param1='xyz', param2=123 ).returns();
+}
+{code}
+If the component to be mocked doesn't use named parameters as illustrated above, you
+must also not used named parameters.
+
+----
+
+5341416
+
+
+
+
+Verstion: 3
+
+Created By: virtix
+
+Created On: 2010-04-05 02:15:05.000
+
+Last Update By: virtix
+
+Last Update On: 2010-06-24 10:52:37.000
+
+
+
+

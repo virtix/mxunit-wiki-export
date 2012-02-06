@@ -1,0 +1,128 @@
+
+
+
+
+
+
+
+Release Notes
+
+5767274
+{toc:maxLevel=2}
+{tip}You can get the latest version of MXUnit here:&amp;nbsp;[http://mxunit.org/download.cfm|http://mxunit.org/download.cfm]
+
+You can get the latest version of the Eclipse plugin by pointing at this update site:
+[http://mxunit.org/update]
+{tip}
+{section}
+
+{column:width=50%}
+
+h2. Framework \-\- 2.1 \-\- November 12, 2011
+
+h3. Enhancements
+
+* TestDecorators
+* Array, Query, and Structure deep comparison in assertEquals()
+* Improved Test Ordering
+
+Special thanks to Mark Mandel, Ryan Anklam, and Tim and John Farrar
+
+h2. Framework \-\- 2.0.3 \-\- May 5, 2011
+
+
+
+h3. Enhancements
+
+* User-contributed "assertEqualsWithTolerance()" function which adds a tolerance parameter
+to equality assertions
+* Updated samples/build.xml with hints for using with Jenkins
+* Updated mxunit-ant.jar to log the entire html response to the console if the test
+run bombs (i.e. 500 error)
+
+h2. Framework \-\- 2.0.2 \-\- November 19, 2010
+
+
+
+h3. Enhancements
+
+* added restoreMethod() for undoing method overwrites from injectMethod(). This is
+particularly useful when using ColdSpring-managed objects in your tests. Inspired
+by [this post|http://www.silverwareconsulting.com/index.cfm/2009/7/14/Using-MXUnits-injectMethod-to-Reverse-an-injectMethod-call#c82B9BFA8-0DE7-8E6D-2C4C1BC85072A908]&amp;nbsp;
+* HTML Result tweaks... mostly code cleanup. Also, no need to specify a result type
+any longer as it defaults to the new HTML output introduced in MXUnit 2.0
+
+h3. Bug Fixes
+
+* User-supplied patch to JUnitXMLTestResult to properly encode "special characters".
+Thanks\!
+
+
+
+
+h2. Framework \-\- 2.0.1
+
+
+h3. Enhancements
+
+
+* [debug()|default:View Debug Output] and [request.debug()|default:Using request.debug()]
+now support all attributes of cfdump. For example, you can now do: debug(var=mystruct,
+top=5, label="some label"); This is particularly important when debugging ORM objects
+* Assertion isTypeOf() now considers interfaces
+
+h3. Bug Fixes
+
+* Core features should now be CF7 compatible.
+* MightyMock behavioral inconsistency on CF8 fixed
+* Components with output=true have been turned to output=false where appropriate.
+This important fix [addresses a memory condition|default:How cfcomponent output=true
+can affect memory consumption] in MightyMock on Adobe ColdFusion
+
+h3. Backwards Compatibility
+
+* debug() will be backwards compatible IF for calls not using named arguments
+* debug() will now fail if the old (removed) "debugdata" argument was passed like
+so: debug(debugdata=someStruct); to fix, either change debugdata to "var" or remove
+the named argument
+
+
+{column}
+{column:width=5%}
+
+
+{column}
+{column:width=45%}
+
+h2. Eclipse Plugin \-\- 1.4.1 \-\- March 23, 2011
+
+
+* Added "Run MXUnit Tests" to the "Run As" menu. Default keybinding is alt-shift-x,
+m (you can change that in preferences)
+* Added support for opening files from the "Tag Context" panel when those files are
+not in projects, i.e. opens from the file system.
+* Thanks Denny for these contributions\!
+
+
+
+{column}
+{section}
+
+5734518
+
+
+
+
+
+Verstion: 17
+
+Created By: marcesher
+
+Created On: 2010-09-26 18:29:02.000
+
+Last Update By: marcesher
+
+Last Update On: 2011-11-14 14:21:40.590
+
+
+

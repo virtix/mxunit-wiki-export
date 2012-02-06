@@ -1,0 +1,154 @@
+
+
+
+Continuous Integration -- Running tests with Jenkins
+
+6783219
+{section}
+{column:width=60%}
+
+{toc:maxLevel=5}In the first installment, I showed how to get Jenkins set up and connected
+to your SVN  server. In this entry, I'll demonstrate how to run your MXUnit tests
+in a Jenkins  project.
+
+h2. Assumptions
+
+
+I'm assuming you successfully [completed the prior step|default:Continuous Integration
+-- ANT - The Glue between Jenkins and your Tests] and can run your tests from ANT,
+either within your IDE or at the command line. Don't bother proceeding until you've
+done so.
+
+h2. Configuring ANT within Jenkins
+
+Jenkins needs to know where your ANT install lives. If you haven't downloaded  ANT,
+do so now, unzip it, and put it somewhere. Then, copy the path to that  location.
+
+From your main Jenkins screen, click on "Manage Jenkins", then "Configure  System".
+More quickly, type "configure" into the search box and it'll take you  to the same
+place. Go down to the "ANT" section, click "Add", and paste that  path to your ANT
+install. Note, this is NOT the "bin" directory... just the ANT  root. Give it a name,
+like "ANT 1.7" or whatever. Click Save
+
+*Jenkins will not treat this ANT location as the default  location*. You must (at
+least, I did) have to explicitly choose this ANT  instance for every project setup.
+Just so you know. This tripped me up at  first.
+
+h2. Configuring your project's test runner step
+
+Navigate to your project, then click "Configure". More quickly, you can  search for
+your project by name, then search for "configure", and you'll get to  the same screen.
+
+Find the "Build" section. click "Add build step". Select "Invoke ANT". Select  the
+ANT instance from the dropdown list of installed ANTs. In the "target"  field, type
+the name of the target in your ANT build file that you use to run  tests. For example,
+"runTests"
+
+This *might* be all you need. So you could save this and try to do a  build now, and
+see what happens.
+
+h2. Test Runner Step Configuration, Part 2: Properties
+
+Now's a good time to talk about the weirdo nature of ColdFusion projects with  respect
+to CI. Remember, you checked out your project from Subversion into  Jenkins's workspace,
+but that's not the code you care about... your code already  lives on a DEV server
+and is updated by some other means. However, there is one  file that gets checked
+out that you do care about: Your ANT build file.
+
+When Jenkins runs your ANT file, it'll be running the one from its workspace.  And
+then that build file will be executing its tests against the components you  specify
+on your DEV server. Got it? Good. Confused? I know.
+
+It's possible that your build file's runTests target might need some  properties that
+are possibly set in a properties file that you don't keep in SVN  or which otherwise
+you need to override. For example, for MXUnit itself, our  build file looks at a file
+named "unames.properties" to get some configuration  information such as server name,
+port, usernames/passwords, webroot location,  and some other things. This is NOT kept
+in SVN b/c it's unique for each MXUnit  contributor. When MXUnit's runTests is run,
+it tries to read that properties  file and then set the server, port, and webroot
+properties. But since that file  isn't checked out from SVN, it's not visible in Jenkins's
+workspace and thus  those properties never get set. It's super easy to get around
+this though\!
+
+In your ANT step's "Advanced" tab, you'll see a "properties" box. In here,  you can
+type in any properties in name=value format, linebreak-delimited, and  poof, properties
+problem solved. For example, here's what I put into the  properties box for the MXUnit
+job:
+
+server=localhost port=80 webroot=c:/inetpub/wwwroot
+
+h2. Configuring your project's JUnit XML Output
+
+In that sample ANT build file above, you saw how easy it was for MXUnit to  spit out
+JUnit-compliant XML. Basically, no matter where your tests actually run  ([http://blah/whatever/HttpAntRunner.cfc|http://blah/whatever/HttpAntRunner.cfc]),
+your JUnit XML files will go in a directory relative to the build file that is  running.
+Got that? That means that, as discussed above, your JUnit xml files  will go in your
+Jenkins workspace somewhere. This is perfect, because that's  where Jenkins wants
+them to be.
+
+For example, with the MXUnit build, the build file is at mxunit/build.xml. It  specifies
+a location for the JUnit xml output as something that evaluates to  tests/testresults/tmp/.
+So in the Jenkins configuration for the MXUnit job, I  specify the JUnit XML location
+as:
+
+*tests/testresults/tmp/*.xml\*
+
+That's it. So wherever your xml files go relative to your workspace root,  simply
+go to the "Post Build Action" section of your job configuration, check  the "Publish
+JUnit XML" checkbox, and enter in the path to your xml files, with  \*.xml, as I did
+above. Click save
+
+h2. Re-saving ant.bat
+
+{note}The following was true when I first set up Hudson with MXUnit, in two-thousand-aught-something.
+I have not had these problems since then but am keeping this information here in the
+event that it helps someone with the same problem{note}
+
+
+After I got the MXUnit project all set up, I ran the build; it executed the  tests;
+Hudson read the JUnit XML (all tests passed). And then.... Failed. Failed?\!  WTF?
+WTF was failing? The Hudson console output (thank you, Hudson\!) read: "The  system
+cannot find the batch label specified".
+
+This wasn't a Hudson problem. It wasn't an MXUnit problem. Turns out, it was  the
+ant.bat file giving me grief. That's right... the ant.bat that ships with the  eclipse
+ANT install. Perhaps had I been using a "proper" install, this wouldn't  have been
+the case. Nonetheless, I wasn't. So, how to fix it? Simple
+
+Open up ant.bat in Textpad. Notice that it's in Unix format. Change the  format to
+"PC". Click Save.
+
+Rerun the Hudson build. Oh Joy. Oh Rapture. A fully functioning test run with  test
+results. Let the CI begin.
+
+h2.
+
+
+{column}
+{column:width=5%}
+
+{column}
+{column:width=35%}
+
+h6. Navigate space
+{pagetree:searchBox=true|expandCollapseAll=true|startDepth=1}
+{column}
+{section}
+
+6750462
+
+
+
+
+Verstion: 1
+
+Created By: marcesher
+
+Created On: 2011-04-02 13:17:44.769
+
+Last Update By: marcesher
+
+Last Update On: 2011-04-02 13:17:44.769
+
+
+

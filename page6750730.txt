@@ -1,0 +1,75 @@
+
+
+
+Running directories of tests
+
+6783475
+h2. Running entire directories of Tests with one line of code
+
+When you have a multiple tests  all residing in a directory and subdirectories,  
+it's very conventient to run everything contained in those directories.  In   this
+context, a directory of tests _implies_ a test suite, and MXUnit enables   you to
+run directories as test suites.
+
+Running directories of tests can be done with a single line of code:
+
+{code}
+&lt;cfinvoke component="mxunit.runner.DirectoryTestSuite"
+	      method="run"
+	      directory="#expandPath('/mxunit/PluginDemoTests')#"
+	      recurse="true"
+	      excludes="InvalidMarkupTest,FiveSecondTest"
+	      returnvariable="results" /&gt;
+{code}
+
+*Explanation:*
+
+
+* component: The MXUnit runner component responsible for running all the tests.
+* method: The component's method being invoked.
+* directory: A physical path to the directory containing your tests.
+* recurse: A flag to indicate whether or not to run tests in all subdirectories.
+* excludes: A list of component names to exclude.
+* returnvariable: The variable name of the TestResult object returned
+* componentPath: (Not listed above) Optional parameter that increases performance.
+This is the component name prefix; e.g., com.foo.bar.        If not specified, MXUnit
+will locate the full component name using the ColdFusion server       cache of components.
+* This will pick up any file that *starts or ends with the word "Test"*, but excluding
+anything in your "excludes" attribute
+
+Once this is exectuted you can easily output the results to the screen:
+
+{code}
+&lt;cfinvoke component="mxunit.runner.DirectoryTestSuite"
+	      method="run"
+	      directory="#expandPath('/mxunit/PluginDemoTests')#"
+	      recurse="true"
+	      excludes="InvalidMarkupTest,FiveSecondTest"
+	      returnvariable="results" /&gt;
+
+&lt;cfoutput&gt; #results.getResultsOutput('extjs')# &lt;/cfoutput&gt;
+{code}
+
+
+Copy the above to a file called /mxunit/doc/tutorial/directoryRunner.cfm and   run
+it: [http://localhost:8500/mxunit/doc/tutorial/directoryRunner.cfm|http://localhost:8500/mxunit/doc/tutorial/directoryRunner.cfm]
+You should see this:
+
+!dir-runner-1.png!
+
+6750730
+
+
+
+Verstion: 2
+
+Created By: marcesher
+
+Created On: 2009-01-18 12:34:41.000
+
+Last Update By: marcesher
+
+Last Update On: 2009-01-18 12:38:32.000
+
+
+

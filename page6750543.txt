@@ -1,0 +1,95 @@
+
+
+
+
+
+
+Continuous Integration -- Using git as your SCM
+
+6783298
+{section}
+{column:width=60%}
+{toc:maxLevel=5}
+
+h1. Introduction
+
+If you're using git as your SCM, you'll need to install the Jenkins [git plugin|https://wiki.jenkins-ci.org/display/JENKINS/Git+Plugin]
+, potentially configure it, and properly configure your git projects.
+
+h1. Prerequisites
+
+I'm assuming you know what git is, and that you have a git  environment installed.
+If you're on Windows, this means either msysgit  or cygwin with git installed. Bottom
+line: from a command line, you  should be able to type "git" and get something other
+than "unrecognized  command". If you have git installed, and your cmd doesn't recognize
+it,  it should simply be a matter of adding the path to the "bin" directory  to your
+system's path variable. If you don't have a clue about what I  just said, send a note
+to the mxunit google group and we'll walk you  through it.
+
+h1. Installing and configuring the git plugin in Jenkins
+
+In the Jenkins plugin section, find the "git plugin" and install it.  This is NOT
+the github plugin, which is merely a decorator. You need the  git plugin to communicate
+with your git projects regardless of where  you host them.
+
+h2. Git path
+
+
+Once installed, and you've restarted Jenkins, head to "Manage  Jenkins" and find the
+config section for git. By default it'll show  something like "git.exe" in the git
+path. This may or may not work for  you. In addition, *if you don't have git installed,
+it'll give you an option to download it*.
+
+In that field, I entered the full path to my git.exe, which on windows was "C:\cygwin\bin\git.exe"
+
+h2. Git user values
+
+A few sections down, you'll see additional config options for Git.  This is where
+you'll enter the default user.name and user.email config  options. Go ahead and add
+the user.name and user.email values that you  most frequently use... you can override
+them at the project level if  necessary
+
+
+h1. SSH Keys
+
+On Windows, SSH Key management is apparently more complicated than  other OSs. When
+I used ssh-keygen to create keys, I specified a password  for the keys and consequently
+had to type that password whenever I used  the key. This caused problems with Jenkins
+because there was no place  to specify the key passphrase. To solve, I created new
+keys, with no  passphrase, and registered that new key with github.
+
+
+h1. Configuring your Jenkins job
+
+In the *git* section of your job configuration, you'll simply add one or more git
+repositories. I used the SSH URL for mine (for example,  git@github.com:marcesher/mxunit.git).
+
+Jenkins will attempt to clone that repo, using your public key for authentication.
+Ensure 2 things:
+# You can clone from that URL from the command line, without any prompts for passphrases
+# Jenkins is running under a user account that has a public key. In  my case, I run
+Jenkins under my user account, so it's using the same key  that I'm using from cmd{column}
+{column:width=5%}{column}
+{column:width=35%}
+h6. Navigate space
+
+{pagetree:searchBox=true\|expandCollapseAll=true\|startDepth=1}{column}{section}
+
+6750543
+
+
+
+
+
+Verstion: 4
+
+Created By: marcesher
+
+Created On: 2011-04-17 17:07:24.504
+
+Last Update By: marcesher
+
+Last Update On: 2011-05-24 20:57:24.610
+
+
+

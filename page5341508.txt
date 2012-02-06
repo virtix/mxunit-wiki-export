@@ -1,0 +1,90 @@
+
+
+
+Stubbing
+
+5374214
+Suppose you have a component you want to test (_MyComponent_) and that component calls
+a method on another component (_MyOtherComponent_) which returns a number needed by
+the 1st component:
+
+{code:title=MyComponent (The component under test) }
+&lt;cfcomponent hint="Example Component To Mock" output="false"&gt;
+
+&lt;cffunction name="myMethod"&gt;
+	&lt;cfargument name="foo" /&gt;
+	&lt;cfset myData = myOtherComponent.doSomething('foo') /&gt;
+	&lt;!--- Do something with myData ---&gt;
+	&lt;cfreturn true /&gt;
+&lt;/cffunction&gt;
+
+&lt;/cfcomponent&gt;
+{code}
+
+Using MightyMock, you can mock MyOtherComponent like this:
+
+{code:title=Sample MXUnit Test Case}
+&lt;cfcomponent extends="mxunit.framework.TestCase" output="false"&gt;
+
+&lt;cffunction name="testMyComponentInteractions"&gt;
+
+	&lt;!--- Our component under test (CUT) ---&gt;
+	&lt;cfset myComponent = createObject('component','MyComponent') /&gt;
+
+	&lt;!--- Create the mock ---&gt;
+	&lt;cfset mock = createObject('component','MightyMock').init('MyOtherComponent') /&gt;
+
+	&lt;!--- Define the behavior for our mock, including expected parameters ---&gt;
+	&lt;cfset mock.doSomething('foo').returns( 123456 ) /&gt;
+
+	&lt;!--- Inject the mock into CUT ---&gt;
+	&lt;cfset myComponent.setMyOtherComponent(mock) /&gt;
+
+	&lt;!--- Exercise MyComponent ---&gt;
+	&lt;cfset actual = myComponent.myMethod('foo') /&gt;
+
+		&lt;!--- Perform some test ---&gt;  
+&lt;cfset assert( actual eq 'cool and bad-ass')  /&gt; 
+&lt;/cffunction&gt;
+
+&lt;/cfcomponent&gt;
+{code}
+
+What's important to consider here is the difference between mocking and stubbing.
+Here we are testing some data returned by our component under test. We're using
+the internal MXUnit mocking facilities to stub out the data returned by _MyOtherComponent_.
+*If* the CUT returned void, it makes it more difficult to test. In cases like that,
+we would use verification rather than testing the data (or state) returned by the
+CUT.
+
+_Side Bar_: The init('component.name') statement above is optional. It's only required
+if your component under test requires an exact type; e.g.,
+
+{code}
+
+
+
+&lt;cffunction name="setMyOtherComponent"&gt;
+&lt;cfargument name='aCollaborator' type='MyOtherComponent' /&gt;
+...
+&lt;/cffunction&gt;
+
+{code}
+
+
+5341508
+
+
+
+Verstion: 4
+
+Created By: virtix
+
+Created On: 2010-03-26 10:04:19.000
+
+Last Update By: virtix
+
+Last Update On: 2010-05-26 10:36:55.000
+
+
+

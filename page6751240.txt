@@ -1,0 +1,87 @@
+
+
+
+Continuous Integration -- Getting Started
+
+6783973
+{toc}
+
+This series will demonstrate how to set up a continuous integration (CI) environment
+for ColdFusion projects using [Jenkins|http://jenkins-ci.org/] CI and MXUnit. We'll
+cover Jenkins setup, MXUnit test runs and JUnit XML output, and a few notification
+mechanisms (email, IM).
+
+I will not attempt to duplicate the quite thorough documentation available for Jenkins.
+Rather, I intend to cover enough "getting started" material, and then focus on instructions
+specific to MXUnit and Jenkins
+
+h1. Big Picture
+
+# You and your peeps write code and commit it to your source control repo
+# Jenkins recognizes those commits (it can pulse SCM, or it can run every XXX hours/minutes/whatever)
+# Jenkins runs "build actions" -- ANT targets, shell scripts, gradle tasks, whatever
+## Use SVNAnt, git, post-commit hooks, or some other means to get the latest code
+onto your target server (usually DEV)
+## Use ANT to run your MXUnit tests on the target server
+## MXUnit test results are stored as XML files inside of Jenkins
+# Jenkins reads the XML files and generates pretty reports of test results
+# Jenkins sends notifications (email, IM, etc) when the build fails, tests fail, etc
+
+!cfobjective_jenkins.png!
+
+
+h1. Installing Jenkins
+
+This  will cover the simple way to run Jenkins, which is to use its built-in Winstone
+container, which is fine for testing and has served me well in a medium-load production
+environment. If you already have Tomcat set up, then you  know how to install war
+files so follow that procedure instead (i.e.  drop the war where you put your war
+files, or use the admin to deploy  the war. It's that simple)
+# Download the Jenkins war file and put it somewhere
+# Open a command line and navigate to the war file location
+# type "java \--jar jenkins.war"
+# This will launch Jenkins. You can navigate to [http://localhost:8080|http://localhost:8080/]
+and from there, you're ready to start
+# If you're on Windows, you can install Jenkins as a Windows service from inside "Manage
+Jenkins".
+
+h1. Pulling your project from Subversion (SVN)
+
+# Click "create a new job"
+# Give your job a name, and then select Freestyle Software Project
+# Under Source Code Management, select SVN, and then plug in your project's SVN location,
+eg [http://svn.myproject/whatever/trunk|http://svn.myproject/whatever/trunk]
+# In the "Local Module Directory" field, I typicaly use the name of the directory
+as it will be deployed onto some production server. So if I'm checking out myproject/trunk,
+I'll use&amp;nbsp; "myproject". The reason is that I'll often check out from multiple
+places in a single Job, and giving each module directory a proper name helps with
+organization.
+# From  here, you can click "Save" and then perform a build by clicking  "Build".
+This will check out your code into the Jenkins workspace for  your project
+
+*But this code isn't where I need the code to be\!* Good point. We'll talk more about
+that later
+
+
+h2. What's Next?
+
+See how easy that was? Next up, [configuring ANT|default:Continuous Integration --
+ANT - The Glue between Jenkins and your Tests] , running your tests, and recording
+results
+
+6751240
+
+
+
+Verstion: 6
+
+Created By: marcesher
+
+Created On: 2011-03-06 23:49:45.633
+
+Last Update By: marcesher
+
+Last Update On: 2011-09-30 18:36:28.569
+
+
+

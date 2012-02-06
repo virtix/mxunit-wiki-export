@@ -1,0 +1,99 @@
+
+
+
+
+
+
+
+Test Private Methods
+
+4325483
+Testing private methods with MXUnit
+
+With MXUnit, testing private methods is easy.
+
+Imagine a component named Something.cfc. It has a method named somePrivate:
+
+{code}
+
+	 	&lt;cffunction name="somePrivate" access="private"&gt;
+	 		&lt;cfargument name="someArg" required="false" default="blah"&gt;
+	 		&lt;cfreturn someArg&gt;
+	 	&lt;/cffunction&gt;
+	{code}
+
+You can't test this method directly. You can only test it indirectly through the component's
+public API. A lot of times, that's entirely appropriate. But sometimes, maybe that
+function is particularly nasty or granular and you'd just feel better if you could
+test it directly.
+
+In typed languages such as Java, testing private methods is pretty difficult. In ColdFusion
+it's much easier because, unlike in Java, subclasses can call super.somePrivateMethod()
+and it'll actually work. Private in CF is not like private in Java. Thus, the preferred
+way to test private functions in CF has been to create a subclass of the object under
+test and override the private function with a public version which simply calls the
+parent. Robert Blackburn, maintainer of CFUnit, discusses this nicely.
+
+As Robert discusses at the end, the primary concern here is that you create more maintenance
+when your private methods change. Now, you have three files to change: the component
+itself, the subclass containing the overridden private methods, and the test case.
+
+If this is your cup of tea, that's cool. It's an accepted approach to this problem
+and it works well. You need read no further. However, if you don't particularly care
+for the extra maintenance, MXUnit makes it a bit easier.
+
+{code:title=PrivateMethodTest.cfc}
+	&lt;cfcomponent extends="mxunit.framework.TestCase"&gt;
+		
+		&lt;cffunction name="testSomePrivateDefaultBehavior"&gt;
+	 		&lt;cfset myObj = createObject("component","Something")&gt;
+			&lt;cfset makePublic(myObj,"somePrivate")&gt;
+			&lt;cfset ret = myObj.somePrivate("blah2")&gt;
+			&lt;cfset assertEquals("blah2",ret)&gt;
+	 	&lt;/cffunction&gt;
+		
+		&lt;cffunction name="testSomePrivateUsingDifferentName"&gt;
+	 		&lt;cfset myObj = createObject("component","Something")&gt;
+			&lt;cfset makePublic(myObj,"somePrivate","_somePrivate")&gt;
+			&lt;cfset ret = myObj._somePrivate("blah2")&gt;
+			&lt;cfset assertEquals("blah2",ret)&gt;
+	 	&lt;/cffunction&gt;
+		
+	&lt;/cfcomponent&gt;
+{code}
+
+Didjoo see that? Simply call makePublic(), passing in:
+
+* An instance of the object with the private method
+* The method name you want to test
+* Optionally, a name for the "proxy" for the private method. If you don't pass anything,
+it'll just be the private method name
+
+Internally, all that's happening is a bit of method shuffling. The original private
+method is renamed to something else, and a new, public method is injected into the
+object. This injected function then calls the original private method directly. This
+means that when you call "myObj.somePrivate()", you're calling this new function on
+the object you've already created and thus all your initialization done prior to that
+function call is retained. This would include anything done in the setUp function
+as well as anything done in the test function prior to this specific function call.
+
+To see more examples, download the MXUnit framework and look at mxunit/tests/framework/PublicProxyMakerTest.cfc
+
+
+4292736
+
+
+
+
+Verstion: 4
+
+Created By: zoramite
+
+Created On: 2009-10-31 23:47:41.000
+
+Last Update By: virtix
+
+Last Update On: 2010-03-26 15:09:05.000
+
+
+

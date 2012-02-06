@@ -1,0 +1,99 @@
+
+
+
+
+
+
+Running your Tests under the Application Scope -- Custom RemoteFacades
+
+6783193
+h1. Project-Specific RemoteFacade URL
+
+Pointing a project at a custom RemoteFacade URL involves two simple  steps:
+# Create the new RemoteFacade.cfc
+# Point your project properties to the new URL
+
+h2. How
+
+
+h3. Creating the new RemoteFacade.cfc
+
+# Create a New CFC. Put it wherever. Name it whatever.
+# Set the "extends" attribute of the component tag to  "mxunit.Framework.RemoteFacade"
+# Ensure you can access the wsdl for the file in a browser. For example, if  you created
+c:\inetpub\wwwroot\myproject\RemoteFacade.cfc, try hitting [http://localhost/myproject/RemoteFacade.cfc?wsdl]
+
+h3. Pointing your project properties to the new URL
+
+# Right click on the project name in the Navigator or Project Explorer
+# Select "Properties"
+# Select "MXUnit Properties"
+# Add the path to your custom remote URL
+#* NOTE: if you're just using this to point to an mxunit install on a different  port,
+then you can skip the "/mxunit/framework/RemoteFacade.cfc" part of the  URL. Just
+use [http://localhost:8888], for example. In that case, the plugin will  suffix your
+url with "mxunit/framework/RemoteFacade.cfc"
+
+h2. Example #1: Creating a custom RemoteFacade.cfc for your project which tests  CF
+ORM / Hibernate Components
+
+In your project, create a file named RemoteFacade.cfc and give it this  content:
+
+
+{code}
+&lt;cfcomponent extends="mxunit.framework.RemoteFacade"&gt;
+&lt;/cfcomponent&gt;
+
+{code}
+
+Right click on your project and set the RemoteFacade URL property to point to  the
+URL for this new component
+
+Now, all calls to your tests *for this project* will route  through this RemoteFacade.cfc.
+Since your project also has an Application.cfc,  that means that everything from your
+Application.cfc will apply
+
+h2. Example #2: Creating a custom RemoteFacade.cfc for your project and  including
+custom behavior for every test case
+
+Follow the same steps as above
+
+In your new RemoteFacade.cfc, implement the actOnTestCase method to peform  whatever
+behavior you would like for each test case. Here's an example:
+
+{code}
+&lt;cfcomponent extends="mxunit.framework.RemoteFacade"&gt;
+
+	&lt;cffunction name="actOnTestCase"&gt;
+		&lt;cfargument name="TestCase"&gt;
+
+		&lt;cfif findNoCase("TestManager.Retail",GetMetadata(TestCase).name)&gt;
+			&lt;cfinclude template="retail/Application.cfm"&gt;
+		&lt;cfelse&gt;
+			&lt;cfinclude template="enrollment/Application.cfm"&gt;
+		&lt;/cfif&gt;
+	&lt;/cffunction&gt;
+
+
+&lt;/cfcomponent&gt;
+
+
+{code}
+
+6750434
+
+
+
+
+
+Verstion: 1
+
+Created By: marcesher
+
+Created On: 2011-03-25 23:06:57.546
+
+Last Update By: marcesher
+
+Last Update On: 2011-03-25 23:06:57.546
+
+
