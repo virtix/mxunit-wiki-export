@@ -1,0 +1,54 @@
+
+
+
+
+
+
+Creating an EC2 ColdFusion AMI
+
+6193170
+{toc}
+
+h1. Why create an AMI?
+
+An AMI is an encrypted Amazon Machine Image. When you launch an EC2 instance, you're
+launching an instance of a previously created AMI. The idea here is that you launch
+some "base" instance to get started, install necessary software, configure, and otherwise
+get this instance into a shape that you'd want to deploy repeatedly. To do that, you'll
+take the instance you previously created and create an image out of it. After you
+have an image, you can then launch multiple instances of it, thereby achieving the
+provisioning that brought you to AWS EC2 in the first place.
+
+h1. Create the AMI
+
+Once you have confirmed that the instance you created previously is working, you'll
+select that image in the AWS Console and then select "Create Image". It'll take you
+through some screens. Name it clearly. Tag it appropriately. Then let it do its thing.
+
+This will take some time, and it'll shut down the instance from which you are generating
+the AMI
+
+h1. Visibility
+
+You will have the option of making this AMI public or private. As of this writing,
+I believe you need to keep it private due to distribution restrictions in the ColdFusion
+EULA
+
+6160404
+
+
+
+
+Verstion: 2
+
+Created By: marcesher
+
+Created On: 2010-10-18 01:51:11.000
+
+Last Update By: marcesher
+
+Last Update On: 2010-10-18 20:20:53.000
+
+
+
+

@@ -1,0 +1,322 @@
+
+
+
+Launching your first EC2 Instance
+
+6193193
+{toc}
+
+h1. Expectations
+
+Adjust your expectations. Make no mistake: you are configuring a naked server just
+as you would if you were configuring a brand new instance in your own environment.
+You are renting space and compute power from Amazon. Eventually, we should see preconfigured
+ColdFusion instances once licensing issues are resolved. Until then, you're on your
+own.
+
+
+
+{warning}From the moment you start creating an  account to the time you have your
+first live, web-accessible, ColdFusion  instance, give yourself at least *3 hours*.
+It's not that it's  complicated, it's that you'll do a lot of waiting... waiting on
+your  first EC2 instance to boot, waiting for software to download, and  waiting for
+software to install.&amp;nbsp; {warning}
+
+h1. Stop vs. Terminate
+
+These terms will have no meaning to you... yet.
+
+If you are blessed, as I am, with a loving spouse and beautiful children, you know
+that all chairs \-\- especially ones facing computing devices \-\- are equipped with
+sensors that, upon ass hitting seat, send out warning signals indicating that you
+are about to engage in illicit bit fiddling which must at all costs be interrupted.
+"Daddy\!\!\!\!1\!\!1\!\!\! I need milk\!", and its ilk. Take heart. Amazon's instances
+are not necessarily throwaway VMs that turn to rags upon the stroke of midnight.
+
+You have two choices with any VMs you create during this session: "*stop*" and "*terminate*".
+It's quite simple. Stop means "shut down, as I wish to use ye later". Terminate means
+"Yer dead ta me". A stopped instance can be rebooted. A terminated instance can only
+be mourned and forgotten.&amp;nbsp;
+
+{tip}When creating your first intstance, don't Terminate anything. Choose "Stop" instead.
+*You will not pay any more for stopped instances{*}{tip}
+
+
+h1. Launching your first EC2 Instance
+
+Once you've signed up, you'll go to your AWS Console: [https://console.aws.amazon.com/ec2/home]
+
+It'll be empty to start. You should have some tabs at the top of the screen. Click
+the EC2 tab. If it's not available, or if it gives you a screen indicating you haven't
+signed up for EC2 yet, go through the steps to sign up. Again, don't fret: you're
+not signing away your mortgage or jeopardizing your family's supper.
+
+Once signed up for EC2, you'll have some links in your AWS Console to "Launch Instance".
+Clicking that will take you to the "Request Instances" Wizard.
+
+h2. Request Instances Wizard
+
+
+h3. 32bit or 64 bit, Linux or Windows?
+
+
+Here's your first "real" decision, and you needn't labor over it. Essentially, you're
+choosing a "base" platform on which to build your first ColdFusion AMI. This may seem
+daunting at first, considering just how many AMIs are available. My advice is to not
+sweat it. If you're familiar with Windows, use Windows. If you're familiar with Linux,
+use linux. If all you know is "I want Windows", or "I want Linux", then choose one
+of the Win or Linux AMIs that appears on the initial "Quick Start" screen. These are
+generally either 32 or 64 bit.
+
+*If you choose 64 bit, you're going to pay more.* The reason is that EC2 comes in
+a variety of "sizes", from "small" to humongous. Obviously, 32 bit doesn't do humongous
+because 32 bit can only address so much memory.
+
+{tip}My advice: don't expect to make the best decision right away. You'll most likely
+end up configuring a different kind of server eventually. For now, concentrate on
+getting started, not getting it right{tip}
+
+h3. Launch or Spot?
+
+* to get started, choose "Launch Instances" as opposed to Spot instances. Spot instances
+are a way to save money, but they may add a bit of time onto your Getting Started
+experience. If you're choosing Windows, it doesn't matter anyway because the price
+is the same.
+
+In the Instance Details screen, keep the defaults. Click through.
+
+In the next screen, you'll be prompted for some key-value pairs. These are only meaningful
+to you. For example, you get prompted with a "Name" key... give it a name that's meaningful
+to you... "Windows Attempt #1", or "Linux Attempt #1", or something like that. Click
+through.
+
+h3. Key Pairs
+
+On the next screen, you'll be prompted about Key Pairs. These are critical. Presumably
+this is your first time through, so click "Create a new KeyPair" and give it a name.
+Click to download the file. Again, keep it secret, keep it safe. This will be a ".pem"
+file.
+
+h3. Security Group
+
+On the next screen you'll be prompted to create a Security Group for this new instance.
+Think of a Security Group as a firewall. Once you assign a SG to an instance, that's
+it. You live with it forever. This does NOT mean you can't change the configuration
+of this group\! You can.
+
+At the very least, to start, you'll want to *Add* "SSH" as a rule. No, Windows servers
+don't have SSH, but you're going to install it, so add the rule now.
+
+{tip}Give this Security Group a meaningful name, like "Win2k8" or some such thing.{tip}
+
+h3. The Meter is now running
+
+Once you launch an instance, the meter starts running. So don't launch an instance
+and forget about it for 3 months. You're now being billed until you stop this instance.
+
+
+h3. Almost there
+
+
+Congratulations. You've launched your first AWS EC2 instance. It's going to take a
+while to spin up, perhaps 15 minutes or more, so go grab a beer.
+
+h3. Connecting to your instance
+
+If you go back to your AWS Console, you'll see your instances in the Instances tab.
+It'll be marked as "Running", and my experience is that it takes 15-30 minutes for
+it to become available for you to connect to it. If you right click on that instance,
+you'll have a number of options. Right now, click on the "Get System Log" option.
+It'll pop up a window, and you'll probably see something like "Gathering metadata"
+or "Rebooting" or some such thing. After a while, it'll indicate that it's "ready",
+which means you can connect to it.
+
+If you're running a Windows Instance, you'll need to get the initial Windows password,
+via the "Get Windows password" option in the menu. This will prompt you for the contents
+of your keypair file that you downloaded earlier. Open that file in a text editor,
+and copy the entire contents. Paste that chunk into this window, and it'll take you
+through the process of getting the admin password. This, too, might take some time.
+Be patient. Beer #2 doesn't hurt. I'd be remiss if I didn't suggest a Terrapin Big
+Hoppy Monster. I'd also be remiss if I didn't at this point direct you to Pintley.com,
+a ColdFusion-powered site for beer lovers. (Noooo, I don't have a problem. I just
+love great beer. And ColdFusion). Now, then...
+
+
+Once you have that, select "Connect", and you'll get an option to "download a shortcut
+file". This is a typical windows ".rdp" file, which should be familiar to you if you've
+RDP''d into a windows server before.
+
+Go through the RDP connection screens, and use "administrator" as the username, and
+that password as the password.
+
+h3. You're in
+
+You're in. You now have a brand new server (a virtual one, albeit). Now it's time
+to turn this thing into a ColdFusion server. It's way beyond the scope of this document
+to explain how to install and configure most of this software. I trust that you know
+how to create a CF server and that, if you don't, you know how to find the resources
+to teach you. From now on, I'll explain the important things you'll need to do as
+you install and configure this server.
+
+h2. The Software you need
+
+At this point, I'm going to describe how to set up a Windows server. If you're on
+Linux, you know how to do all of this already.
+
+{note} I hope, at some point, Adobe will either provide supported AMIs or allow us
+to publish our own AMIs. As of this writing, neither are true. This means you need
+to start from scratch.{note}
+
+
+Download the following:
+
+*Required*
+* firefox or chrome. You'll need to change the permissions on IE to download files.
+Do it once, to give you permission to download a decent browser. Then go drink another
+Big Hoppy Monster to eradicate the memory of dealing with IE for the night. Once you
+have a suitable browser installed:
+* Apache web server. Or, if you like, stick with IIS that's already on the server.
+If you prefer IIS, I still respect you, though I do fear for your sanity.
+* ColdFusion
+* The latest CF updater
+* Any CF hotfixes
+* A respectable text editor, like Notepad+\+ or Notepad2 or Textpad. This is listed
+as required because Notepad sucks. Period.
+* [WinSSH|http://www.bitvise.com/winsshd] by bitvise. I tried FreeSSH and it didn't
+work on Windows 2008. YMMV. WinSSH licensing seemed reasonable to me, and it worked
+flawlessly.
+
+*Optional*
+* [Launchy|http://blog.mxunit.org/2009/04/timesavers-launchy.html] . Because a man
+without a key launcher just ain't livin'.
+* Tortoise SVN
+* [Git Bash|http://en.kioskea.net/faq/499-git-for-windows]&amp;nbsp;
+* BareTail if you want to sanely read log files
+
+h2. Installation
+
+Install the above just as you would on your own server. Essentially, you're now on
+your own server, except you're renting it. Start with the webserver (apache), then
+go to CF and all the hotfixes. You'll likely need to restart a few times... it is
+Windows, after all. If you're on Linux, you won't have read this far so no worries.
+
+h2. Secure CFAdmin
+
+By now, 4 beers or so in, you should have CF running and be able to connect to CFAdmin
+(localhost/CFIDE/administrator). Guess what... everyone else can get to it, too, publicly.
+No, they don't know your password, but you'll want to lock it down. If you've installed
+apache, here's how to do it (thanks [Jason Dean|http://www.12robots.com] \!)
+
+In your Apache httpd.conf, add these lines:# Prevent external CFIDE access
+&lt;Location /CFIDE&gt;
+Order Deny,Allow
+Deny from all
+Allow from 127.0.0.1
+&lt;/Location&gt;
+
+# Allow CFIDE access for scripts (ajaxy goodness, etc)
+&lt;Location /CFIDE/scripts&gt;
+Order Allow,Deny
+Allow from all
+&lt;/Location&gt;
+
+
+h2. Windows Firewall
+
+When you created a Security Group, it already had Port 80 open for web traffic, and
+you added Port 22 for SSH. That's on the AWS side, but you'll also need to configure
+it in Windows. This is easy:
+* Start \--&gt; Windows Firewall \--&gt;Change settings
+* Exceptions Tab
+* Add Port
+** Add port 80
+** Add port 22
+
+h2. EC2 Windows user account
+
+Create a new user account&amp;nbsp; named "EC2-user". Password-protect that account. I
+chose the name "EC2" because the official Amazon Linux distros use that name, and
+the Eclipse tools don't make it easy (if possible) to use different users for different
+servers (more on the Eclipse tools later).
+
+Log out of that RDP session and log in as ec2-user, with the password you chose, to
+ensure that everything is correctly configured.
+
+h2. Configure SSH
+
+If you want to more easily deploy code to Windows, you'll probably do so over SSH.
+This means you need an SSHd server and at least one account with permisions.
+
+
+Assuming you've installed the WinSSH software linked above, you can now associate
+this ec2-user with SSH. To do so, open WinSSH, click the "settings" link, Click the
+Windows Accounts tab, and add the Windows ec2-user.
+
+h2. Whew\!
+
+Who knew that setting up a server would be *the same amount of work as building you
+own CF Server?* Well... that's what you're doing, so it shouldn't be a surprise, Just
+because you're paying by the hour doesn't mean you get any work for free (until Adobe
+provides AMIs...)
+
+h2. Let's test
+
+Assuming you have set up your web server, installed ColdFusion, and opened the ports
+in both Amazon Security Group and Windows Firewall, your server is now online. Put
+a test.cfm file in your web root (wherever you have that configured in your webserver),
+give it contents like &lt;cfoutput&gt;#now()#&lt;/cfoutput&gt;.
+
+From within that server (i.e. RDP'd into it), load that file at [http://localhost/test.cfm].
+If you see the current date and time, you're almost there.
+
+h2. What's the public URL?
+
+If you've followed all of the above, a test .cfm page loads correctly at localhost.
+Now we need to ensure it's available publicly. On your AWS console, click on your
+instance. In the bottom frame, you'll see 2 URLs, a "private" and a "public". The
+private will be a 10.xxx address, and the public will be an "ec2-xxx" domain. Right
+now, we're interested in that public domain. Copy it. It'll be something inscrutable
+like "ec2-174-129-164-113.compute-1.amazonaws.com". From your machine \-\- NOT in
+your RDP screen but your "this is where I pay my bills and search for recipes and
+play Elmo games with my kids" machine,&amp;nbsp; Paste that into your browser. It'll be
+something like "\[http://ec2-174-129-164-113.compute-1.amazonaws.com/test.cfm\]".
+
+You should get the current date and time, similar to what you saw when running from
+localhost a few minutes ago
+
+{warning}If it spins and you get a timeout, or you get a "connection dropped" error,
+your firewall is most likely misconfigured.{warning}
+
+
+h2. Next steps
+
+At this point, you have ColdFusion installed. It's accessible externally. This instance
+is configured with useful software.
+
+You now ask yourself: is this a good "source" from which to build future servers?
+
+*Do I need to install additional software? What software am I missing?*
+
+Grab another Big Hoppy Monster, go kiss your spouse, and sleep on it. You're building
+a server. You want the right tools. You've earned some cred. Go kiss the kids and
+tell them that Daddy/Mommy kicked some ass tonight.
+
+*Next up: we bundle this server into an AMI*. This is the magic \-\- and the terror
+\-\- of cloud computing. You can now spin up 1, or a 1000+, servers. In a few clicks.
+
+6160427
+
+
+
+Verstion: 13
+
+Created By: marcesher
+
+Created On: 2010-10-18 01:40:43.000
+
+Last Update By: marcesher
+
+Last Update On: 2010-10-18 12:37:32.000
+
+
+

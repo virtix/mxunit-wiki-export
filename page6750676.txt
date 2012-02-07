@@ -1,0 +1,50 @@
+
+
+
+CFObjective 2011 -- ORM Zen
+
+6783428
+h2. CFObjective 2011 \-\- ORM Zen \-\- Marc Esher
+
+A presentation about suffering and enlightenment
+
+h3. Description
+
+{color:#000000}The month: June. The weather: hot. Brewfests: too far away. My job:{color}
+{color:#000000}brand new. My issue tracker: overflowing. Deadlines: looming. My{color}
+{color:#000000}spirits: sunken.{color}
+
+{color:#000000}Why? I had met my nemesis, and it was ORM. Got Artists, got Art? Easy.{color}
+{color:#000000}Got real-world stuff to do... hey, wait a minute\!{color}
+
+{color:#000000}We'll explore entity relationship problems in depth, as they are the{color}
+{color:#000000}heart of ORM and consequently the most frequent source of ORM pain.
+In{color}
+{color:#000000}addition, we'll cover strategies for taming the Hibernate session and{color}
+{color:#000000}general "how do I do this in ORM?" problems that all programmers new{color}
+{color:#000000}to ORM need to know.{color}
+
+{color:#000000}This presentation is my story of suffering through the initial ORM{color}
+{color:#000000}learning curve and how I finally achieved ORM enlightenment.{color}
+
+h3. Download
+
+[Here you go|download/attachments/6750399/marc_esher_cfobjective_2011_orm_zen.zip?version=1&amp;modificationDate=1305140090316]
+[|#]
+
+6750676
+
+
+
+Verstion: 2
+
+Created By: marcesher
+
+Created On: 2011-03-15 01:35:22.566
+
+Last Update By: marcesher
+
+Last Update On: 2011-05-11 18:56:41.950
+
+
+

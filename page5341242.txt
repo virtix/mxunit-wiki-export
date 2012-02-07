@@ -1,0 +1,118 @@
+
+
+
+Mocking
+
+5374004
+h3. Mocking
+
+If your dependency does not return any data, but rather _does{_}something (returns
+void), you will want to verify that it was called, but maybe you don't want to incur
+side-effects, such as emails or logging:
+
+{color:#800000}&lt;cffunction{color}{color:#800000}name={color}{color:#0000ff}"myMethod"{color}{color:#800000}&gt;{color}
+{color:#800000}&amp;nbsp;&amp;nbsp; &amp;nbsp;{color}{color:#800000}&lt;cfargument{color}{color:#800000}name={color}{color:#0000ff}"foo"{color}{color:#800000}/&gt;{color}
+
+{color:#800000}&amp;nbsp;&amp;nbsp; &amp;nbsp;{color}{color:#800000}&lt;cfset{color}myOtherComponent.writeToLog({color:#0000ff}'Hello.'{color}){color:#800000}/&gt;{color}
+
+{color:#800000}_&amp;nbsp;&amp;nbsp; &amp;nbsp;_{color}{color:#999999}_&lt;\!--\- do a bunch of other
+stuff ... \---&gt;_{color}{color:#800000}&amp;nbsp;&amp;nbsp; &amp;nbsp;{color}{color:#800000}&lt;cfset{color}myOtherComponent.writeToLog({color:#0000ff}'Good
+bye.'{color}){color:#800000}/&gt;{color}
+
+{color:#800000}&lt;/cffunction&gt;{color}
+
+A mock for this would like something like :
+
+{color:#800000}&lt;cffunction{color}{color:#800000}name={color}{color:#0000ff}"testMyComponent"{color}{color:#800000}&gt;{color}
+
+{color:#800000}_&amp;nbsp;&amp;nbsp; &amp;nbsp;_{color}{color:#999999}_&lt;\!--\- Create the  mock
+\---&gt;_{color}{color:#800000}&amp;nbsp;&amp;nbsp; &amp;nbsp;{color}{color:#800000}&lt;cfset{color}
+myMock=mock({color:#0000ff}'MyOtherComponent'{color}){color:#b84747}/&gt;{color}
+
+{color:#808080}_&lt;\!--\- Define Behavior \---&gt;_{color}
+
+{color:#800000}&lt;cfset{color} myMock.writeToLog ({color:#0000ff}'Hello.'{color}){color:#800000}/&gt;{color}
+
+{color:#800000}&lt;cfset{color} myMock.writeToLog ({color:#0000ff}'Good Bye.'{color}){color:#800000}/&gt;{color}
+
+{color:#800000}&lt;cfset{color} myMock.setMyOtherComponent(mock) {color:#800000}/&gt;{color}
+
+{color:#808080}_&lt;\!--\- Exercise MyComponent \---&gt;_{color}
+
+{color:#800000}&lt;cfset{color} myMock.myMethod({color:#0000ff}'foo'{color}){color:#800000}/&gt;{color}
+
+{color:#808080}_&lt;\!--\- Verify \---&gt;_{color}
+
+{color:#800000}&lt;cfset{color} myMock.verify().writeToLog ({color:#0000ff}'Hello.'{color}){color:#800000}/&gt;{color}
+
+{color:#800000}&lt;cfset{color} myMock.verify().writeToLog ({color:#0000ff}'Good Bye.'{color}){color:#800000}/&gt;{color}
+
+{color:#800000}&lt;/cffunction&gt;{color}
+
+*Note{*}that there is no returns()method chained to the end of of the writeToLog()behavior
+definition. This is a shortcut and is the same as myMock.writeToLog ({color:#0000ff}...{color}).returns().It
+saves you 9 or so keystrokes. The reason being is that true "mocks" typically do not
+return data.
+
+If you are not overly concerned with the literal details of the method calls, you
+could simplify this with{_}argument patterns_:
+
+{color:#800000}&lt;cffunction{color}{color:#800000}name={color}{color:#0000ff}"testMyComponent"{color}{color:#800000}&gt;{color}
+
+{color:#808080}_&lt;\!--\- Create the mock \---&gt;_{color}
+
+{color:#800000}&lt;cfset{color} myMock=mock({color:#0000ff}'MyOtherComponent'{color}){color:#b84747}/&gt;{color}
+
+{color:#808080}_&lt;\!--\- Define Behavior \---&gt;_{color}
+
+{color:#800000}&lt;cfset{color} myMock.writeToLog({color:#0000ff}'{string}'{color}).returns(){color:#800000}/&gt;{color}
+
+{color:#800000}&lt;cfset{color}myComponent.setMyOtherComponent(mock) {color:#800000}/&gt;{color}
+
+{color:#808080}_&lt;\!--\- Exercise MyComponent \---&gt;_{color}
+
+{color:#800000}&lt;cfset{color}myComponent.myMethod({color:#0000ff}'foo'{color}){color:#800000}/&gt;{color}
+
+{color:#808080}_&lt;\!--\- Verify \---&gt;_{color}
+
+{color:#800000}&lt;cfset{color} myMock.verifyTimes({color:#ff0a0a}2{color}).writeToLog({color:#0000ff}'{string}'{color}){color:#800000}/&gt;{color}
+
+{color:#800000}&lt;/cffunction&gt;{color}
+
+In the above example, we use the MightyMock keyword, {string}, instead of literal
+arguments.
+
+What happens under the hood is that when the method is called by the component that
+is passing in any _single string argument_ as a parameter, the defined mock behavior
+is invoked.
+
+MightyMock's argument patterns support all common CFML data types. The intent is that
+it's identical to the typeattribute of CFARGUMENT : {numeric},{any},{query},{struct},{array},
+etc.  See Argument Matching in the next section for more detail.
+
+The above examples create _Fast Mocks_, that is mocks that can be created quickly
+but may not have the desired _type{_}you need; that is, what's specified in the first
+parameter. To create a _Type Safe_ mock, simply tell MightyMock that's what you want:
+
+{color:#800000}&lt;cfset{color}mock=createObject({color:#0000ff}'component'{color},{color:#0000ff}'MightyMock'{color}).init({color:#0000ff}'MyOtherComponent',{color}{color:#0000ff}{*}{_}true{_}{*}{color}){color:#b84747}/&gt;{color}
+
+The second parameter  in the constructor tells MightyMock to return an object of the
+same type specified in the first parameter. If an object of that type cannot be found,
+and instantiation exception will be thrown.
+
+5341242
+
+
+
+Verstion: 1
+
+Created By: virtix
+
+Created On: 2010-03-26 10:09:03.000
+
+Last Update By: virtix
+
+Last Update On: 2010-03-26 10:09:03.000
+
+
+

@@ -1,0 +1,53 @@
+
+
+
+Recommended Reading on Testing
+
+5374253
+Here are some references that Los Hombres have found useful:
+
+
+|[Introduction to Software Testing|http://www.amazon.com/gp/product/0521880386?ie=UTF8&amp;tag=mx06-20&amp;linkCode=as2&amp;camp=1789&amp;creative=9325&amp;creativeASIN=0521880386]
+by Paul Ammann and Jeff Offutt from George Mason University, Fairfax, VA.| 
+{iframe:src=http://rcm.amazon.com/e/cm?t=mx06-20&amp;o=1&amp;p=8&amp;l=as1&amp;asins=0521880386&amp;fc1=000000&amp;IS2=1&amp;lt1=_blank&amp;m=amazon&amp;lc1=0000FF&amp;bc1=000000&amp;bg1=FFFFFF&amp;f=ifr|style=width:120px;height:240px;|scrolling=no|marginwidth=0|marginheight=0|frameborder=0}|
+|
+{quote}
+Don't let the title fool you. This is far from an introduction and addresses many
+areas of software testing. Specifically, it presents 36 _coverge criteria_ used in
+both manual and automated testing. This text represents many years of research in
+the area and is a great formal and practical overview of the numerous challenges associated
+with  testing software. Note that the authors do not take *any* of the book's royalties;
+instead, the royalties are used in a scholarship fund for software engineering students.
+If for no other reason, that may be a good motivation to buy the book!
+{quote}||
+
+
+----
+
+
+
+
+
+
+
+
+
+
+
+
+5341552
+
+
+
+Verstion: 15
+
+Created By: virtix
+
+Created On: 2010-06-18 10:53:25.000
+
+Last Update By: virtix
+
+Last Update On: 2010-06-18 11:34:40.000
+
+
+

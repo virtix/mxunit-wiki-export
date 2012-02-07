@@ -1,0 +1,77 @@
+
+
+
+
+
+
+Continuous Integration -- Failing builds for failing tests
+
+6783221
+{section}
+{column:width=60%}
+
+{toc:maxLevel=5}
+
+h1. Fail? Or Unstable?
+
+By default, when a Jenkins runs your tests (via ANT) and tests fail, your build will
+not be marked as "Failed" but as "Unstable". If this is not what you want \-\- if
+you want failed tests to cause a build failure \-\- you need only make a small modification
+to your ANT build.
+
+h1. How to fail a build for failing tests
+
+# add a "failureproperty" attribute to your mxunit task
+# add a "fail" directive if failure property existsHere's what it looks like, in code.
+This all happens in your "runTests" target
+{code}
+&lt;mxunittask ...[omitted for brevity] testResultsSummary="my.summary" failureproperty="testsfailed"&gt;
+
+.....
+
+&lt;/mxunittask&gt;
+
+......
+
+&lt;fail if="testsfailed" message="Failing the build because tests failed"/&gt;
+&lt;/target&gt;
+{code}
+
+h1. Why this works
+
+This works because the failure property will only be set if there are failures. If
+no failures occur, the property remains unset.
+
+The fail directive's "if" test will return true only if the property exists \-\- it
+does not matter whether it's a boolean, whether it's true, etc. I simply need exist.
+Consequently, fail will only run if the failureproperty is set due to failed tests
+
+
+
+{column}
+{column:width=5%}
+
+{column}
+{column:width=35%}
+
+h6. Navigate space
+{pagetree:searchBox=true|expandCollapseAll=true|startDepth=1}
+{column}
+{section}
+
+6750464
+
+
+
+
+Verstion: 1
+
+Created By: marcesher
+
+Created On: 2011-04-02 13:29:11.000
+
+Last Update By: marcesher
+
+Last Update On: 2011-04-02 13:29:11.000
+
+

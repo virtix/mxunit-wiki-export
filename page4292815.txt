@@ -1,0 +1,156 @@
+
+
+
+
+
+
+
+Eclipse Plugin Troubleshooting
+
+4325539
+{toc}In general, problems with the plugin come in these varieties:
+* The plugin can't figure out the correct "cfc path" for a file
+* The plugin can't communicate with the RemoteFacade URL
+* My tests load but either never finish or throw inexplicable errors with no stack
+trace
+
+h2. CFC Path
+
+If you've read the Help documentation in the plugin and you still can't figure out
+how to get the plugin to correctly derive the CFC path for your components, then please
+follow these steps:
+# Close Eclipse
+# Open eclipse.ini in the eclipse install directory, and add "-debug" on a separate
+line, toward the top of the file. For example, it might look like this:
+# {code}-startup
+plugins/org.eclipse.equinox.launcher_1.0.200.v20090520.jar
+--launcher.library
+plugins/org.eclipse.equinox.launcher.win32.win32.x86_1.0.200.v20090519
+-product
+org.eclipse.epp.package.rcp.product
+--launcher.XXMaxPermSize
+256M
+-showsplash
+-debug
+org.eclipse.platform
+--launcher.XXMaxPermSize
+256m
+-vmargs
+-Dosgi.requiredJavaVersion=1.5
+-Xms40m
+-Xmx512m{code}
+# (Note the \-debug on a line by itself)
+# Start Eclipse
+# Try running your test. This will now put a bunch of stuff into Eclipse's error log
+view
+# Open the Error Log View (window \-\- show view \-\- general \-\- Error Log)
+# You'll see a number of entries with an "i" (Information) Icon in the top few rows.
+Copy the contents of those rows and email them to the MXUnit google group with an
+explanation of what the plugin should be doing that it's not doing
+# Alternately, you can open the raw law and copy the appropriate lines which you'll
+find toward the bottom of the file. To get to the Eclipse error log: Help \-\- About
+Eclipse \-\- Installation Details \-\- View Error Log
+
+After you do that, you can remove the \-debug from your eclipse.ini file
+
+
+
+h2. RemoteFacade
+
+* Ensure you can hit the URL in a browser. If not, there's your problem.
+* If you can access the URL in a browser, but the plugin still can't talk to your
+URL, try opening that URL in Eclipse's internal browser
+* If you're still getting "could not connect to facade URL" and can't figure it out,
+ensure that you don't have any onError stuff in your Application.cfc. Perhaps the
+errors are being swallowed?
+* Try looking at the coldfusion error logs to see if anything in there sheds light
+on the problem
+
+
+h2. Using the RemoteFacadeTester.cfm
+
+
+The RemoteFacadeTester.cfm is a great help in diagnosing problems, especially for
+removing the plugin from the equation so that you can follow normal ColdFusion debugging
+processes that you're used to.
+
+Open a file named "RemoteFacadeTester.cfm" in the mxunit/samples directory. This file
+is included in the distribution. At the top of the file, you'll see this content:
+{code:controls=true}&lt;!--- change these as necessary ---&gt;
+&lt;cfset mycomponent = "mxunit.PluginDemoTests.HodgePodgeTest"&gt;
+&lt;cfset myfunction = "testNotEquals"&gt;
+&lt;cfset remoteURL = "http://localhost/mxunit/framework/RemoteFacade.cfc?wsdl"&gt;{code}Replace
+the variables with the component, function, and URL you're trying to invoke. Run that
+RemoteFacadeTester.cfm in your browser and inspect the output. Look at the CFDumps.
+It'll show you the result of running the test when run directly, when run through
+a testsuite, and when run through the RemoteFacade.cfc URL. All 3 results should be
+roughly the same. As an example, the last cfdump should look something like this:
+!remotefacadetester.png!
+
+{warning}If you're using this to test code that depends on setup in&amp;nbsp; your Application.cfc
+\-\- especially ORM-related functionality, then you'll need to copy this file into
+your application{warning}
+
+h2. My tests load but either never finish or throw inexplicable errors with  no stack
+trace
+
+Check the following:
+# If you're pointing to a custom RemoteFacade.cfc that lives in your project (because
+you need Application.cfc to run, for example),
+## Something might be failing in Application.cfc itself. Use the RemoteFacadeTester
+described above for this
+## Code in onRequestStart(), onRequest(), or onRequestEnd() might be causing errors
+or even swallowing errors
+# If every test throws the same error, check to see if something's erroring in your
+TestCase's "setUp()" or "tearDown()" functions. Also, check if you have "constructor"
+code running that could be causing errors
+# If you're extending a TestCase that isn't mxunit.framework.TestCase, but instead
+some other superclass that eventually extends mxunit.framework.TestCase, ensure that
+no weird errors are occurring in your superclass tests
+# If you're testing ORM functionality, ensure that no errors are being thrown at the
+end of the request. This can happen when ORM flushes at request end, for example
+# Look at your ColdFusion error logs\! Often CF will tell you exactly what the problem
+is, but sometimes it never makes its way back to the plugin
+
+h2. A note on debugging your tests
+
+It's not uncommon for me to get asked about problems with the plugin that end up not
+being plugin-related at all. The first step to debugging your problems is to confirm
+to the best of your ability that the behavior you're experiencing is definitely related
+only to running the test from the plugin and not anywhere else. That means you have
+to do some legwork, son. *Run your code in isolation*. Run it in a web browser. Create
+a quicky .cfm page and run your code from in there. Or use the RemoteFacadeTester
+up above.&amp;nbsp;
+
+If you're getting *behavior* in your code that you do not expect, then first seek
+to understand whether that behavior has anything at all to do with testing, or whether
+it's simply that there's a problem in your code. For example, if you have a test that
+executes some ORM functionality, and rows aren't being inserted in your test but they
+do in your standalone code example, ensure that the code is doing *exactly the same
+thing* in both situations.This common problem happens to all of us\! I bring it up
+only because it is so common and can be quite frustrating to debug. [Here's an example
+of what I'm talking about|http://groups.google.com/group/mxunit/browse_thread/thread/fcc85d132fe49dfa/2b534667e023682e?lnk=gst&amp;q=2098#2b534667e023682e].
+Again, we don't mind helping debug, at all\! But we don't you to be slowed down for
+hours going down one path when in fact the answer was something else entirely. So,
+this is a kindly public service announcement.
+
+4292815
+
+
+
+
+
+Verstion: 11
+
+Created By: marcesher
+
+Created On: 2009-12-27 18:18:08.000
+
+Last Update By: marcesher
+
+Last Update On: 2010-07-08 00:08:22.000
+
+
+
+
+

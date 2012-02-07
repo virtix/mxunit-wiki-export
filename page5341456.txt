@@ -1,0 +1,126 @@
+
+
+
+CFMeetupEclipseProductivity
+
+5374175
+h1. Know your Tools: Being More Productive in ColdFusion Builder / CFEclipse
+
+*CFMeetup Link (with recording URL):* [http://www.meetup.com/coldfusionmeetup/calendar/13102729/]
+
+h2. Topics Covered
+
+# Teach a man to fish: How to use Eclipse Help
+## The Welcome Screen: a few things actually work (and are useful)
+## Help contents \-\- familiarity with structure
+## F1
+# Mylyn
+## Tasks
+## Noise Reduction
+## Context Switching
+## Context Sharing (if time permits)
+# Workbench Navigation
+## Editor fun (especially useful for developing with more than 1 monitor)
+## Customizing the toolbar
+## Full Screen
+### Ctrl-M
+### Full-Screen Plugin (for&amp;nbsp;Ctrl+M on 'roids)&amp;nbsp; (gives you mega full screen
+with Ctrl-Alt-Z
+## Detached tabs
+# Keyboard shortcuts
+## Find links&amp;nbsp;in the Eclipse help under "Workbench User Guide \-\- Concepts \-\-
+Accessibility features in Eclipse"
+## Resource finding and creation
+### Ctrl-N&amp;nbsp; (ctrl-N&amp;nbsp;&amp;nbsp; ctrl-N&amp;nbsp; ctrl-N&amp;nbsp;&amp;nbsp;&amp;nbsp; Get your
+damn hands off the mouse. File \-\- New is killing you)
+### Ctrl-Shift-R&amp;nbsp;&amp;nbsp;&amp;nbsp; \---&amp;nbsp; The best damn Eclipse shortcut, period
+## Editor Navigation
+### Ctrl-PgUp and Ctrl-PgDown
+### Ctrl-E
+### Ctrl-Q
+## File Navigation And Manipulation
+### Ctrl-K and Ctrl-Shift-K
+### Ctrl-L
+### Ctrl-Shift-N (CFEclipse Only)
+### text insertion shortcuts
+## Showing Views
+### Alt-Shift-Q, Q
+### Ctrl-3
+### Customize\!
+## Mylyn tasks
+### Ctrl-F9 to find and activate tasks
+### Ctrl-Shift-F9 to deactivate the current task
+## Customizing Keys
+### Window \-\- preferences \-\- keys
+### Ctrl-3 "keys"
+### Ctrl-Shift-L, Ctrl-Shift-L (to use this, you can't be in the CFEclipse editor
+window... click in a view and then use this shortcut; does not work in CFBuilder)
+## MouseFeed
+### Pavlov + Keyboard shortcuts = MouseFeed
+
+h2. Mylyn Links
+
+
+
+h4. Official Links
+
+
+[Mylyn Home Page|http://www.eclipse.org/mylyn/]
+
+[Mylyn 3.0 Video|http://live.eclipse.org/node/573] (older but excellent)
+
+[April 14, 2010 Mylyn Webinar|http://www.zend.com/en/company/news/event/webinar-code-at-the-speed-of-thought-with-task-focused-programming]
+
+
+[TaskTop Home Page|http://tasktop.com/] (TaskTop is mylyn's big brother. Reasonably
+priced, too)
+
+[TaskTop Videos|http://tasktop.com/resources/videos/]
+
+h4. MXUnit Blog Posts
+
+
+[Why I love Mylyn|http://blog.mxunit.org/2010/02/why-mylyn-is-indispensible.html]
+
+
+[My Favorite Mylyn Menu|http://blog.mxunit.org/2010/02/best-eclipse-menu-youve-never-heard-of.html]
+
+[Linking Mylyn up to Jira|http://blog.mxunit.org/2010/03/mylyn-and-jira-short-tutorial.html]
+(short screencast)
+
+[Sharing context with another developer|http://blog.mxunit.org/2010/03/mylyn-and-jira-sharing-context-with.html]
+(short screencast)
+
+[Creating new Issues from TODO comments|http://blog.mxunit.org/2010/03/mylyn-creating-new-issues-from-todo.html]
+(short screencast)
+
+
+h2. Shortcut Links
+
+
+[Common Eclipse Shortcuts|http://blog.mxunit.org/2009/04/timesavers-common-eclipse-shortcuts.html]
+
+[Ctrl-Shift-R|http://blog.mxunit.org/2009/04/timesavers-ctrl-shift-r.html]
+
+[Resource Navigation|http://blog.mxunit.org/2009/04/timesavers-tabaholic.html]
+
+[Full Screen and Maximizing screen real estate|http://blog.mxunit.org/2009/07/coldfusion-builder-maximizing-screen.html]
+
+[MouseFeed Home Page|http://www.mousefeed.com/] (Eclipse update site is [http://update.mousefeed.com/])
+
+5341456
+
+
+
+Verstion: 15
+
+Created By: marcesher
+
+Created On: 2010-04-07 14:19:18.000
+
+Last Update By: marcesher
+
+Last Update On: 2010-04-08 21:23:10.000
+
+
+

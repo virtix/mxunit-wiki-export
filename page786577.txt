@@ -1,0 +1,169 @@
+
+
+
+Getting Started -- More Test Cases
+
+819329
+h2. More MXUnit Test Cases
+
+For this section we will add to our [first TestCase|http://mxunit.org/doc/getting-started.html].
+We will add more basic math functions to complete a our TestCases: Subtraction, Multiplication,
+and Division.
+
+Again, following Kent Beck's Test Driven Development (TDD) we will follow this simple
+method:
+# Write the test _first_
+# Watch the test fail
+# Write the component
+# Watch the test pass
+
+Note that this rhythm is referred to as Red-Refactor-Green. This means that the  
+first step is failure and is signified by {color:red}{*}Red{*}{color}. The second
+step is to [Refactor|http://www.refactoring.com/] the code. The last step is   to
+make sure the test passes, which is indicated by {color:green}{*}Green{*}{color}
+
+*1.Write the test* *{_}first{_}*.  Type the following code into your existing file
+called MyComponentTest.cfc and save it to /mxunit/doc/tutorial/mytests
+
+{code:title=testSubtract()}
+&lt;cffunction name="testSubtract" access="public" returntype="void"&gt;
+&lt;cfscript&gt;
+mycomponent = createObject("component","MyComponent");
+expected = 5;
+actual = mycomponent.subtract(10,5);
+assertEquals(expected,actual);
+&lt;/cfscript&gt;
+&lt;/cffunction&gt;
+
+{code}
+
+*2. Watch the test fail. (Red)*
+
+[http://localhost:8500/mxunit/doc/tutorial/mytests/MyComponentTest.cfc?method=runTestRemote|http://localhost:8500/mxunit/doc/tutorial/mytests/MyComponentTest.cfc?method=runTestRemote]
+Change the server name and port as needed.
+You should see this: 
+
+!mxu-sub-fail.png!
+
+
+Again, this error is exactly what we expect. This tells us that the subtract method
+does not exist.
+
+*3. Refactor the component. (Refactor)*
+
+Type the following code into MyComponent.cfc and save it to /mxunit/doc/tutorial/mytests
+
+
+{code:title=MyComponent.cfc subtract()}
+&lt;cffunction name="subtract" access="public" returntype="numeric"&gt;
+&lt;cfargument name="num1" type="numeric" /&gt;
+&lt;cfargument name="num2" type="numeric" /&gt;
+&lt;cfreturn num1-num2&gt;
+&lt;/cffunction&gt;
+
+{code}
+
+*4. Watch the test pass. (Green)*
+
+[http://localhost:8500/mxunit/doc/tutorial/mytests/MyComponentTest.cfc?method=runTestRemote|http://localhost:8500/mxunit/doc/tutorial/mytests/MyComponentTest.cfc?method=runTestRemote]
+
+You should see this:
+
+!mxu-sub-pass.png!
+
+*5. Now, let's do something interesting with Division - divide by zero.*
+
+Type the following code into your existing file called MyComponentTest.cfc and save
+it to /mxunit/doc/tutorial/mytests
+
+{code:title=testDivide()}
+&lt;cffunction name="testDivide" access="public" returntype="void"&gt;
+&lt;cfscript&gt;
+mycomponent = createObject("component","MyComponent");
+expected = 2;
+actual = mycomponent.divide(10,0);
+assertEquals(expected,actual);
+&lt;/cfscript&gt;
+&lt;/cffunction&gt;
+
+{code}
+
+
+*6. Watch the test fail. (Red)*
+
+[http://localhost:8500/mxunit/doc/tutorial/mytests/MyComponentTest.cfc?method=runTestRemote|http://localhost:8500/mxunit/doc/tutorial/mytests/MyComponentTest.cfc?method=runTestRemote]
+
+You should see this:
+
+!mxu-divide-fail-1.png!
+
+
+
+This tells us that the divide method does not exist.
+
+*7. Refactor the component. (Refactor)*
+
+Type the following code into MyComponent.cfc and save it to /mxunit/doc/tutorial/mytests
+
+{code:title=MyComponent.cfc divide()}
+&lt;cffunction name="divide" access="public" returntype="numeric"&gt;
+&lt;cfargument name="num1" type="numeric" /&gt;
+&lt;cfargument name="num2" type="numeric" /&gt;
+&lt;cfreturn num1/num2&gt;
+&lt;/cffunction&gt;
+
+{code}
+
+*8. Watch the test pass. (Green)*
+[http://localhost:8500/mxunit/doc/tutorial/mytests/MyComponentTest.cfc?method=runTestRemote|http://localhost:8500/mxunit/doc/tutorial/mytests/MyComponentTest.cfc?method=runTestRemote]
+
+Hold on\! We're still in red. The exception shows a divide by zero error.
+
+!mxu-divide-fail-2.png!
+
+
+In this case, The test itself is broken. So, we need to fix the test. Replace the
+existing testDivide test method in MyComponentTest.cfc and save it to /mxunit/doc/tutorial/mytests
+
+{code:title=testDivide() refactored}
+&lt;cffunction name="testDivide" access="public" returntype="void"&gt;
+&lt;cfscript&gt;
+mycomponent = createObject("component","MyComponent");
+expected = 2;
+actual = mycomponent.divide(10,5);
+assertEquals(expected,actual);
+&lt;/cfscript&gt;
+&lt;/cffunction&gt;
+
+{code}
+
+
+
+*8 (Redux). Watch the test pass. (Green)*
+
+[http://localhost:8500/mxunit/doc/tutorial/mytests/MyComponentTest.cfc?method=runTestRemote|http://localhost:8500/mxunit/doc/tutorial/mytests/MyComponentTest.cfc?method=runTestRemote]
+
+Ahh\! Oh joy\! Oh rapture\! We're in the green ...
+
+!mxu-divide-pass.png!
+
+*9. Try the multiplication test on your own.*
+
+[Click here for the full solution|http://mxunit.org/doc/tutorial/solution-1.zip].
+
+786577
+
+
+
+Verstion: 4
+
+Created By: marcesher
+
+Created On: 2009-01-18 15:36:01.000
+
+Last Update By: marcesher
+
+Last Update On: 2009-01-18 15:51:45.000
+
+
+

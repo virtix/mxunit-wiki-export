@@ -1,0 +1,132 @@
+
+
+
+MXUnit TestResult Output Formats
+
+819340
+h2. *MXUnit TestResult output formats*
+
+MXUnit provides a high level of flexibility by providing    test results in various
+output formats. Some of these are   preformatted, such as HTML, and others are _raw_
+to   allow developers to generate customizable output formats.
+
+The available TestResult output formats are:
+# HTML Format
+# ExtJs Format
+# XML Format
+# JUnit Report XML
+# ColdFusion Query Format
+# ColdFusion Array format
+We will use the MXUnit example found in  the installation package mxunit/samples/MyTestSuite.cfm
+as the   base TestResults.    You may want to refer to your local TestResult API for
+details; e.g., [http://localhost:8500/mxunit/doc/api/]
+
+The syntax for generating the various types of output is:
+
+{code}
+&lt;cfset output = results.getResultsOutput( ['html', 'extjs', 'xml', 'junitxml', 'query',
+'array'] ) /&gt;
+&lt;cfoutput&gt;#output#&lt;cfoutput&gt;
+{code}
+
+Note: Since the above query and array types are complex data structures, you will
+get an error by trying to print those directly, as illustrated above. You most likely
+be computing other outputs if you use those types.
+
+Following are simple examples of how to handle the various output types.
+
+Note that in order to toggle between HTML and ExtJs format, pass in a 
+
+*1. HTML Format*
+The HTML output is basic preformatted HTML:
+
+{code}
+&lt;cfoutput&gt;#results.getResultsOutput( 'html' )#&lt;cfoutput&gt;
+
+{code}
+
+*2. ExtJs Format*
+
+ExtJs is a rich user interface set of APIs written in JavaScript.
+
+{code}
+&lt;cfoutput&gt;#results.getResultsOutput( 'extjs' )#&lt;cfoutput&gt;
+
+{code}
+
+*3. XML Format*
+This is basic raw XML format that can be transformed into custom HTML output.
+
+
+{code}
+&lt;cfoutput&gt;#results.getResultsOutput( 'xml' )#&lt;cfoutput&gt;
+
+{code}
+
+*4. JUnit Report XML*
+This is an XML format that is used by Ant's JunitReport Task. Also see the MXUnit
+Ant Task for usage information.
+
+{code}
+&lt;cfoutput&gt;#results.getResultsOutput( 'junitxml' )#&lt;cfoutput&gt;
+
+{code}
+
+5. ColdFusion Query Format
+Returns a CF Query object that you can loop over as if it were a database query.
+
+{code}
+&lt;cfset q = results.getResultsOutput( 'query' ) /&gt;
+&lt;cfoutput query="q"&gt;
+#q.component#, #q.testStatus# ...
+&lt;/cfoutput&gt;
+
+
+{code}
+
+The available columns names: COMPONENT, CONTENT, DATETIME, DEBUG, ERROR, NUMBER, TESTNAME,
+TESTSTATUS, TIME, TRACE.
+Summary data members ( q = results.getResultsOutput('query') ) :
+q.testRuns = How many tests were run,
+q.failures = How many tests fail,
+q.errors = How many errors occurred,
+q.successes = How many successes occurred,
+q.totalExecutionTime = How long it took, in milliseconds, to run all the tests
+
+{code}
+&lt;cfdump var="#results.getResultsOutput( 'query' )#" /&gt;
+{code}
+
+6. ColdFusion Array Format
+This is how internal test results are stored within the TestResult component.
+To access specific members, you can execute the following:
+
+{code}
+&lt;cfset a = results.getResultsOutput( 'array' ) /&gt;
+&lt;cfoutput&gt;
+#a[1]["component"]#, #a[1]["testStatus"]# ...
+&lt;/cfoutput&gt;
+
+{code}
+
+{code}
+&lt;cfdump var="#results.getResultsOutput( 'array' )#" /&gt;
+
+{code}
+
+786589
+
+
+
+Verstion: 4
+
+Created By: marcesher
+
+Created On: 2009-01-18 15:59:53.000
+
+Last Update By: marcesher
+
+Last Update On: 2009-01-18 16:09:54.000
+
+
+

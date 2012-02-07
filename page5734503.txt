@@ -1,0 +1,150 @@
+
+
+
+How cfcomponent output="true"  can affect memory consumption
+
+5767261
+{toc}
+
+h2. Introduction
+
+Bob Silverberg and I were trying to tackle a memory problem in his unit tests for
+ValidateThis. Running CF with 1GB of memory, he'd get Out Of Memory Errors and his
+tests would not complete when run in the browser \-\- i.e. all tests running in a
+single page request. When run through Eclipse \-\- where each test method is run as
+a separate request \-\- he had no troubles.
+
+This is our story.
+
+h2. First Line of Defense
+
+I always suggest these as the first culprits in memory problems:
+# Memory Tracking turned on in the CF Server Monitor
+# Request output debugging turned on in CFAdmin (I'm NOT talking about the Line Debugger...
+just regular old debug output)
+
+In and of themselves neither of these are evil; however, when an application, or a
+particular page, does a tremendous amount of work, both of those can become problems
+in a hurry.
+
+Bob turned both off, and he was still running out of memory.
+
+h2. My first task...
+
+I needed to replicate the issue. I got all his code and ran his tests. Fortunately,
+I, too, received an OOME. I then turned off debugging and, sure enough, the tests
+completed as expected (though slowly).
+
+So, lesson #1 kids: debugging can crash your server
+
+{tip}At this point, I no longer have problems, but Bob still does. Thus, we're not
+done yet{tip}
+
+h2. Meanwhile, Back at Bob's Ranch
+
+I suggested to Bob that he start to troubleshoot this by adding the "excludes" attribute
+onto his DirectoryTestSuite, and initially exclude everything but the first test,
+then incrementally remove tests from the Excludes until he got the error. Then, he'd
+probably know which test was causing troubles.&amp;nbsp;
+
+Normally, this is a fine approach. It turns out that it wouldn't have helped anyway.
+But hey, this stuff is hit and miss.
+
+h2. Gathering data
+
+My next step was to get a heap dump of ColdFusion as it was running the tests... I
+needed to see what was consuming all the memory. To do so, I used the java "jmap"
+command to get the dump and Eclipse MAT to analyze the dump. This is not nearly as
+complicated as it sounds, and I wrote up [full instructions here|http://blog.mxunit.org/2010/01/using-eclipse-mat-to-track-down.html]
+.
+
+h2. Inspecting data
+
+
+h3. Narrowing down to "FusionContext"
+
+
+I used Eclipse MAT to inspect the heap dump. When I first loaded it, I opened the
+"Dominator Tree" and saw the following two entries sucking up a combined 200+MB of
+RAM:
+* coldfusion.filter.FusionContext
+* coldfusion.bootstrat.BoostrapClassLoader
+
+Let's look at the first few consumers for each of these: !memory1.png|align=center!
+Now, looking at the BootstrapClassLoader, I see a FontSetBuilder taking up a whole
+lot of memory. I have no idea what the hell that is, so I ignore it. I figure I can't
+do anything about it anyway, so....
+
+Let's look at the big old HashMap in the FusionContext. That looks like something
+I might be able to do something about. Why? Well, I don't know... I just imagine that
+any variables my app is creating live in there.
+
+h3. Narrowing down to a Code File
+
+{tip}When working with Eclipse MAT, keep your eyes on the "Inspector View" as you
+select different items in the "dominator tree" editor{tip}
+
+
+This was kind of just dumb luck and I'm not sure exactly what it means. Nonetheless,
+if you look at the image below, you'll see that when I opened up the HashMap in the
+FusionContext I had a whole mess of entries for "CFDummyComponent". Clicking on one
+of those showed \-\- over in the "Inspector" view on the left, that the file was "cfMockRegistry2ecfc"
+followed by some numbers. This told me that the file associated with that component
+was "*MockRegistry.cfc*". !memory2.png|thumbnail,align=center!
+Then, drilling into one of those instances, you see a lot of *coldfusion.tagext.io.OutputTag*
+instances. !memory3.png|thumbnail,align=center!
+
+h2. Light Bulb
+
+So here's where I put things together:
+# File named MockRegistry.cfc
+# Tons of OutputTag instances
+
+What could this mean?
+
+Well, that must mean that something's being output in that file. But what? it's a
+component that sets up mocking... why would it be outputting anything?
+
+Sure enough, opening the file showed me the answer: *&lt;cfcomponent output="true"&gt;*
+
+h2. Full Disclosure
+
+I left out a step in the lightbulb moment, but the problem is that I cannot for the
+life of me figure out how to get back to what I saw. Basically, when I was digging
+through the heap dump in MAT, I saw an instance of "cfsavecontent". That is truly
+what made me suspicious about the output problem. But, I can't find it again... so
+be it.
+
+h2. Conclusion
+
+I set output="false" on MockRegistry.cfc, ran all of the unit tests to confirm that
+didn't break anything. Then I ran Bob's code again. Bingo... no OOME errors. In addition,
+while the tests were running, I took another heap dump, and Sure enough, memory was
+down to a completely reasonable level. Rather than consuming 100+MB of memory, FusionContext
+was down in the teens.
+
+*Does this mean output="true" is bad?*&amp;nbsp; No, it doesn't. It means a) don't use
+it unless you need it, and b) something's going on under the hood in CF where, if
+you have output="true" on in a component, it seems to keep a reference to&amp;nbsp; everything
+in that page's context, such that normal garbage collection can't do its job because
+the current stack still has a reference to everything in that OutputTag. It appears
+that when output="false", the data in the component and the component's functions
+are not being referenced by an OutputTag and as such are free to be reclaimed by the
+garbage collector
+
+5734503
+
+
+
+Verstion: 3
+
+Created By: marcesher
+
+Created On: 2010-09-16 16:27:31.000
+
+Last Update By: marcesher
+
+Last Update On: 2010-09-16 17:22:13.000
+
+
+

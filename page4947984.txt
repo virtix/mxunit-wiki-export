@@ -1,0 +1,64 @@
+
+
+
+Testing MXUnit
+
+4980749
+When making changes to the MXUnit framework it's a good idea to test those changes
+to ensure you haven't broken anything. Luckily MXUnit can be used to test itself!
+Methods of running MXUnit's tests include:
+# via the Eclipse plugin
+# via the browser
+# via the ant task
+
+h3. Running the Unit Tests via the Eclipse Plugin
+
+In the _Navigator_ tab, simply point to the _/tests_ folder, off of the MXUnit root,
+right-click, and choose *_Run MXUnit Tests_*. You should see the results of the tests
+in the MXUnit tab.
+
+h3. Expected Errors and Failures
+
+*Fixtures Can Be Safely Ignored*
+
+When running all of the tests in the /tests folder, some errors and failures will
+be reported. Most of these are due to fixtures being run as tests, so you can safely
+ignore any errors or failures reported from test cases that reside in a folder with
+the word _fixture_ in its name.
+
+*Expected Failures*
+* testAdd2() in mxunit.tests.samples.MyComponentTest fails with an mxunit.exception.AssertionFailedError
+failure. It can be safely ignored.
+* mismatchedArgumentTypesShouldFail() in mxunit.tests.mightymock.ArgumentMatcherTest
+fails because it is a placeholder for unimplemented logic.
+* attemptingToRegisterTheSamePatternShouldThrowMeaningfulException() in mxunit.tests.mightymock.InvocationTestArgumentMatcherTest
+fails as a reminder to fix or document an issue.
+* testWriteLog() in mxunit.tests.mightymock.MockLoggerTest fails because it is a placeholder
+for unimplemented logic.
+* $addInvocationRecordForBothPatternAndLiteral() in mxunit.tests.mightymock.MockRegistryTest
+fails because it is a placeholder for unimplemented logic.
+* howToHandlePatternVerification() in mxunit.tests.mightymock.MockVerificationTest
+fails because it is a placeholder for unimplemented logic.
+* $verifyExact() in mxunit.tests.mightymock.OrderTest fails because it is a placeholder
+for unimplemented logic.
+* shouldBeAbleToVerifyBothePatternAndLiteral() in mxunit.tests.mightymock.PatternInvocationTest
+fails because it is a placeholder for unimplemented logic.
+
+
+
+4947984
+
+
+
+Verstion: 5
+
+Created By: bob.silverberg@gmail.com
+
+Created On: 2010-02-09 22:58:16.000
+
+Last Update By: bob.silverberg@gmail.com
+
+Last Update On: 2010-02-10 03:20:19.000
+
+
+

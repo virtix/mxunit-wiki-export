@@ -1,0 +1,77 @@
+
+
+
+Ordered Verification
+
+5374013
+Verifying Order _(NOTE: Although built into MightyMock, this has not yet been wired
+into MXUnit)_
+
+Frequently you will want to know if and how your mock executed and compare that with
+expectations. MightyMock gives you the ability to intuitively establish expectations
+and perform flexible verification. Instead of wiring this into a mock, we create an
+OrderedExpectation object and pass in the mocks to be verified:
+
+{code}
+&lt;cfset mock.one().returns() /&gt;
+&lt;cfset mock.two().returns() /&gt;
+&lt;cfset mock.three().returns() /&gt;
+
+&lt;!--- Inject mock into component and run it ... ---&gt;
+
+
+
+&lt;!--- Ok, now let's see what happened:---&gt;
+
+&lt;cfset order = ordered(mock) /&gt;
+
+&lt;cfset order.one().
+	two().
+	three().
+	verify() /&gt;
+{code}
+
+If your collaborator invokes several different mocks, simply pass in a list of the
+mocks to be verified into the OrderedExpecation constructor. For example, if your
+collaborator does something like this:
+
+
+{code}
+&lt;cffunction name="myMethod"&gt;
+&lt;cfset myFirstObj.doSomething('foo') /&gt;
+&lt;cfset mySecondObj.doSomethingElse('bar') /&gt;
+&lt;cfset myThirdObj.doSomethingDifferent('foobar') /&gt;
+&lt;/cffunction&gt;
+{code}
+
+After creating mocks for myFirstObj, mySecondObj, and myThirdObj, you can verify the
+order of the call like this:
+
+{code}
+&lt;cfset order = createObject('component','mightymock.OrderedExpectation').
+
+init( myFirstObj, mySecondObj, myThirdObj) /&gt;
+
+&lt;cfset order.doSomething('foo').
+	doSomethingElse('bar').
+	doSomethingDifferent('foobar').
+	verify() /&gt;
+{code}
+
+
+5341254
+
+
+
+Verstion: 1
+
+Created By: virtix
+
+Created On: 2010-03-26 10:38:10.000
+
+Last Update By: virtix
+
+Last Update On: 2010-03-26 10:38:10.000
+
+
+

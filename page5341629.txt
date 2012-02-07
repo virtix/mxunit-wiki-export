@@ -1,0 +1,72 @@
+
+
+
+Defining a Mock's Behaviour
+
+5374330
+After you have [created a mock|Creating a Mock], you'll need to define behaviours
+on that mock. You need to specify which methods your component under test (CUT) will
+call on the mock object, along with the arguments that will be passed. You can also
+optionally define what data the methods should return.
+
+For example, if your CUT will call a method called _getName()_ with no arguments,
+and you want your mock to return "The Dude", your code would look like this:
+{code:title=A method that expects no arguments}
+&lt;cfset myMock = mock() /&gt;
+&lt;cfset myMock.getName().returns('The Dude') /&gt;
+{code}
+
+If your CUT will call a method called _getNameForUser()_ passing the value "dude"
+into the method as an argument, and you want your mock to return "The Dude", your
+code would look like this:
+{code:title=A method that expects a specific argument}
+&lt;cfset myMock = mock() /&gt;
+&lt;cfset myMock.getNameForUser('dude').returns('The Dude') /&gt;
+{code}
+
+If your CUT will call a method called _setName()_ passing the value "The Dude" into
+the method as an argument, and you don't want the method to return anything, your
+code would look like this:
+{code:title=A method that expects a specific argument, and returns nothing}
+&lt;cfset myMock = mock() /&gt;
+&lt;cfset myMock.setName('The Dude').returns() /&gt;
+{code}
+
+You can also save yourself a few keystrokes by leaving out the _returns()_ entirely,
+if you don't want anything returned:
+{code:title=A method that expects a specific argument, and returns nothing}
+&lt;cfset myMock = mock() /&gt;
+&lt;cfset myMock.setName('The Dude') /&gt;
+{code}
+
+You can also use [Argument Matching] to allow the CUT to call a particular method
+multiple times, with different arguments, provided you want the same result each time,
+for example:
+{code:title=Using argument matching to allow for any string argument}
+&lt;cfset myMock = mock() /&gt;
+&lt;cfset myMock.getNameForUser('{string}').returns('The Dude') /&gt;
+{code}
+
+The above code will create a mock on which the _getNameForUser()_ method can be called
+multiple times, and it will accept any string argument, always returning the value
+"The Dude". For more information on which patters are supported for argument matching,
+see the [Argument Matching] section.
+
+
+
+5341629
+
+
+
+Verstion: 1
+
+Created By: bob.silverberg@gmail.com
+
+Created On: 2010-06-21 15:34:40.000
+
+Last Update By: bob.silverberg@gmail.com
+
+Last Update On: 2010-06-21 15:34:40.000
+
+
+

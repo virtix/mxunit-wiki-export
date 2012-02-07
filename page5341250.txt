@@ -1,0 +1,64 @@
+
+
+
+
+
+
+
+Selective Verification
+
+5374010
+Syntax: {code}verifyType([int count]).mockedMethod( [params] );{code}
+
+Types: verifyAtLeast(int count), verifyAtMost(int count), verifyTimes(int count),
+verifyOnce(), verifyNever(), verify().  Note, verifyOnce(), verifyNever(), and verify()
+do not require any parameters.
+
+Simple verification:
+
+{code} myMock.verify().foo(1) {code}
+
+
+This is the same as {code}myMock.verifyOnce().foo(1);{code} or {code}myMock.verifyTimes(1).foo(1);{code}
+
+
+
+Chaining is also possible like this (assuming foo(1) was invoked 5 times):
+
+
+
+{code} 
+myMock.verifyTimes(5).
+	foo(1).
+	verifyAtLeast(1).foo(1).
+	verifyAtMost(5) .foo(1) ;
+	
+{code}
+	
+	
+
+
+
+This can very powerful when verifying multiple mocked methods in the component under
+test.
+
+
+
+
+5341250
+
+
+
+
+Verstion: 2
+
+Created By: virtix
+
+Created On: 2010-03-26 10:31:03.000
+
+Last Update By: virtix
+
+Last Update On: 2010-03-26 10:31:20.000
+
+
+

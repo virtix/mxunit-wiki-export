@@ -1,0 +1,158 @@
+
+
+
+
+
+
+Continuous Integration -- Setting up Notifications
+
+6783223
+{section}
+{column:width=60%}
+
+{toc:maxLevel=5}
+
+h1. Communicating Build Results
+
+
+All of the information Jenkins provides is lovely; however, we're not interested in
+monitoring the Jenkins interface every time a build runs. Instead, we want to get
+notified when things change. That's it: *when build status  changes*. For me, continuous
+integration is as much about communicating  results as it is about providing an easy,
+scheduled mechanism for running your  tests (we don't care about compiling and linking
+in CF applications, so that  core benefit of CI doesn't apply to us either).
+
+Ideally, only interested parties would be notified on a change in build  status. For
+example, let's say a build runs at 8:00 AM, and all tests pass. It  runs again at
+8:15 AM, and tests fail. What I want to happen is:
+# Jenkins looks at source control for the users who have committed code since  the
+last build
+# Jenkins notifies \*just\* those people that the build is now failing.
+# Jenkins does this either via email, instant message (SMS), or both.
+
+Fortunately, this is all possible. Let's set it up.
+
+h1. Configuring Email Settings
+
+From the main Jenkins screen, type "configure" in the search box
+
+Scroll down to the bottom and find the E-mail notification section.
+
+I'm using gmail in this case, so I plugged in my gmail credentials, using  "smtp.gmail.com"
+as the server. I'm keeping "default email suffix" blank since  this can't be computed
+(this would be more for corporate email accounts where  you can trust that the email
+would end up as "firstname" + "lastname" + default  email suffix, for example).
+
+In the Advanced settings, I checked "use smtp authentication", entered my  email address
+into the username field, added my password, checked "use ssl", and  specified the
+port as 465
+
+h1. Configuring SMS (Jabber) via GTalk
+
+From the "manage Jenkins" screen, click on Manage Plugins
+
+go to "Available Plugins", and find the "Jenkins Jabber notifier plugin".  Click things
+and install it. Restart if necessary.
+
+Now, back in your Manage Jenkins screen, you'll have a new section, right  above the
+Email section, for Jabber.
+
+I entered my gmail address and password, and "talk.google.com" as the server.  That's
+it\!
+
+h1. Noise Control
+
+At the project level, you can also configure how noisy you want this  communication
+to be. Here's what that looks like:
+
+!Hudson_notificationconfig.png|thumbnail!
+
+From that image, you'll see that I can configure *when* *I want to be notified*...
+every build, just on change, etc. Thus,  to substantially reduce the noise from your
+scheduled builds, go into the  project and configure it to only notify via IM on status
+change. *This,  in my humble opinion, is gold.*
+
+h1. Configuring Users
+
+Now that the communication mechanisms are set up, we have to associate email  addresses
+with the subversion users. Quite possibly there's an easier way to do  this via some
+batch process, but as I'm just getting started with my Jenkins  investigation, I haven't
+looked into it. So please don't take this as "the only  way" or "best practice", because
+I do not know that to be true.
+
+For my setup for MXUnit, I linked it to SVN and when it updated and there  were changes,
+it created new a new user for any user that was associated with a  change. So, I committed
+some code to MXUnit, ran a Jenkins build, and Jenkins  added me as a user, silently.
+
+To give the "marc.esher" user notification details:
+# from the main Jenkins screen I clicked on "people" then on "marc.esher". (You  can
+also get here if you know the username you want to configure by typing that  username
+in the "Search" box at the top of the screen)
+# click Configure
+# enter my email address
+# since I installed the Jabber plugin, it also has a space for jabber  credentials.
+I entered my gmail address again.
+
+h1. So what's all this get me?
+
+After this configuration was finished, here's what I get:
+
+Emails on build failure that look like this:
+
+!Hudsonbuildfailure_email.png|thumbnail!
+
+GTalk notifications on build failure that look like this:
+
+!Hudsonbuildfailure_gtalk.png|thumbnail!
+
+And corresponding messages for when things go back to normal.
+
+Importantly, *what I don't get*: noise. I don't get notified  on every build via email.
+I don't have to constantly go to a website to check  the build status. I get notifications
+when I care about them: when things go  bad, and when things go from bad back to good.
+
+h1. Summary
+
+Continuous Integration is about communication. It's about noise control. And  so far
+I'm discovering that Jenkins is performing admirably. You can configure  different
+methods of communication, all hooked into source control, with  different "strategies"
+(on every build, on every change, etc). I appreciate this  level of configurability.
+In addition, I was able to get all of this going  without reading a single page of
+documentation. I think that speaks to Jenkins's  ease of use.
+
+
+
+
+
+{column}
+{column:width=5%}
+
+
+
+{column}
+{column:width=35%}
+
+h6. Navigate space
+{pagetree:searchBox=true|expandCollapseAll=true|startDepth=1}
+{column}
+{section}
+
+6750466
+
+
+
+
+Verstion: 6
+
+Created By: marcesher
+
+Created On: 2011-04-02 14:18:48.000
+
+Last Update By: marcesher
+
+Last Update On: 2011-04-02 15:49:54.205
+
+
+
+
+

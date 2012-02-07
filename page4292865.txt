@@ -1,0 +1,71 @@
+
+
+
+Home
+
+4325585
+{section:border=false}
+
+h2. Home
+
+
+{column:width=60%}
+h5. MXUnit is a proven and robust test framework and Eclipse plugin used by the some
+of the best ColdFusion developers around the world. 
+h6. Quick Links
+* [Getting Started|http://wiki.fuseboxframework.com/display/default/Getting+Started]
+* [Installing The Eclipse Plugin|http://wiki.fuseboxframework.com/display/default/Install+the+Eclipse+Plugin]
+* [The MXUnit Blog|http://blog.mxunit.org]
+
+h6. Support
+* [MXUnit Google Group|http://groups.google.com/group/mxunit]
+* [File a Bug|http://code.google.com/p/mxunit/issues/list]
+
+h6. Committers
+* Marc	Esher
+* Adam	Haskel
+* Mike	Henke
+* Randy	Merril
+* Mike	Rankin
+* Bill	Shelton 
+* Bob	Silverberg
+
+
+{column}
+
+{column:width=5%}
+&amp;nbsp;
+{column}
+
+
+{column:width=35%}
+h6. Navigate space
+{pagetreesearch}
+{pagetree:startDepth=3}
+{column}
+
+{section}
+
+{recently-updated-dashboard:types=page,comment}
+
+
+
+
+
+
+4292865
+
+
+
+Verstion: 3
+
+Created By: marcesher
+
+Created On: 2009-01-11 13:53:32.000
+
+Last Update By: virtix
+
+Last Update On: 2010-01-07 10:51:29.000
+
+
+

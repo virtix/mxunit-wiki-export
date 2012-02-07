@@ -1,0 +1,42 @@
+
+
+
+
+
+
+Eclipse Plugin Tips and Tricks
+
+4325542
+* You can right click on any directory, select "Run MXUnit Tests", and it'll find
+your Test components and run them, ignoring all the others
+* If you have your test case open in an Eclipse editor, you can right click in the
+file, select "Run MXUnit Test", and run the tests in the plugin
+* You can find "slow" tests easily by setting the Timeout preference to "1". You can
+easily change the timeout preference from the little white triangle on the right side
+of the view
+* If you maximize the plugin view, the view will automatically put the "Tag Context"
+view on the right (i.e. it'll shift from vertical to horizontal)
+* [debug()|default:View Debug Output] and the "b" keyboard shortcut are perhaps your
+best friends
+* If you need to copy the contents of a failure or error message, you can select the&amp;nbsp;
+failed/errored test in the tree, then select a row in the TagContext panel, right
+click, and choose "Copy Exception" or "Copy Tag Context"
+
+4292820
+
+
+
+
+
+Verstion: 3
+
+Created By: marcesher
+
+Created On: 2009-12-27 18:38:06.000
+
+Last Update By: marcesher
+
+Last Update On: 2009-12-28 00:02:39.000
+
+
+

@@ -1,0 +1,92 @@
+
+
+
+
+
+
+Recommended Reading on Testing
+
+5374231
+Here are some references that Los Hombres have found useful (Forgive the blatant monetization.
+All funds will be funneled back into MXUnit):
+
+
+{table:rules=rows|width=90%}
+
+{HTMLcomment}\-------------\--Software Testing: Ammann/Offutt-\---------------\-{HTMLcomment}
+
+{tr}
+{td:valign=top}
+{iframe:src=http://rcm.amazon.com/e/cm?t=mx06-20&amp;o=1&amp;p=8&amp;l=as1&amp;asins=0521880386&amp;fc10321146530=000000&amp;IS2=1&amp;lt1=_blank&amp;m=amazon&amp;lc1=0000FF&amp;bc1=000000&amp;bg1=FFFFFF&amp;f=ifr|style=width:120px;height:240px;|scrolling=no|marginwidth=0|marginheight=0|frameborder=0}
+{td}
+{td:valign=top}
+Don't let the title fool you; this is far from an introduction. It addresses many
+areas of software testing. Specifically, it presents 36 _coverage criteria_ used in
+both manual and automated testing. It represents many years of research in the area
+of software testing and is a great formal and practical overview of the numerous challenges
+associated with testing software. Note that the authors (Paul Ammann and Jeff Offutt)
+do *not* pocket any royalties made from sales of the book. Rather, they funnel those
+funds into a scholarship for software engineering students.
+{td}
+{tr}
+
+
+
+{HTMLcomment}\-------------\--Test Driven: Lasse-\---------------\-{HTMLcomment}
+
+{tr}
+{td:valign=top}
+{iframe:src=http://rcm.amazon.com/e/cm?t=mx06-20&amp;o=1&amp;p=8&amp;l=as1&amp;asins=1932394850&amp;fc10321146530=000000&amp;IS2=1&amp;lt1=_blank&amp;m=amazon&amp;lc1=0000FF&amp;bc1=000000&amp;bg1=FFFFFF&amp;f=ifr|style=width:120px;height:240px;|scrolling=no|marginwidth=0|marginheight=0|frameborder=0}
+{td}
+{td:valign=top}
+Lasse Koskela presents insightful and practical approaches to testing and Test Driven
+Development.
+{td}
+{tr}
+
+
+{HTMLcomment}\-------------\--Kent Beck-\---------------\-{HTMLcomment}
+{tr}
+{td:valign=top}{iframe:src=http://rcm.amazon.com/e/cm?t=mx06-20&amp;o=1&amp;p=8&amp;l=as1&amp;asins=0321146530&amp;fc10321146530=000000&amp;IS2=1&amp;lt1=_blank&amp;m=amazon&amp;lc1=0000FF&amp;bc1=000000&amp;bg1=FFFFFF&amp;f=ifr|style=width:120px;height:240px;|scrolling=no|marginwidth=0|marginheight=0|frameborder=0}
+{td}
+{td:valign=top}
+The father of TDD, Kent Beck presents the original and revolutionary concepts behind
+Test Driven Development. A great presentation and a relatively simple read.{td}
+{tr}
+
+
+
+{HTMLcomment}\-------------\- Gerard Meszaros asins=0131495054 \----------------\-{HTMLcomment}
+{tr}
+{td:valign=top}
+{iframe:src=http://rcm.amazon.com/e/cm?t=mx06-20&amp;o=1&amp;p=8&amp;l=as1&amp;asins=0131495054&amp;fc10321146530=000000&amp;IS2=1&amp;lt1=_blank&amp;m=amazon&amp;lc1=0000FF&amp;bc1=000000&amp;bg1=FFFFFF&amp;f=ifr|style=width:120px;height:240px;|scrolling=no|marginwidth=0|marginheight=0|frameborder=0}
+{td}
+{td:valign=top}
+A slightly more formal and certainly thorough discussion on common patterns found
+in unit testing. The section on test smells and the refactoring advice is immensely
+useful. The chapter on _Test Doubles_ presents a number of interesting perspectives
+on mocks and stubs.
+{td}
+{tr}
+
+
+
+{table}
+
+5341530
+
+
+
+
+Verstion: 31
+
+Created By: virtix
+
+Created On: 2010-06-18 10:53:25.000
+
+Last Update By: virtix
+
+Last Update On: 2010-06-19 10:47:45.000
+
+
+

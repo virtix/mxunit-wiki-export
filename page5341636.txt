@@ -1,0 +1,51 @@
+
+
+
+
+
+
+Debugging Mocks
+
+5374337
+In most non-trivial apps, it's important to know what's going on under the hood. This
+is particularly true for mocks. If something doesn't seem right you can inspect a
+mock to see how it's been defined and how it's been invoked. This is accomplished
+by using the &amp;nbsp;(debugMock()) method. This returns a _raw_ struct with all the
+information about the mock object:
+
+{code:title="Mock Debug"}
+//Some MXUnit test case
+
+//create
+myMock = mock();
+
+//define behavior
+myMock.foo().returns(1234);
+
+//invoke
+myMock.foo();
+
+//inspect
+debug( myMock.debugMock() );
+
+{code}!MockDebugScreenshot.png|align=center!
+
+5341636
+
+
+
+
+Verstion: 2
+
+Created By: virtix
+
+Created On: 2010-06-22 10:59:31.000
+
+Last Update By: virtix
+
+Last Update On: 2010-06-22 11:01:08.000
+
+
+
+
+

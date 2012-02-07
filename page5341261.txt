@@ -1,0 +1,43 @@
+
+
+
+Data Type Matching
+
+5374017
+
+
+As you've seen previously, you can match arguments by data type. The available types
+are those that are commonly available in ColdFusion:
+{code}
+\{string\}, \{any\}, \{object\}, \{struct\}, \{udf\}, \{numeric\}, \{array\}, \{query\},
+\{xml\}, \{boolean\}, \{binary\}, \{image\}
+{code}
+
+Using type argument matching, you can specify mock behavior like so:
+
+{code}
+&lt;cfset myMock.doSomething('\{struct\}','\{image\}').returns(true) /&gt;
+{code}
+
+When the mock is invoked, the value true will be returned to the calling component
+only when an invocation matches this patter ... doSomething with any structure as
+the first parameter followed by any image as the second parameter.
+
+Make sure to check out the next section on Wildcard Pattern Matching!
+
+5341261
+
+
+
+Verstion: 1
+
+Created By: virtix
+
+Created On: 2010-03-26 10:47:10.000
+
+Last Update By: virtix
+
+Last Update On: 2010-03-26 10:47:10.000
+
+
+

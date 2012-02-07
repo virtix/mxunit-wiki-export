@@ -1,0 +1,31 @@
+
+
+
+
+
+
+
+Automation
+
+4325516
+{pagetree:root=Automation}[Continuous Integration with Hudson, ANT, and MXUnit|default:CFObjective
+2010 -- Continuous Integration with Hudson, ANT, and MXUnit]
+
+4292773
+
+
+
+
+
+Verstion: 2
+
+Created By: zoramite
+
+Created On: 2009-11-01 01:29:13.000
+
+Last Update By: marcesher
+
+Last Update On: 2010-04-22 12:23:33.000
+
+
+

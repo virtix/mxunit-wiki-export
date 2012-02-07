@@ -1,0 +1,65 @@
+
+
+
+Adding MXUnit Snippets To CFEclipse and ColdFusion Builder
+
+5767172
+[CFEclipse|http://cfeclipse.org] and ColdFusion Builder give you the same snippet
+functionality you know and love from ColdFusion Studio. When you download MXUnit,
+you get a directory of snippets (and key combos) that you can apply to your own snippets.
+These snippets live in mxunit/eclipse/snippets. You can copy them manually, or use
+a bundled ANT task.
+
+h2. Step 1: Where do your snippets live?
+
+# &amp;nbsp;In Eclipse:
+## CFEclipse: go to Window \-\- Preferences \-\- CFEclipse
+## ColdFusion Builder: Window \-\- Preferences \-\- ColdFusion \-\-  Snippets
+# &amp;nbsp;Copy the path to the snippets directory
+
+h2. Step 2: Manually Copy the snippets
+
+
+# &amp;nbsp;open that path on your file system
+# &amp;nbsp;In a separate window, open the mxunit/eclipse/snippets/ directory on your
+file system. Copy the contents of that directory into the snippets directory that
+you just opened in #3
+# &amp;nbsp;optionally, copy the contents of snippets/mxunit/keyCombos.properties into
+your existing keyCombos.properties file
+
+h2. Step 2 (optional): Use ANT to copy them for you
+
+The first time you do this, it'll be a two step process. Step 1 has you creating a
+1-line properties file; Step 2 has you executing the ANT task
+# In mxunit/eclipse/snippets, create a file named copysnippets.properties
+# Populate it like so: snipdir.options=c:/my/path/to/cf/snippets, where that snippets
+directory is the value of your snippet path
+# Right click on "copysnippets.properties" and select "Run as ANT build"
+
+{tip}The paths must be forward slashes\!
+&amp;nbsp;&amp;nbsp;&amp;nbsp; &amp;nbsp;&amp;nbsp;
+&amp;nbsp;&amp;nbsp;&amp;nbsp; &amp;nbsp;&amp;nbsp; On my computer, the path is:
+&amp;nbsp;&amp;nbsp;&amp;nbsp; &amp;nbsp;&amp;nbsp; snipdir.options=C:/Users/Marc/EclipseWorkspaces/MyCFWorkspace/.metadata/.plugins/org.cfeclipse.cfml/snippets
+
+this can be a comma-separated list, too, just in case you have multiple snippets locations
+&amp;nbsp;&amp;nbsp;&amp;nbsp; &amp;nbsp;&amp;nbsp; (for different eclipse installs, for example)
+
+
+{tip}
+
+5734404
+
+
+
+Verstion: 3
+
+Created By: virtix
+
+Created On: 2010-03-26 15:33:38.000
+
+Last Update By: marcesher
+
+Last Update On: 2010-06-26 22:04:45.000
+
+
+

@@ -1,0 +1,108 @@
+
+
+
+Data driven testing with MXUnit dataproviders
+
+6783150
+Data driven testing allows you to execute tests with a wide variety of input data.
+This can make creating and executing certain kinds of tests&amp;nbsp; efficient and very
+powerful. Essentially, you provide a reference to a collection of data and MXUnit
+will iterate over that data and execute the test for each item in the collection.
+
+Here it is in action:
+{code:title=Basic Array Dataprovider Example}&lt;cffunction name="setUp"&gt;
+&lt;cfset name_data = ['joe','taj','mary','juan','hans', 'bjork','chaksa'] /&gt;
+&lt;cfset myObject =&amp;nbsp; createObject('component','com.foo.MyObject').init() /&gt;
+&lt;/cffunction&gt;
+
+&lt;cffunction name="testNameValidation" mxunit:dataprovider="name_data"&gt;
+&lt;cfargument name="name" hint="Each name item in the name_data array" /&gt;
+&lt;cfset assertTrue( myObject.validateName(name), "#name# not valid" ) /&gt;
+&lt;/cffunction&gt;
+{code}To use data to drive tests, tell MXUnit about it using the mxunit:dataprovider
+annotation. This accepts a string name of some data that exists in the variables scope
+of the test. The mxunit:dataprovider annotation accepts the following types of data:
+array, query, list, and a CSV or Excel file. What's unique about these types of tests
+is that they accept parameters. The parameters represent the data you are using in
+your tests and may vary depending upon the type of the dataprovider. Note that this
+is invalid in ColdFusion: mxunit:dataprovider="#my_variable#" - this value must be
+a string.
+Consider the following examples:
+
+{code:title=Query Dataprovider Example}&lt;!--------------------------------------------------------------------
+Example using a query:
+query_data = queryNew('name');
+query_data.addRow(1);
+query_data.setCell('name','ed');
+Note query name as a parameter
+--------------------------------------------------------------------&gt;
+&lt;cffunction name="testSomethingWithQuery" mxunit:dataprovider="query_data"&gt;
+&lt;cfargument name="q" hint="A query object" /&gt;
+&lt;cfset assertTrue( myObject.validateName(q.name), "#q.name# not valid." ) /&gt;
+&lt;/cffunction&gt;
+{code}In this example we specify the name of a query that's in the variables scope
+of the test. We use this query name for the mxunit:dataprovider value. This test will
+be run once for each row in the query, and the value of "arguments.q" in this case
+will be the current row of the query.
+
+{code:title=Basic List Dataprovider Example}&lt;!-----------------------------------------------------------------
+Example using a list (identical to array)
+list_data = 'ed,joe,mary,jeff';
+Note list item name as a parameter
+--------------------------------------------------------------------&gt;
+
+&lt;cffunction name="testSomethingWithList" mxunit:dataprovider="list_data"&gt;
+&lt;cfargument name="list_item" hint="Item in the list" /&gt;
+&lt;cfset assertTrue( myObject.validateName(list_item), "#list_item# not valid." ) /&gt;
+&lt;/cffunction&gt;
+{code}Iterating over a list is essentially the same as an array. The data here is
+provided as a list of values. As in all mxunit:dataprovider types, pass in the _name_
+of the data to the dataprovider.
+
+{code:title=Basic Excel/CSV Dataprovider}&lt;!----------------------------------------------------------------
+Example using an Excel file
+Note query name as a parameter
+------------------------------------------------------------------&gt;
+&lt;cfset names_excel = getDirectoryFromPath(getCurrentTemplatePath()) &amp; "/dataproviders/names.xls"&gt;
+&lt;cffunction name="testSomethingWithExcel" mxunit:dataprovider="names_excel"&gt;
+&lt;cfargument name="name_query" hint="Default behavior is to convert Excel with header
+names to query object."&gt;
+&lt;cfset debug(myQuery)&gt;
+&lt;cfset assertTrue( myObject.validateName(name_query.name), "#name_query.name# not
+valid." ) /&gt;
+&lt;/cffunction&gt;
+{code}For the basic default excel behavior where you have an Excel file with named
+row headers, pass the name of the file reference to the mxunit:dataprovider. Then,
+treat the data as a query object, using the row headings as column names.
+
+{code:title=Basic Iterator Dataprovider}&lt;!----------------------------------------------------------------
+Fuzzy Goodness
+------------------------------------------------------------------&gt;
+&lt;cffunction name="testRandomPasswordGenerator" mxunit:dataprovider="1000"&gt;
+&lt;cfargument name="count" /&gt;
+&lt;cfset pwd = myObject.generateRandomPassword(seed=count) /&gt;
+&lt;cfset assert( myObject.isValidPassword(pwd), "#pwd# not valid. Occurred at iteration
+#count#" ) /&gt;
+&lt;/cffunction&gt;
+{code}Sometimes it's useful to just iterate a number of times over some computation.
+You can do this with MXUnit simply by specify a positive integer to the mxunit:dataprovider.
+
+To Do: Advanced Dataproviders (2D Arrays and Excel and CSVs with or without header
+rows).
+
+6750389
+
+
+
+Verstion: 6
+
+Created By: virtix
+
+Created On: 2009-11-16 20:09:12.000
+
+Last Update By: haylo75
+
+Last Update On: 2011-03-08 17:21:09.863
+
+
+

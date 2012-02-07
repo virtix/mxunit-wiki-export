@@ -1,0 +1,58 @@
+
+
+
+Presentations, Talks, and Meetups
+
+5374195
+Los Hombres have given a number of individual and combined talks and presentations
+both in public and on line. Here're some of the the talks we've given:
+
+* [CFObjective 2010 -- Continuous Integration with Hudson, ANT, and MXUnit|CFObjective
+2010 -- Continuous Integration with Hudson, ANT, and MXUnit] \-\- April 22 2010 \-\-
+An ungentle introduction to Continuous Integration for CFMLers
+* [April 2010 -- Online ColdFusion  Meetup -- Know your tools: Productivity Tips-n-Tricks
+for ColdFusion Builder / CFEclipse|CFMeetupEclipseProductivity|Master your tool]
+* [CFUnited 2009 -- Automate like a Rock Star: Do more work in less time|http://mxunit.s3.amazonaws.com/doc/zip/CFUnited_2009_Esher_Automation.zip]
+\-\- August 14 2009 \-\- The presentation I'd give myself if I could go back in time
+* [CFObjective 2009 -- Writing Easy-To-Test Code|http://mxunit.s3.amazonaws.com/doc/zip/marc_esher_cfobjective_2009_designing_for_easy_testability.zip]
+\-\- May 14 2009 \-\- Mo'Betta tips for designing easy-to-test components
+* [CFObjective 2009 -- Approaches To Automated Security Testing|http://mxunit.s3.amazonaws.com/doc/zip/cfobjective-2009-security-testing.zip]
+\-\- May 16 2009
+* [Adobe MAX 2008: Advanced Patterns for ColdFusion Test Automation|http://mxunit.s3.amazonaws.com/doc/zip/MAX08_AdvancedUnitTestPatterns_Shelton_Esher.zip]
+\-\- November 19, 2008 \-\- How to be a Design-For-Testability Ninja
+* [Automating the build/deploy process with ANT - CFUnited|http://mxunit.s3.amazonaws.com/doc/zip/CFU2008ANT.zip]
+\-\- June 19, 2008 \-\- Copying, Zipping, FTPing, SVN, SQL, macrodef, looping, conditionals,
+scriptdef. Lots of example code\!
+* [Patterns for ColdFusion Test Automation - CFUnited|http://mxunit.s3.amazonaws.com/doc/zip/Patterns-for-CF-Test-Automation-CFUnited08.zip]
+\-\- June 18, 2008 \-\- Basic and advanced patterns for unit testing
+* [Better living through Testing|http://mxunit.s3.amazonaws.com/doc/zip/BaltimoreAUGMXUnitIntro.zip]
+\-\- April 23, 2008 \-\- Intro to Unit Testing and MXUnit.
+* [Unit Testing w/MXUnit (Part-2) : In the weeds|http://mxunit.s3.amazonaws.com/doc/zip/cfmeetup-unittesting-part2-04102008.zip]
+\-\- April 10, 2008 \-\- Writing tests principals, design for testability, and test
+automation
+* [Unit Testing w/MXUnit (Part-1) - Jump Start|http://mxunit.s3.amazonaws.com/doc/zip/CFMeetup_MXUnit_Jumpstart.zip]
+\-\- March 06, 2008 \-\- Getting started with unit testing, MXUnit, and Test Driven
+Development.
+* [Ant on the wire|http://mxunit.s3.amazonaws.com/doc/zip/CFMeetup_AntWired.zip] \-\-
+February 28, 2008 \-\- This is a how-to session on using FTP, Email, Subversion, and
+VSS access in your ANT build files.
+
+{tip}Just getting started with unit testing? John C Bland II gave a fantastic overview...
+[watch it here|http://experts.na3.acrobat.com/p76614762/] .{tip}
+
+5341482
+
+
+
+Verstion: 9
+
+Created By: virtix
+
+Created On: 2010-01-15 15:14:51.000
+
+Last Update By: marcesher
+
+Last Update On: 2010-04-22 12:25:50.000
+
+
+

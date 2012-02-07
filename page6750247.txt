@@ -1,0 +1,98 @@
+
+
+
+Eclipse Plugin FAQ
+
+6783015
+{toc:minLevel=4}I have tried to anticipate the most common problems and address them
+in the Help that comes with the MXUnit Eclipse plugin. You should always consult the
+Help first\! (The help is the Question Mark icon in the plugin view)
+
+
+h4. Q: What version of Eclipse will the plugin work in?
+
+A: As of right now, Eclipse 3.4 and later. If you need a version that works on Eclipse
+3.3, use [http://mxunit.org/update33] as the update site
+
+
+h4. Q: Why won't the plugin see "MyFile.cfc" as a test?
+
+A: Because the file doesn't start or end with the word "Test".
+
+h4. Q: The plugin seems to be ignoring my custom RemoteFacade.cfc URL
+
+A: Try restarting Eclipse. Also, it only honors that URL when it's set at the project
+level, not in a subdirectory of a project
+
+h4. Q: The plugin can't figure out my "cfc path" (dot notation)
+
+A: Read the plugin help. If you still can't figure it out from reading the help, please
+email the [Google Group|http://groups.google.com/group/mxunit]
+
+h4. Q: The plugin won't do anything with a TestSuite I created
+
+A: The plugin doesn't do test suites. Read the Help for an explanation
+
+h4. Q: Why doesn't the plugin support NTLMv2?
+
+A: Because neither Apache Axis nor commons HTTPClient doesn't support it. There does
+not, as of this writing, appear to be a free java client for NTLMv2
+
+h4. Q: When I run the tests in the plugin, my Application scope variables aren't present
+
+A: You'll need a custom RemoteFacade.cfc (very easy\!). See the Plugin Help.
+
+h4. Q: When I run the tests in the plugin, I get "Variable FORM is undefined". Why?
+
+
+A: The plugin runs the tests via SOAP. The form scope is not available to ColdFusion
+components during webservice calls. My advice: Don't use the form scope in your CFCs
+
+h4. Q: When I add certain variables to a "debug()" call, the plugin hangs. Why?
+
+A: debug() duplicates and then cfdumps whatever variables are passed into it. Depending
+on the content of the variable you're trying to debug, this could kill ColdFusion.
+
+
+
+h4. Q: What are the differences between how the plugin runs tests and how the tests
+run when I run them in the browser?
+
+A: The plugin runs test test one test at a time, one request at a time. This means
+there is zero chance for "bleed" from one test method run to another. When you run
+them in the browser, they're run as a single request.
+
+In addition, since the plugin runs the tests via SOAP, the FORM scope is not available.
+
+h4. Q: What do you call a snail in a ship?
+
+A: A Snailor\!
+
+h4. Q: Does the Plugin work in ColdFusion Builder?
+
+A: Of course
+
+h4. Q: Do I need to do something special to test ColdFusion ORM apps?
+
+A: Yes, you need to set a custom RemoteFacade URL on the project. On the MXUnit view,
+click the Green Help Icon (or hit F1), and click "Talking to ColdFusion: The RemoteFacade.cfc
+URL". From there, click the link at the bottom of the page, which takes you to the
+"Project-Specific RemoteFacade URL" page. This has all the instructions you should
+need.
+
+6750247
+
+
+
+Verstion: 10
+
+Created By: marcesher
+
+Created On: 2009-12-27 18:18:28.000
+
+Last Update By: marcesher
+
+Last Update On: 2010-11-28 11:58:21.000
+
+
+

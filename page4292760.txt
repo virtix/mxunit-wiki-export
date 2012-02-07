@@ -1,0 +1,90 @@
+
+
+
+Getting Started -- Setting up your Tests Directory
+
+4325505
+{html}
+&lt;h2&gt;Setting up your environment&lt;/h2&gt;
+
+&lt;p&gt;
+	So you've downloaded mxunit. Now What? How do you set up your own project? Where
+do you put your tests?
+&lt;/p&gt;
+
+&lt;p&gt;Everyone hates to hear this, but there's no one right answer. However, we're not
+gonna leave you hangin' with that lame answer. Here's what we've done (and still do):&lt;/p&gt;
+
+&lt;p&gt;
+
+&lt;ul&gt;
+
+	&lt;li&gt;put your tests in a directory named "tests" parallel to your components&lt;/li&gt;
+		&lt;ul&gt;
+			&lt;b&gt;pros:&lt;/b&gt;
+			&lt;li&gt;in the same place so they're easy to find&lt;/li&gt;
+			&lt;li&gt;separated so you have no danger of accidentally running a "real" component
+as a test case &lt;/li&gt;
+			&lt;b&gt;cons:&lt;/b&gt;
+			&lt;li&gt;if it matters to you, you probably don't want to deploy your tests to prod,
+so you'd need to filter them out somehow (ANT!)&lt;/li&gt;
+		&lt;/ul&gt;
+				
+	&lt;li&gt;put your tests in a directory named "tests" underneath your components directory&lt;/li&gt;
+		&lt;ul&gt;
+			&lt;b&gt;pros&lt;/b&gt;
+			&lt;li&gt;same as above&lt;/li&gt;
+			&lt;b&gt;cons&lt;/b&gt;
+			&lt;li&gt;same as above&lt;/li&gt;
+			
+		&lt;/ul&gt;
+	&lt;li&gt;put your tests in a directory named "tests" outside your project&lt;/li&gt;
+		&lt;ul&gt;
+			&lt;b&gt;pros&lt;/b&gt;
+			&lt;li&gt;centralize all your tests in one place&lt;/li&gt;
+			&lt;li&gt;forces you to find problems where your tests rely on data they shouldn't be
+able to see (session info, etc)&lt;/li&gt;
+			&lt;b&gt;cons&lt;/b&gt;
+			&lt;li&gt;potentially not as intuitive to find tests for a project when getting started
+initially&lt;/li&gt;
+			&lt;li&gt;makes it harder to access application-specific data (that might be a good thing
+though)&lt;/li&gt;
+			
+		&lt;/ul&gt;
+	&lt;li&gt;put your tests in the same directory as your components&lt;/li&gt;
+		&lt;ul&gt;
+			&lt;b&gt;pros&lt;/b&gt;
+			&lt;li&gt;extremely easy to see your tests and components together&lt;/li&gt;
+			&lt;b&gt;cons&lt;/b&gt;
+			&lt;li&gt;you probably don't want to deploy tests to production so you'd need to use
+ANT or some other tool to pull those files out during deployments&lt;/li&gt;
+			
+			
+		&lt;/ul&gt;
+
+
+&lt;/ul&gt;
+
+
+
+
+
+&lt;/p&gt;
+{html}
+
+4292760
+
+
+
+Verstion: 2
+
+Created By: marcesher
+
+Created On: 2009-01-18 16:15:02.000
+
+Last Update By: zoramite
+
+Last Update On: 2009-11-01 00:45:18.000
+
+
+

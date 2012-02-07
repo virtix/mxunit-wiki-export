@@ -1,0 +1,57 @@
+
+
+
+Recommended Reading on Testing
+
+5374272
+Here are some references that Los Hombres have found useful (Forgive the blatant monetization.
+All funds will be funneled back into MXUnit):
+
+|{iframe:src=http://rcm.amazon.com/e/cm?t=mx06-20&amp;o=1&amp;p=8&amp;l=as1&amp;asins=0521880386&amp;fc10321146530=000000&amp;IS2=1&amp;lt1=_blank&amp;m=amazon&amp;lc1=0000FF&amp;bc1=000000&amp;bg1=FFFFFF&amp;f=ifr|style=width:120px;height:240px;|scrolling=no|marginwidth=0|marginheight=0|frameborder=0}|Don't
+let the title fool you. This is far from an introduction and addresses many areas
+of software testing. Specifically, it presents 36 _coverge criteria_ used in both
+manual and automated testing. This text represents many years of research in the area
+and is a great formal and practical overview of the numerous challenges associated
+with  testing software. Note that the authors do not take *any* of the book's royalties;
+instead, the royalties are used in a scholarship fund for software engineering students.
+If for no other reason, that may be a good motivation to buy the book!|
+
+
+|{iframe:src=http://rcm.amazon.com/e/cm?t=mx06-20&amp;o=1&amp;p=8&amp;l=as1&amp;asins=1932394850&amp;fc10321146530=000000&amp;IS2=1&amp;lt1=_blank&amp;m=amazon&amp;lc1=0000FF&amp;bc1=000000&amp;bg1=FFFFFF&amp;f=ifr|style=width:120px;height:240px;|scrolling=no|marginwidth=0|marginheight=0|frameborder=0}||
+
+
+{HTMLcomment}Kent Beck{HTMLcomment}
+|{iframe:src=http://rcm.amazon.com/e/cm?t=mx06-20&amp;o=1&amp;p=8&amp;l=as1&amp;asins=0321146530&amp;fc10321146530=000000&amp;IS2=1&amp;lt1=_blank&amp;m=amazon&amp;lc1=0000FF&amp;bc1=000000&amp;bg1=FFFFFF&amp;f=ifr|style=width:120px;height:240px;|scrolling=no|marginwidth=0|marginheight=0|frameborder=0}|
+The grand daddy of TDD, Kent Beck presents the original and revolutionary concepts
+behind Test Driven Development. A great presentation and a relatively simple read.
+
+|
+
+
+
+{HTMLcomment:hidden}
+Syntax notes: {iframe macro in html table | | | ... note that the only difference
+is the the asin url parameter
+
+|{iframe:src=http://rcm.amazon.com/e/cm?t=mx06-20&amp;o=1&amp;p=8&amp;l=as1&amp;asins=0321146530&amp;fc10321146530=000000&amp;IS2=1&amp;lt1=_blank&amp;m=amazon&amp;lc1=0000FF&amp;bc1=000000&amp;bg1=FFFFFF&amp;f=ifr|style=width:120px;height:240px;|scrolling=no|marginwidth=0|marginheight=0|frameborder=0}||
+
+{HTMLcomment}
+
+
+
+5341571
+
+
+
+Verstion: 26
+
+Created By: virtix
+
+Created On: 2010-06-18 10:53:25.000
+
+Last Update By: virtix
+
+Last Update On: 2010-06-19 09:45:08.000
+
+
+

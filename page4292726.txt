@@ -1,0 +1,71 @@
+
+
+
+Why MXUnit?
+
+4325474
+h2. Why MXUnit?
+
+Several fine unit testing frameworks exist for ColdFusion. Why choose MXUnit?
+
+At its core, MXUnit grew around the concept of making things easier for the person
+writing the tests. We believe people shy away from unit testing because the perception
+(sometimes justified\!) is that it's too inconvenient. We sought to change that.
+
+h3. Convenience features
+
+* [Easy to see your data|View Debug Output] with cfoutput, cfdump, and debug()
+* Easy to [see your cfcatch|View Debug Output#cfcatch] struct when errors occur
+* Test [single methods|Run Single Method] inside a test case
+* Easy "[directory runner|Directory Tests]" for running entire directories of tests
+* Easy to [test private functions|Test Private] in your components
+* Ability to [switch to message-first style assertions|Message First Assertions] to
+help ease transition from other frameworks
+
+In addition to convenience features, MXUnit contains all the essential components
+of any unit testing framework:
+
+h3. Framework Must-Haves
+
+Test Generator for existing components
+
+[Eclipse Plugin|Install the Eclipse Plugin] with built-in help and [keyboard shortcuts|Plugin
+Shortcuts]
+
+Ant Integration
+
+Plugin architecture for creating custom assertions
+
+Many different [output formats|Output Formats]
+
+* Basic HTML results
+* ExtJS "fancy" grid results
+* XML results
+* JUnitReport XML results (for use with the ANT task and the JUnitReport Ant Task)
+* Query results
+
+h3. Active Development
+
+* We're actively developing MXUnit and have more convenience features in the works.
+A sample:
+* Easier exception testing
+* Easier auto-rollback for tests that access databases
+* JUnit 4 style "Hamcrest" assertions (assertThat(....))
+* Customizable test generation
+
+4292726
+
+
+
+Verstion: 5
+
+Created By: marcesher
+
+Created On: 2009-01-18 12:28:53.000
+
+Last Update By: zoramite
+
+Last Update On: 2009-10-31 23:39:49.000
+
+
+

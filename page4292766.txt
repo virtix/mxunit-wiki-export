@@ -1,0 +1,267 @@
+
+
+
+
+
+
+
+DAO Test Adapter Pattern
+
+4325509
+
+h3. A Test Adapter Pattern for DAO Testing
+Special thanks to [Brian Rinaldi|http://www.remotesynthesis.com/] for the nested transaction
+corrections!
+
+Writing unit tests for Data Access Objects (DAOs), and other database related logic,
+presents unique challenges for developers. And because varying vendor specific database
+implementations, there are at least as many ways to address this problem as there
+are database implementations. We hope, too, that in addition to this concept, we will
+provide several other possible solutions. If you have any comments, suggestions, or
+ideas on how to address this or other unit test issue, please post your thoughts at
+http://groups.google.com/group/mxunit.
+
+Here, we present one method that leverages ColdFusion's &lt;cftransaction ...&gt; and some
+basic design and refactoring principles that will allow you to create unit tests that
+can be run through many database management systems that support transaction handling.
+
+This pattern is based on Gerard Meszaros' (http://xunitpatterns.com/) Humble Transaction
+Controller pattern. His book, xUnit Test Patterns, should be on every developer's
+book shelf!
+
+The goal is to have a way to execute code that utilizes database logic (inserts, updates,
+deletes, etc.), test the results of the code, and set the state of the database back
+to a known state. Leveraging transactions is one way to achieve this. The process
+is to execute code and after assertions, roll back any transactions. Sounds simple
+... it is and it isn't. ColdFusion is limited with transaction handling - you cannot
+have nested transactions and you need to use the &lt;cftransaction ...&gt; tag.
+
+Consider the following typical insert method from a DAO. The method attempts to insert
+a record into two tables. If something goes wrong the transaction is rolled back and
+nothing (in theory) is written to the database :
+
+
+{newcode}
+&lt;cffunction name="create" access="public"&gt;
+&lt;cftransaction&gt;
+&lt;cftry&gt;
+&lt;cftransaction action="begin"&gt;
+
+&lt;cfquery name="q" datasource="myds"&gt;
+insert into mytable
+(foo,bar)
+values
+('foo','bar')
+&lt;/cfquery&gt;
+
+&lt;cfquery name="q2" datasource="myds"&gt;
+insert into myOthertable
+(otherFoo,otherBar)
+values
+('otherFoo','otherBar')
+&lt;/cfquery&gt;
+
+&lt;cftransaction action="commit"&gt;
+&lt;cfcatch type="any"&gt;
+&lt;cftransaction action="rollback"&gt;
+&lt;/cfcatch&gt;
+&lt;/cftry&gt;
+&lt;/cftransaction&gt;
+&lt;/cffunction&gt;
+{newcode}
+
+One way to test this would be to exercise the method in a testCreate() case, and then
+in tearDown() do a delete of the rows that were just inserted. There are a lot of
+issues with this approach: What if the delete fails? Also, the delete code could be
+more complex than the insert code. If you are performing updates, then you have to
+set the state of the db back to where it was by doing additional updates in tearDown()
+using the previous state's data. As you can see, the smell of this permeates ...
+
+Another approach would be to put a Test Hook MEZ into the DAO method that would flag
+component under test (CUT) to behave differently when executed by a test client. In
+this case, you could pass in an argument that would roll back the transaction. Meszaros
+suggests that this should be done as a last resort. Once you begin to change the behavior
+of an operation in order to support your tests, this indicates that some other method
+of testing should be considered.
+
+Show me the money, already!
+Let's refactor the above example and write a test for it. Johnny TDD says, "Gee, fella.
+Aint ya supposed to write that test first?". Why, yes! So, before refactoring, let's
+quickly explain the Test Adapter Pattern recipe.
+
+1. Write the test first ... :-)
+2. Extend the DAO component under test to DAOTestAdapter, or similar
+3. Refactor our DAO component: extract^FOWL^ the database logic to a package access
+method with no transaction handling
+4. Code this packageaccessed method within the transaction block of the public DAO
+method
+5. Create a method in DAOTestAdapter that overrides the DAO method under test and
+calls the pacckage access method, but rolls back the transaction no matter what
+6. Run the test. The expected behavior is that data is inserted into the db, and the
+method returns true
+
+*1. Write the test first ...*
+
+{newcode} 
+
+&lt;cffunction name="testCreateAdapter" access="public"&gt;
+&lt;cfscript&gt;
+adapter = createObject("component","DAOTestAdapter");
+val = adapter.create();
+assertTrue(val,"Should return true on insert success.");
+&lt;/cfscript&gt;
+&lt;/cffunction&gt;
+
+{newcode}
+
+*2. Extend the DAO component under test to DAOTestAdapter*
+
+{newcode}
+&lt;cfcomponent name="DAOTestAdapter" extends="DAO"&gt;
+...
+&lt;/cfcomponent&gt;
+{newcode}
+
+*3. Refactor our DAO component: extractFOWL the database logic to a package method*
+
+{newcode}
+&lt;cfcomponent name="DAO"&gt;
+&lt;cffunction name="_create" access="package"&gt;
+&lt;cfquery name="q" datasource="myds"&gt;
+insert into mytable
+(foo,bar)
+values
+('foo','bar')
+&lt;/cfquery&gt;
+
+&lt;cfquery name="q2" datasource="myds"&gt;
+insert into myOthertable
+(otherFoo,otherBar)
+values
+('otherFoo','otherBar')
+&lt;/cfquery&gt;
+&lt;/cffunction&gt;
+&lt;/cfcomponent&gt;
+{newcode}
+
+*4. Code this package method within the transaction block of the public DAO method*
+
+{newcode} 
+&lt;cfcomponent name="DAO"&gt;
+&lt;cffunction name="create" access="public" returntype="boolean"&gt;
+&lt;cftransaction action="begin"&gt;
+&lt;cftry&gt;
+&lt;cfset  _create() /&gt;
+&lt;cftransaction action="commit"&gt;
+&lt;cfreturn true /&gt;
+&lt;cfcatch type="any"&gt;
+&lt;cftransaction action="rollback"&gt;
+&lt;cfreturn false /&gt;
+&lt;/cfcatch&gt;
+&lt;/cftry&gt;
+&lt;/cftransaction&gt;
+&lt;/cffunction&gt;
+&lt;/cfcomponent&gt;
+{newcode}
+
+*5. Create a method in DAOTestAdapter that overrides the DAO method under test and
+calls the package method, but rolls back the transaction no matter what:*
+
+{newcode}
+&lt;cfcomponent name="DAOTestAdapter" extends="DAO"&gt;
+&lt;cffunction name="create" access="public" returntype="boolean"&gt;
+&lt;cftransaction action="begin"&gt;
+&lt;cftry&gt;
+&lt;cfset  _create() /&gt;
+&lt;cftransaction action="rollback"&gt;
+&lt;cfreturn true /&gt;
+&lt;cfcatch type="any"&gt;
+&lt;cfrethrow /&gt;
+&lt;/cfcatch&gt;
+&lt;/cftry&gt;
+&lt;/cftransaction&gt;
+&lt;/cffunction&gt;
+&lt;/cfcomponent&gt;
+{newcode}
+
+*6. Run the test ...*
+
+{newcode}
+&lt;cffunction name="testCreateAdapter" access="public"&gt;
+&lt;cfscript&gt;
+adapter = createObject("component","DAOTestAdapter");
+val = adapter.create();
+assertTrue(val,"Should return true on insert success.");
+&lt;/cfscript&gt;
+&lt;/cffunction&gt;
+{newcode}
+
+h4. Variations
+
+*Variation #1*: A little less OO in nature, you could also us the MXUnit built-in
+function makePublic(...) in your test to access the private DAO method and wrap that
+in a transaction. This has the benefit of fewer files, but the amount of code is roughly
+the same. This might also make your tests a little harder to read.
+view plaincopy to clipboardprint?
+
+{newcode}
+&lt;cffunction name="test_Create" access="public"&gt;
+&lt;cfset dao = createObject("component","DAO")&gt;
+&lt;cftransaction&gt;
+&lt;cftry&gt;
+&lt;cftransaction action="begin"&gt;
+&lt;cfset publicObj = makePublic(dao,"_create")&gt;
+&lt;cfset  val = publicObj._create() /&gt;
+&lt;cfset assertTrue(val,"should return true")&gt;
+&lt;cftransaction action="ROLLBACK"&gt;
+&lt;cfreturn true /&gt;
+&lt;cfcatch type="any"&gt;
+&lt;cftransaction action="ROLLBACK"&gt;
+&lt;cfreturn false /&gt;
+&lt;/cfcatch&gt;
+&lt;/cftry&gt;
+&lt;/cftransaction&gt;
+&lt;/cffunction&gt;
+&lt;/cfcomponent&gt;
+&lt;/cffunction&gt;
+{newcode}
+
+*Variation #2*: If appropriate, you may move your transaction handling to the database.
+This can be done by using stored procedures to implement your database writes and
+inside those stored procedures, you use your database management system's transaction
+handling capabilities. Then in your ColdFusion test code, you execute the transaction
+and intentionally cause a failure, which will instruct the database to roll back the
+pending transaction. The failure may be injected by using the cftransaction tag or
+by ...?
+Test Adapter Limitations
+
+* This method depends upon transaction support in your database.
+* If your updates affect tables that have IDENTITY or AUTNUMBER columns, those may
+continue to increment regardless of the transaction rolling back.
+
+h4. Summary
+The primary concept here is to delegate a rollback of any transaction within the test.
+
+# MEZ - Meszaros, Gerard; xUnit Test Patterns
+# LISK - http://en.wikipedia.org/wiki/Liskov_substitution_principle
+# FOWL - http://martinfowler.com/
+
+
+4292766
+
+
+
+
+
+Verstion: 2
+
+Created By: zoramite
+
+Created On: 2009-11-01 01:12:43.000
+
+Last Update By: virtix
+
+Last Update On: 2010-01-15 15:04:53.000
+
+
+

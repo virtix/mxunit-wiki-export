@@ -1,0 +1,69 @@
+
+
+
+
+
+
+
+Using request.debug()
+
+2228232
+h1. What is request.debug()?
+
+One of my favorite features of MXUnit is the debug() function, [described here|View
+Debug Output]. As you're developing, you might find yourself wishing you had a debug()
+function to use in the components you're building, not just in the unit tests themselves.
+
+You can\! MXUnit will create a function called request.debug() that is hooked into
+the same glob of debug output as the debug() function you use in your tests. Thus,
+in any component you're trying to test (or its dependencies, for that matter), if
+you're running the code from within MXUnit, request.debug() will be available.
+
+h1. Is it turned on by default?
+
+It is turned on by default ONLY when tests are run from within the Eclipse plugin.
+Tests run within the browser and a DirectoryTestSuite (this includes tests executed
+with ANT) will not have this function available by default. The reason is simple:
+we believe that it's a bad thing to commit your changes to source control with stray
+request.debug() calls left in there. We believe most people run their tests from within
+Eclipse while developing, but entire suites of tests should also be run in the browser,
+or via ANT, in a scheduled process. Otherwise, what's the point of having tests if
+they're not running at least once a day?&amp;nbsp; By turning them off in non-Eclipse
+contexts, you're more likely to catch the cases where you forget to remove the request.debug()
+calls when they're no longer helping you write your code
+
+
+h1. Can I turn it on in those contexts?
+
+{code:title=Example Debugging}
+&lt;cffunction name="testRequestDotDebug_WillPassInBothPluginAndWeb"&gt;
+	&lt;cfset createRequestScopeDebug()&gt;
+	&lt;cfset obj = createObject("component","SomeObject")&gt;
+	&lt;cfset debug("before the object calls request.debug")&gt;
+	&lt;cfset obj.thisWillOnlyWorkInThePlugin()&gt;&lt;!--- only work in plugin.... unless we
+explictly enable it in the test!!! ---&gt;
+	&lt;cfset debug("after a function that called request.debug")&gt;
+	&lt;cfset stopRequestScopeDebug()&gt;
+&lt;/cffunction&gt;
+{code}
+
+Yes.&amp;nbsp; Here's how:
+
+2195464
+
+
+
+
+
+Verstion: 3
+
+Created By: marcesher
+
+Created On: 2009-04-01 00:46:05.000
+
+Last Update By: zoramite
+
+Last Update On: 2009-10-31 23:37:31.000
+
+
+

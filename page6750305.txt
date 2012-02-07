@@ -1,0 +1,24 @@
+
+
+
+How cfloop query="" can affect memory consumption
+
+6783070
+
+
+6750305
+
+
+
+Verstion: 1
+
+Created By: marcesher
+
+Created On: 2011-02-22 11:24:02.420
+
+Last Update By: marcesher
+
+Last Update On: 2011-02-22 11:24:02.420
+
+
+

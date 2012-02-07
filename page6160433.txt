@@ -1,0 +1,42 @@
+
+
+
+
+
+
+Launching your ColdFusion AMI as a new Instance
+
+6193199
+{toc}
+
+h1. Launching your instance
+
+Previously, you created an AMI based on the ColdFusion server you built. After a while,
+that AMI will be available for you, from which you can launch multiple new instances.
+# From the AWS Console, select the Amazon EC2 Tab, then select "AMIs"
+# Select the AMI you created. If you don't see it, select "Owned by me" in the "Viewing"
+dropdown to show you just the AMIs you've created
+# Right click, and hit "Launch Instance".
+
+This will take you through the same set of screens you encountered when you created
+your first ColdFusion instance. The only difference here is that you're launching
+an instance of a machine that you configured. Go through all the same steps with Security
+Groups and Key Pairs, and launch that sucker. You can choose to use the Key Pair and
+Security Group that you already created.
+
+6160433
+
+
+
+
+Verstion: 1
+
+Created By: marcesher
+
+Created On: 2010-10-18 20:28:21.000
+
+Last Update By: marcesher
+
+Last Update On: 2010-10-18 20:28:21.000
+
+

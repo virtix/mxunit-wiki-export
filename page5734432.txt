@@ -1,0 +1,50 @@
+
+
+
+
+
+
+
+Installation Requirements
+
+5767200
+h2. MXUnit 2.0
+
+* Adobe ColdFusion 8.x and later (ColdFusion 9 recommended)
+* Railo
+* Open Blue Dragon
+* Windows, Linux, Mac
+* Recommended: Eclipse, CFEclipse, or ColdFusion Builder
+
+{note}
+For Railo and Open Blue Dragon, _most_ features work as expected, however, some features
+(such as the DataProviders) do not work as they would on Adobe ColdFusion.
+
+Please file compatibility issues, and patches :-), at http://jira.mxunit.org/secure/IssueNavigator.jspa?reset=true&amp;mode=hide&amp;pid=10000
+{note}
+
+h2. MXUnit 1.x
+
+* Adobe ColdFusion 7.x and later
+* Railo
+* Open Blue Dragon
+* Windows, Linux, Mac
+* Recommended: Eclipse, CFEclipse, or ColdFusion Builder
+
+5734432
+
+
+
+
+
+Verstion: 1
+
+Created By: virtix
+
+Created On: 2010-07-04 11:56:32.000
+
+Last Update By: virtix
+
+Last Update On: 2010-07-04 11:56:32.000
+
+

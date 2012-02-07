@@ -1,0 +1,51 @@
+
+
+
+Install MXUnit
+
+5373977
+h2. *Installing the MXUnit Framework*
+
+This should be the easiest part\! Download, unzip, and test ...&amp;nbsp; You can also
+[watch the video|default:MXUnit Installation Video] if you're so inclined
+
+
+1. [Download|http://mxunit.org/download.cfm] the latest version ...
+
+
+!install-download.png!
+
+
+2. Unzip to your webroot; e.g., C:\Inetpub\wwwroot\
+{color:darkred}{*}Note:*{color} The MXUnit framework can exist in any ColdFusion context
+-        in the webroot or in the custom tags.
+{color:darkred}{*}However{*}{color},        The examples assume installation directly
+under the webroot.
+
+!install-unzip.png!
+
+
+3. Test the install by pointing your web browser to the installation; e.g., [http://localhost:8500/mxunit/index.cfm|http://localhost:8500/mxunit/index.cfm]
+You should see this:
+
+!install-test.png!
+
+
+4. Write some good clean code that works.
+
+5341214
+
+
+
+Verstion: 5
+
+Created By: marcesher
+
+Created On: 2009-01-18 15:11:31.000
+
+Last Update By: marcesher
+
+Last Update On: 2009-01-18 15:19:31.000
+
+
+

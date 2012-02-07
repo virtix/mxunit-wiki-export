@@ -1,0 +1,96 @@
+
+
+
+Launching you first EC2 Instance
+
+6193172
+{toc}
+
+h1. Launching your first EC2 Instance
+
+Once you've signed up, you'll go to your AWS Console: https://console.aws.amazon.com/ec2/home
+
+It'll be empty to start. You should have some tabs at the top of the screen. Click
+the EC2 tab. If it's not available, or if it gives you a screen indicating you haven't
+signed up for EC2 yet, go through the steps to sign up. Again, don't fret: you're
+not signing away your mortgage or jeopardizing your family's supper.
+
+Once signed up for EC2, you'll have some links in your AWS Console to "Launch Instance".
+Clicking that will take you to the "Request Instances" Wizard.
+
+h2. Request Instances Wizard
+
+
+h3. 32bit or 64 bit, Linux or Windows?
+
+
+Here's your first "real" decision, and you needn't labor over it. Essentially, you're
+choosing a "base" platform on which to build your first ColdFusion AMI. This may seem
+daunting at first, considering just how many AMIs are available. My advice is to not
+sweat it. If you're familiar with Windows, use Windows. If you're familiar with Linux,
+use linux. If all you know is "I want Windows", or "I want Linux", then choose one
+of the Win or Linux AMIs that appears on the initial "Quick Start" screen. These are
+generally either 32 or 64 bit.
+
+*If you choose 64 bit, you're going to pay more.* The reason is that EC2 comes in
+a variety of "sizes", from "small" to humongous. Obviously, 32 bit doesn't do humongous
+because 32 bit can only address so much memory.
+
+{tip}My advice: don't expect to make the best decision right away. You'll most likely
+end up configuring a different kind of server eventually. For now, concentrate on
+getting started, not getting it right{tip}
+
+h3. Launch or Spot?
+
+to get started, choose "Launch Instances" as opposed to Spot instances. Spot instances
+are a way to save money, but they may add a bit of time onto your Getting Started
+experience. If you're choosing Windows, it doesn't matter anyway because the price
+is the same.
+
+In the Instance Details screen, keep the defaults. Click through.
+
+In the next screen, you'll be prompted for some key-value pairs. These are only meaningful
+to you. For example, you get prompted with a "Name" key... give it a name that's meaningful
+to you... "Windows Attempt #1", or "Linux Attempt #1", or something like that. Click
+through.
+
+h3. Key Pairs
+
+On the next screen, you'll be prompted about Key Pairs. These are critical. Presumably
+this is your first time through, so click "Create a new KeyPair" and give it a name.
+Click to download the file. Again, keep it secret, keep it safe. This will be a ".pem"
+file.
+
+h3. Security Group
+
+On the next screen you'll be prompted to create a Security Group for this new instance.
+Think of a Security Group as a firewall. Once you assign a SG to an instance, that's
+it. You live with it forever. This does NOT mean you can't change the configuration
+of this group\! You can.
+
+At the very least, to start, you'll want to *Add* "SSH" as a rule. No, Windows servers
+don't have SSH, but you're going to install it, so add the rule now.
+
+{tip}Give this Security Group a meaningful name, like "Win2k8" or some such thing.{tip}
+
+h3. That's it\!
+
+Congratulations. You've launched your first AWS EC2 instance. It's going to take a
+while to spin up, perhaps 15 minutes or more, so go grab a beer.
+
+6160406
+
+
+
+Verstion: 1
+
+Created By: marcesher
+
+Created On: 2010-10-18 01:40:43.000
+
+Last Update By: marcesher
+
+Last Update On: 2010-10-18 01:40:43.000
+
+
+

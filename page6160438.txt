@@ -1,0 +1,38 @@
+
+
+
+
+
+
+Amazon EC2 Security Groups
+
+6193204
+Security Groups provide for both IP and Group Name access control. 
+
+Using Group Names were useful for me when configuring a Linux-based MongoDB server
+which the CF servers connected to. 10Gen suggests to run Mongo in "trusted" mode behind
+the firewall. The problem is that if you run in trusted mode, then any server on EC2
+could connect to your Mongo instance... obviously this won't do.
+
+To properly secure Mongo on that server, then, was simply a matter of adding my CF
+security group as a new "Allowed Connection" into the security group I created for
+the Linux Mongo server. This way, any new CF instances I launch -- which all belong
+to the CF Security Group -- will automatically be able to access the Mongo Server,
+while keeping all other connections out.
+
+6160438
+
+
+
+
+Verstion: 1
+
+Created By: marcesher
+
+Created On: 2010-10-21 15:31:24.000
+
+Last Update By: marcesher
+
+Last Update On: 2010-10-21 15:31:24.000
+
+

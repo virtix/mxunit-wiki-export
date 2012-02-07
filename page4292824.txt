@@ -1,0 +1,29 @@
+
+
+
+Eclipse Plugin FAQ
+
+4325546
+I have tried to anticipate the most common problems and address them in the Help that
+comes with the MXUnit Eclipse plugin. You should always consult the Help first\!
+
+Q: Why won't the plugin see "MyFile.cfc" as a test?
+
+A: Because the file doesn't start or end with the word "Test".
+
+4292824
+
+
+
+Verstion: 2
+
+Created By: marcesher
+
+Created On: 2009-12-27 18:18:28.000
+
+Last Update By: marcesher
+
+Last Update On: 2009-12-27 22:23:37.000
+
+
+

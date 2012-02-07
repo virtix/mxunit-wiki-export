@@ -1,0 +1,65 @@
+
+
+
+Using External Mocking Frameworks
+
+5374325
+MXUnit comes bundled with its own lightweight, yet full-featured mocking framework.
+If you would prefer to use an external mocking framework and still take advantage
+of MXUnit's _mock()_ method, you can tell MXUnit to use a different framework. You
+can do this in a number of ways.
+
+h5. Use the setMockingFramework() Method
+
+In your test case you can call the _setMockingFramework()_ method, passing in the
+name of the framework you wish to use. MXUnit will then use that framework for any
+calls to mock(). For example:
+{code:title=Setting a Default Mocking Framework for a Test Case}
+&lt;cfcomponent extends="mxunit.framework.TestCase" output="false"&gt;
+
+&lt;cffunction name="setup"&gt;
+&lt;cfset setMockingFramework('MockBox') /&gt; 
+&lt;/cffunction&gt;
+
+&lt;/cfcomponent&gt;
+{code}
+
+h5. Change the Default Mocking Framework in mxunit-config.xml
+
+MXUNit ships with a config file, named mxunit-config.xml, that resides in the _framework_
+folder. There is a _config-element_ in this file with a type of _mockingFramework_,
+which is set to _MightyMock_ (the name of the built-in mocking framework) by default.
+If you change this value to the name of another supported framework, MXUnit will use
+that framework by default instead.
+
+h5. Pass a Mocking Framework Name into the mock() Method
+
+You can use the third argument of the mock() method, to override the framework to
+use. For example:
+{code:title=Mocking with a Different Framework}
+&lt;cfset mockOtherComponent = mock('my.component.toBeMocked','','MockBox') /&gt;
+{code}
+
+h5. Mocking Frameworks Supported
+
+MXUnit currently supports the MockBox and ColdMock mocking frameworks, in addition
+to its own. Additional frameworks can be supported by adding the required entries
+to the mxunit-config.xml file.
+
+
+5341624
+
+
+
+Verstion: 1
+
+Created By: bob.silverberg@gmail.com
+
+Created On: 2010-06-21 17:11:57.000
+
+Last Update By: bob.silverberg@gmail.com
+
+Last Update On: 2010-06-21 17:11:57.000
+
+
+

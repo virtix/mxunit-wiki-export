@@ -1,0 +1,132 @@
+
+
+
+
+
+
+Continuous Integration -- Advanced Notification Control
+
+6783234
+{section}
+{column:width=60%}
+
+{toc:maxLevel=5}
+
+h1. Introduction
+
+
+In an earlier post, I wrote about configuring notifications with Jenkins. This  is
+a follow-up post to demonstrate how to set up even more fine-grained  notification
+control using the Jenkins [Email Extension Plugin|http://wiki.Jenkins-ci.org//display/Jenkins/Email-ext+plugin].
+
+In a nutshell, this provides granular control over:
+* Who receives notifications at any event: build instability, build failure,  return
+to stability, continuing failure, etc.
+* The subject of the notifications that are sent
+* The content of notifications that are sent
+
+By default, as of this writing, Jenkins's email notifications are fairly  basic. It
+will notify either a specified list of recipients or "culprits" when a  build fails.
+It will contain a generic subject and message, basically indicating  that a build
+failed, but with no details.
+
+h1. The Email Extension Plugin: What it gets you
+
+The Email Extension Plugin will enable you to control the content of the  subject
+and message to make them more meaningful, in addition to the more  granular controls
+I mentioned above.
+
+Here's what your "Configure Project" screen will look like once you install  the plugin:
+
+!hudson_editableemailnotification.png|thumbnail!
+
+Notice from this screenshot how you can add notifications on different  triggers:
+"Unstable", "Still Failing", etc. You can specify who should receive  messages for
+all of the available events. You can add a new event by selecting  one of the available
+options in the "Add a trigger" Select list.
+
+Once you do so, you get checkboxes for the recipients to select. In addition,  you
+get fields for controlling the subject and message. You can specify all  manner of
+variables in there. My current setup at work for message content  is:
+
+$PROJECT_DEFAULT_CONTENT
+
+$FAILED_TESTS
+
+$CHANGES
+
+With these variables, on the events I have specified, I get to see what tests  have
+failed and what code changes have happened since the last build. Other  variables
+are available to you. As per Jenkins's conventions, simply click on the  \(?) icon
+beside the configuration to get all the details for how to use the  plugin. Here's
+a sample of what you currently get in the Help:
+
+!hudson_editablenotification_help.png|thumbnail!
+
+h1. My Take
+
+I wrote before about how Jenkins can significantly aide in noise control. I  think
+this plugin gets you even further. Consider the "default case": you get a  notification
+that a build failed. Now you have to go research why it failed.  This means going
+to your Jenkins URL, checking the failed tests, and determining  responsibility. However,
+with the plugin, I believe determining responsibility  cuts out a few steps: it lets
+you see a) what tests failed and b) what code  changed in a single email. All the
+information you and your team need to assign  responsibility is, potentially, in a
+single communication.
+
+*So what?* I think the answer to that question resides  squarely in the answer to
+another question: *how much do you value your  time?*
+
+h1. How to Install
+
+You install this plugin just like you install other Jenkins plugins, thank God  (I
+Love Jenkins. I wish all software I worked with were as easy to extend.)
+# click the Jenkins link, "Manage Jenkins", "Manage Plugins"
+# in the "available" tab, select "Jenkins Email Extension Plugin"
+# select it, and click checkboxes and OK buttons until it's installed. Restart  Jenkins
+
+Once it's installed, you go into your project configuration and now you have  more
+"Advanced" buttons and such in the Notifications area than you had before.  From there,
+it's a matter of selecting your triggers and what you want to happen  on those triggers.
+
+h1. Conclusion
+
+If you want even more noise control, and more meaningful communication, take  the
+few minutes to install the Jenkins Email Extension Plugin.
+
+
+
+
+
+
+{column}
+{column:width=5%}
+
+{column}
+{column:width=35%}
+
+h6. Navigate space
+{pagetree:searchBox=true|expandCollapseAll=true|startDepth=1}
+{column}
+{section}
+
+6750477
+
+
+
+
+
+Verstion: 3
+
+Created By: marcesher
+
+Created On: 2011-04-02 15:52:31.178
+
+Last Update By: marcesher
+
+Last Update On: 2011-04-02 15:57:27.556
+
+
+
+
+

@@ -1,0 +1,73 @@
+
+
+
+Injecting a Mock into a Component Under Test
+
+5374308
+After you've created a mock and defined its behaviour, you'll want to inject it into
+the component under test (CUT). That is a simple matter of passing it into the method
+that already exists to allow for dependency injection. This is generally done either
+via the constructor (init() method), or via a setter.
+
+For example, if the CUT uses constructor injection:
+
+{code:title=MyComponent (Component under test with constructor injection)}
+&lt;cfcomponent hint="Example Component To Mock" output="false"&gt;
+
+&lt;cffunction name="init"&gt;
+&lt;cfargument name="aCollaborator" /&gt;
+&lt;cfset variables.myOtherComponent = arguments.aCollaborator /&gt;
+&lt;cfreturn this /&gt;
+&lt;/cffunction&gt;
+
+&lt;/cfcomponent&gt;
+{code}
+
+You would create and inject a mock like this:
+
+{code:title=Injecting a mock via constructor injection}
+&lt;cfset myMock = mock() /&gt;
+&lt;cfset myMock.getName().returns("The Dude") /&gt;
+&lt;cfset myComponent = createObject("component","MyComponent").init(myMock) /&gt;
+{code}
+
+If the CUT uses setter injection:
+
+{code:title=MyComponent (Component under test with setter injection)}
+&lt;cfcomponent hint="Example Component To Mock" output="false"&gt;
+
+&lt;cffunction name="setMyOtherComponent"&gt;
+&lt;cfargument name="aCollaborator" /&gt;
+&lt;cfset variables.myOtherComponent = arguments.aCollaborator /&gt;
+&lt;/cffunction&gt;
+
+&lt;/cfcomponent&gt;
+{code}
+
+
+You would create and inject a mock like this:
+
+{code:title=Injecting a mock via constructor injection}
+&lt;cfset myMock = mock() /&gt;
+&lt;cfset myMock.getName().returns("The Dude") /&gt;
+&lt;cfset myComponent = createObject("component","MyComponent") /&gt;
+&lt;cfset myComponent.setMyOtherComponent(myMock) /&gt;
+{code}
+
+
+5341607
+
+
+
+Verstion: 1
+
+Created By: bob.silverberg@gmail.com
+
+Created On: 2010-06-21 15:49:10.000
+
+Last Update By: bob.silverberg@gmail.com
+
+Last Update On: 2010-06-21 15:49:10.000
+
+
+

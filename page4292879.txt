@@ -1,0 +1,101 @@
+
+
+
+Who Uses MXUnit?
+
+4325599
+h3. Here are some happy users :-)
+
+
+[Animation Mentor|http://www.animationmentor.com]
+"My work  (Animation Mentor) uses it for THE online animation school (sorry had to
+pump it up there). In fact
+I've spent the whole week cleaning up our entire MXUnit set of tests to finally all
+pass. Keep up the great work\!"
+
+
+----
+[Crisp eBusiness|http://www.crisp-ebusiness.com/]
+
+
+"If you want to do Test Driven Development with CFML, then MXUnit is THE framework
+to use\!"
+
+----
+[Figleaf Software|http://figleaf.com]
+"MXUnit ROCKS"
+
+----
+[ICF Macro|http://www.macrointernational.com/]
+"MXUnit is the suck\!"
+
+----
+[Mach-II Framework|http://www.mach-ii.com/]
+
+----
+[NASA|http://nasa.gov]
+"The Altair Program here at Johnson Space Center NASA is using MXUnit for testing
+the Extensible Information Modeler (XIM) service
+application.  This set of CF services allow the Altair program to create applications
+to design the Lunar Lander in very flexible ways
+under constantly changing requirements.  XIM has further been expanded to support
+the certification of flight readiness (COFR) process of the
+ISS Payloads group and other NASA programs are in the pipeline.  Thus, unit testing
+of the service layer has become critical and we found
+MXUnit to be the best of breed among the available CF xUnit frameworks.  It is being
+regularly maintained, has the best assertion
+capabilities, and best test output mechanisms.  The addition of ant support is an
+added plus (if you can get NTLM authentication
+working :-) "
+
+----
+[Railo Technologies|http://www.getrailo.com/]
+"It's the cream of unit testing frameworks in CFML\!"
+
+----
+[SilverWare Consulting|http://www.silverwareconsulting.com/]
+"It is remarkably easy to get up and running with unit testing in CFusing MXUnit.
+The framework is well designed and full featured, and
+the Eclipse plugin makes working with it a pleasure. Equally important is the support
+available from the development team, who are remarkably
+responsive to questions, bug reports and feature requests.
+
+Keep up the great work, hombres\!"
+
+----
+[SOSensible|http://www.sosensible.com/]
+It is the most approachable ColdFusion testing framework I have come across\!"
+
+----
+[Strictly Business Computer Systems|http://www.sbcs.com]
+"It's easy, it's free, it's powerful, it's the best of it's kind.  There is no reason
+not to use it."
+
+----
+[UNM|http://unm.edu]
+"MXUnit is bad-ass.  Use it.  Use it lots."
+
+----
+[Warwick Business School staff information portal project|http://www.wbs.ac.uk/]
+"We're using MXUnit for a first foray into test-driven development. The option to
+use multiple interfaces gives us great flexibility in how we manage tests both for
+writing brand new code, and regression checking a monolithic application as we refactor.
+The simple assertion syntax and built-in support for accessing private methods makes
+for very quick and natural development."
+
+4292879
+
+
+
+Verstion: 4
+
+Created By: virtix
+
+Created On: 2010-01-07 11:32:40.000
+
+Last Update By: virtix
+
+Last Update On: 2010-01-07 13:12:57.000
+
+
+

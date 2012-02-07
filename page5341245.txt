@@ -1,0 +1,126 @@
+
+
+
+Mocking
+
+5374007
+h3. Mocking
+
+If your dependency does not return any data, but rather _does{_}something (returns
+void), you will want to verify that it was called, but maybe you don't want to incur
+side-effects, such as emails or logging:
+
+{code:title=MyComponentTest.cfc}
+&lt;cffunction name="myMethod"&gt;
+&lt;cfargument name="foo" /&gt;
+
+&lt;cfset myOtherComponent.writeToLog('Hello.') /&gt;
+
+&lt;!--- do a bunch of other stuff ... ---&gt;
+&lt;cfset myOtherComponent.writeToLog('Good bye.') /&gt;
+
+&lt;/cffunction&gt;
+{code}
+
+
+A mock for this would like something like :
+
+
+{code:title=MyMockTest.cfc}
+&lt;cffunction name="testMyComponent"&gt;
+
+&lt;!--- Create the mock ---&gt;
+&lt;cfset myMock=mock('MyOtherComponent') /&gt;
+
+&lt;!--- Define Behavior ---&gt;
+
+&lt;cfset myMock.writeToLog ('Hello.') /&gt;
+
+&lt;cfset myMock.writeToLog ('Good Bye.') /&gt;
+
+&lt;cfset myComponent.setMyOtherComponent(mock) /&gt;
+
+&lt;!--- Exercise MyComponent ---&gt;
+
+&lt;cfset myComponent.myMethod('foo') /&gt;
+
+&lt;!--- Verify ---&gt;
+
+&lt;cfset myMock.verify().writeToLog ('Hello.') /&gt;
+
+&lt;cfset myMock.verify().writeToLog ('Good Bye.') /&gt;
+
+&lt;/cffunction&gt;
+{code}
+*Note{*}that there is no returns()method chained to the end of of the writeToLog()behavior
+definition. This is a shortcut and is the same as myMock.writeToLog ({color:#0000ff}...{color}).returns().It
+saves you 9 or so keystrokes. The reason being is that true "mocks" typically do not
+return data.
+
+If you are not overly concerned with the literal details of the method calls, you
+could simplify this with{_}argument patterns_:
+
+{code: title=MyMockTest.cfc}
+&lt;cffunction name="testMyComponent"&gt;
+
+&lt;!--- Create the mock ---&gt;
+
+&lt;cfset myMock=mock('MyOtherComponent') /&gt;
+
+&lt;!--- Define Behavior ---&gt;
+
+&lt;cfset myMock.writeToLog('{string}').returns() /&gt;
+
+&lt;cfset myComponent.setMyOtherComponent(mock) /&gt;
+
+&lt;!--- Exercise MyComponent ---&gt;
+
+&lt;cfset myComponent.myMethod('foo') /&gt;
+
+&lt;!--- Verify ---&gt;
+
+&lt;cfset myMock.verifyTimes(2).writeToLog('{string}') /&gt;
+
+
+&lt;/cffunction&gt;
+
+{code}
+
+In the above example, we use the keyword, {string}, instead of literal arguments.
+
+What happens under the hood is that when the method is called by the component that
+is passing in any _single string argument_ as a parameter, the defined mock behavior
+is invoked.
+
+Argument patterns support all common CFML data types. The intent is that it's identical
+to the typeattribute of CFARGUMENT : {numeric} , {any} , {query} , {struct} , {array}
+, etc.  See Argument Matching in the next section for more detail.
+
+The above examples create _Fast Mocks_, that is mocks that can be created quickly
+but may not have the desired _type{_}you need; that is, what's specified in the first
+parameter. To create a _Type Safe_ mock, simply tell MightyMock that's what you want:
+
+{code}
+&lt;cfset myMock=mock('MyOtherComponent',true) /&gt;
+{code}
+
+The second parameter  in the constructor tells MXUnit to return an object of the same
+type specified in the first parameter. If an object of that type cannot be found,
+and instantiation exception will be thrown.
+
+5341245
+
+
+
+Verstion: 3
+
+Created By: virtix
+
+Created On: 2010-03-26 10:09:03.000
+
+Last Update By: virtix
+
+Last Update On: 2010-03-26 10:19:41.000
+
+
+

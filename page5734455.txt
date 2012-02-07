@@ -1,0 +1,44 @@
+
+
+
+
+
+
+Features &amp; Engine Support Info
+
+5767219
+{note}
+:: DRAFT ::
+*This is a new work in progress.*
+Comments and suggestions encouraged\!
+{note}
+
+* '?' indicates that it has not been tested. Any users of those engines are encouraged
+to test those features and let us know what you find (writing a patch is even better!).
+
+{center}
+||h5.Feature||h5.CF9||h5.CF8||h5.CF7||h5.Railo||h5.OBD|
+|Ant           |Yes|Yes|Yes|Yes|Yes|
+|Assertions    |Yes|Yes|Yes|Yes|Yes|
+|Dataproviders |Yes|Yes|No| Partial | ? |
+|Mocking       | Yes| Yes | No | Yes | ? |
+|Plugin        | Yes | Yes | Yes | Yes | ? |
+{center}
+
+5734455
+
+
+
+
+Verstion: 2
+
+Created By: virtix
+
+Created On: 2010-07-28 12:12:26.000
+
+Last Update By: virtix
+
+Last Update On: 2010-07-30 10:50:09.000
+
+
+

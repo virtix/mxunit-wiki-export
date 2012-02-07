@@ -1,0 +1,42 @@
+
+
+
+MXUnit Installation Video
+
+4718597
+
+{html}
+&lt;center&gt;
+
+	&lt;!-- the comment and script is used to workaround the KB912945 patch --&gt;
+	&lt;!--[if gte IE 6]&gt; &lt;comment id="to_be_rewritten"&gt; &lt;![endif]--&gt;
+	&lt;OBJECT classid="clsid:D27CDB6E-AE6D-11cf-96B8-444553540000" codebase="http://download.macromedia.com/pub/shockwave/cabs/flash/swflash.cab#version=6,0,40,0"
+WIDTH="718" HEIGHT="541" id="movie"&gt;
+	&lt;PARAM NAME=movie VALUE="mxunit-install3.swf"&gt; 
+	&lt;PARAM NAME=quality VALUE=high&gt;
+	&lt;PARAM NAME=bgcolor VALUE=#FFFFFF&gt;
+	&lt;EMBED src="http://mxunit.s3.amazonws.com/video/mxunit-install3.swf" quality=high
+bgcolor=#FFFFFF WIDTH="718" HEIGHT="541" NAME="movie" ALIGN="" TYPE="application/x-shockwave-flash"
+PLUGINSPAGE="http://www.macromedia.com/go/getflashplayer"&gt;&lt;/EMBED&gt;
+	&lt;/OBJECT&gt;
+	&lt;/comment&gt;&lt;script language="Javascript" src="ieupdate.js"&gt;&lt;/script&gt;
+
+&lt;/center&gt; 
+{html}
+
+4685829
+
+
+
+Verstion: 4
+
+Created By: marcesher
+
+Created On: 2009-01-18 15:17:15.000
+
+Last Update By: virtix
+
+Last Update On: 2010-01-14 10:53:14.000
+
+
+

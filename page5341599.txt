@@ -1,0 +1,47 @@
+
+
+
+Creating a Mock
+
+5374300
+MXUnit's mocking integration allows you to create a mock with a single method call
+from within your test case, using the _mock()_ method.
+
+The fastest way to create a mock is to call mock() with no arguments:
+{code:title=Simple Mock Example}
+&lt;cfset mockOtherComponent = mock() /&gt;
+{code}
+
+If the component under test (CUT) expects the object that you are mocking to be of
+a specific type, you can create a _typeSafe_ mock:
+{code:title=typeSafe Mock Example}
+&lt;cfset mockOtherComponent = mock("my.component.toBeMocked","typeSafe") /&gt;
+{code}
+
+That code will generate a mock that ColdFusion will recognize as being an instance
+of _my.component.toBeMocked_. Note that if the framework cannot create an instance
+of that object an exception will be thrown.
+
+Once you've created a mock you'll want to [define the behaviour|Defining a Mock's
+Behaviour] of the mock.
+
+
+
+
+
+5341599
+
+
+
+Verstion: 1
+
+Created By: bob.silverberg@gmail.com
+
+Created On: 2010-06-21 15:06:38.000
+
+Last Update By: bob.silverberg@gmail.com
+
+Last Update On: 2010-06-21 15:06:38.000
+
+
+

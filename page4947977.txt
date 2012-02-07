@@ -1,0 +1,25 @@
+
+
+
+Testing MXUnit
+
+4980742
+When making changes to the MXUnit framework it's a good idea to test those changes
+to ensure you haven't broken anything. Luckily MXUnit can be used to test itself!
+
+4947977
+
+
+
+Verstion: 1
+
+Created By: bob.silverberg@gmail.com
+
+Created On: 2010-02-09 22:58:16.000
+
+Last Update By: bob.silverberg@gmail.com
+
+Last Update On: 2010-02-09 22:58:16.000
+
+
+

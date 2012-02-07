@@ -1,0 +1,100 @@
+
+
+
+MXUnit Documentation
+
+6783454
+{section:border=false}
+
+
+
+{column:width=52%}
+
+h5. MXUnit is a proven and robust test framework and Eclipse plugin used by the some
+of the best ColdFusion developers around the world.
+
+h6. Quick Links
+
+* [What is MXUnit and Why should you use it?|default:Why MXUnit?]
+* [Getting Started|default:Getting Started]
+* [Download Stable|http://mxunit.org/download.cfm]
+* [Download Nightly Build|http://mxunit.org/downloadNightly.cfm]
+* [Installing The Eclipse Plugin|default:Install the Eclipse Plugin]
+* [The MXUnit Blog|http://blog.mxunit.org]
+* [Eclipse Plugin Update Site|http://mxunit.org/update]
+* [SVN Source Code \-\- trunk|http://mxunit.googlecode.com/svn/mxunit/trunk/]
+* [Github|http://https://github.com/mxunit/]
+* [MXUnit 2.0 API|http://mxunit.s3.amazonaws.com/api/index.html]
+
+
+h6. Support
+
+* [MXUnit Google Group|http://groups.google.com/group/mxunit]
+* [Bug Report or Feature Request|http://jira.mxunit.org/secure/IssueNavigator.jspa?reset=true&amp;mode=hide&amp;pid=10000]
+
+{table:border=0 width=100%}
+{table-row}
+
+{table-cell}
+
+h6. Committers
+
+* Marc	Esher  ([blog|http://blog.mxunit.org], Twitter:[@marcesher|http://twitter.com/marcesher])
+* Adam	Haskell  ([blog|http://cfrant.blogspot.com/], Twitter:[@AHaskell|http://twitter.com/ahaskell])
+* Mike	Henke  ([blog|http://www.henke.ws/], Twitter: [@mikehenke|http://twitter.com/mikehenke])
+* Patrick McElhaney ([blog|http://patrickmcelhaney.com/], Twitter: [@patrick_mc|http://twitter.com/patrick_mc])
+* Randy	Merril  ([blog|http://forthedeveloper.com/], Twitter: [@Zoramite|http://twitter.com/Zoramite])
+* Mike	Rankin  ([blog|http://mrmx.blogspot.com/], Twitter: [@mike_rankin|http://twitter.com/mike_rankin])
+* Bill	Shelton  ([blog|http://blog.billshelton.me], Twitter:[@virtix|http://twitter.com/virtix])
+* Bob	Silverberg  ([blog|http://www.silverwareconsulting.com/], Twitter: [@elegant_chaos|http://twitter.com/elegant_chaos])
+* John Whish ([blog|http://www.aliaspooryorik.com/], Twitter: [@aliaspooryorik|http://twitter.com/aliaspooryorik]
+{table-cell}
+{table-cell} !einstein_coding_mxunit.jpg|thumbnail,align=left!{table-cell}{*}License*
+
+Versions 1.x are licensed under [GPL|http://www.gnu.org/licenses/quick-guide-gplv3.html|Copyleft]
+and versions 2.x are licensed under the [MIT|http://www.opensource.org/licenses/mit-license.php]
+open source license.
+
+{table-cell}
+*MXUnit Office Hours*
+
+Every few weeks we [get together on Adobe Connect|http://experts.na3.acrobat.com/mxunit-office-hours/]
+to chat about testing. Meetups start at Noon EST ([convert|http://www.timeanddate.com/worldclock/converter.html]).
+You're automatically promoted to presenter so bring a microphone. Here's the schedule:
+
+{google-calendar:mode=agenda|width=300|height=300}[http://www.google.com/calendar/ical/h5eh6m4iirte5b7u3r997ul5q0%40group.calendar.google.com/public/basic.ics]{google-calendar}
+
+
+
+{table-row}
+{table}
+{column}
+{column:width=3%}
+
+
+
+
+{column}
+{column:width=45%}
+
+h6. Navigate space{pagetreesearch}{pagetree:startDepth=2}
+{column}
+{section}
+{recently-updated-dashboard:types=page,comment}
+
+6750703
+
+
+
+Verstion: 52
+
+Created By: virtix
+
+Created On: 2009-01-17 10:51:32.000
+
+Last Update By: virtix
+
+Last Update On: 2011-05-22 12:31:32.174
+
+
+

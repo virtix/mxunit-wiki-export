@@ -1,0 +1,214 @@
+
+
+
+Using the Ant Task to Generate JUnit Reports
+
+5374053
+In this tutorial, you will learn how to create an Ant build file that      executes
+MXUnit tests and generates JUnit reports
+
+First off, you should be familiar with [Ant|http://ant.apache.org/]. If not, visit
+the       site, [download    Ant|http://ant.apache.org/bindownload.cgi] and play around
+with it to develop a basic understanding of       projects and tasks.
+
+Ok, now that you're an expert let's kick it. We'll use the MXUnit tests       that
+we use to build the framework. These are located in the MXUnit       Framework download
+in /mxunit/tests. We will use the minimal required       options in order to run the
+Ant task. All optional task attributes can be       found [here|default:Ant Task Doc]
+.
+
+This tutorial assumes installation of MXUnit directly in the webroot;       e.g.,
+/mxunit/
+
+These are the basic steps to create the build that runs tests and       generates
+a report
+# Create ant Ant build project
+# Define the MXUnit Ant Task
+# Tell MXUnit Which Tests You Want to Run
+# Define The JUnit Report Task
+# Run it ...
+# View the report
+
+
+*1. Create an Ant build&amp;nbsp;project*
+
+Type the folling into a text file and save it as       /mxunit/tutorial/ant/build.xml.
+
+
+{code}
+&lt;?xml version="1.0" encoding="ISO-8859-1"?&gt; 
+&lt;project name="MXUnitTask" basedir="." default="main"&gt;
+&lt;/project&gt;
+{code}
+
+If you run just this in Ant you should see the following:
+
+!http://mxunit.s3.amazonaws.com/images/mx_screenshots/ant-junit-1.png!
+
+This is what we expect to see. The build fails because there is no      target main
+defined. We will define this task next.
+
+*2. Define The MXUnit Ant Task*
+
+Add the following into the build.xml file:
+
+{code}
+&lt;project name="MXUnitTask" basedir="." default="main"&gt;
+&lt;mkdir dir="testresults" /&gt;
+
+&lt;target name="main" depends="runtests" description="Main target for running the tests."
+/&gt;
+
+&lt;target name="runtests" description="Make output directories and run the MXUnit task"&gt;
+&lt;taskdef name="mxunittask" classname="org.mxunit.ant.MXUnitAntTask"  classpath="../../ant/lib/mxunit-ant.jar"
+/&gt;
+&lt;mxunittask server="localhost" port="8500"
+outputdir="testresults"
+verbose="true"&gt;
+&lt;/mxunittask&gt;
+&lt;/target&gt;
+&lt;/project&gt;
+{code}
+
+This instructs Ant to use the MXUnit Ant Task located in /mxunit/ant/lib/mxunit-ant.jar.
+It then tells the MXUnit Ant Task to use         the localhost as the target server
+and the HTTP port 8500. You should change         these values to point to any installation
+of the MXUnit Framework. The outputdir is the location to where the test results will
+be saved. The         verbose attribute instructs the task to print additional information
+to         stdout.
+If you run this, you should see the following: 
+
+!http://mxunit.s3.amazonaws.com/images/mx_screenshots/ant-junit-2.png!
+
+This is good. We have made contact with the MXUnit Ant Task. The build fails with
+a  java.lang.NullPointerException   because the task expects some tests to run and
+none were provided.
+
+*3. Tell MXUnit Which Tests You Want to Run*
+&amp;nbsp;
+Add the following to the build.xml file: 
+
+{code}
+&lt;project name="MXUnitTask" basedir="." default="main"&gt;
+
+&lt;mkdir dir="testresults" /&gt;
+
+&lt;target name="main" depends="runtests" description="Main target for running the tests."
+/&gt;
+
+&lt;target name="runtests" description="Make output directories and run the MXUnit task"&gt;
+&lt;taskdef name="mxunittask" classname="org.mxunit.ant.MXUnitAntTask"  classpath="../../ant/lib/mxunit-ant.jar"
+/&gt;
+&lt;mxunittask server="localhost" port="8500"
+outputdir="testresults"
+verbose="true"&gt;
+&lt;directory path="C:\ColdFusion8\wwwroot\mxunit\tests\framework" recurse="false" componentPath="mxunit.tests.framework"
+/&gt;
+&lt;/mxunittask&gt;
+&lt;/target&gt;
+&lt;/project&gt;
+{code}
+
+We inserted the directory element to         instruct the MXUnit Ant Task to run all
+the tests in the directory         specified by the path attribute. Note,        
+make sure your path attribute points to         the location of the /mxunit/tests/framework
+directory. When you run this,         the HttpAntRunner.cfc is called by the task.
+This runner executes the         tests using the mxunit framework and save the results
+as JUnitXml to the         location specified by the outputdir attribute.
+When run, you should see the following:
+
+!http://mxunit.s3.amazonaws.com/images/mx_screenshots/ant-junit-3.png!
+
+You should now have 2 files in /mxunit/tutorial/ant/testresults/tmp/ called mxunitdirectorytestsuite_1.xml
+and testresults.properties.       The first one will be used by JUnit in  the next
+step to generate a report. The second one          can be used to summarize all the
+test results run, as you can have multiple directory elements in the task.
+
+
+*4. Define The JUnit Report Task*
+Type the following into the build.xml:
+
+{code}
+
+&lt;project name="MXUnitTask" basedir="." default="main"&gt;
+
+&lt;mkdir dir="testresults" /&gt;
+
+&lt;target name="main" depends="runtests,junitreport" description="Main target for running
+the tests." /&gt;
+
+&lt;target name="runtests" description="Make output directories and run the MXUnit task"&gt;
+&lt;taskdef name="mxunittask" classname="org.mxunit.ant.MXUnitAntTask"  classpath="../../ant/lib/mxunit-ant.jar"
+/&gt;
+&lt;mxunittask server="localhost" port="8500"
+outputdir="testresults"
+verbose="true"&gt;
+&lt;directory path="C:\ColdFusion8\wwwroot\mxunit\tests\framework" recurse="false" componentPath="mxunit.tests.framework"
+/&gt;
+&lt;/mxunittask&gt;
+&lt;/target&gt;
+
+
+
+&lt;target name="junitreport" description="Create a report for the rest result"&gt;
+&lt;mkdir dir="junithtml"/&gt;
+&lt;junitreport todir="junithtml"&gt;
+&lt;fileset dir="testresults"&gt;
+&lt;include name="*.xml"/&gt;
+&lt;/fileset&gt;
+&lt;report format="frames" todir="junithtml" styledir="../../ant/xsl"/&gt;
+&lt;/junitreport&gt;
+&lt;/target&gt;
+
+&lt;/project&gt;
+
+{code}
+
+
+We've a couple of new things here:
+1. Created a new target for Ant (junitreport). This target is responsible for    
+generating the JUnit-style report.
+2. Instructed the main target to call the runtests target first, then          the
+junitreport task after that.
+The junitreport task is looking for the XML         files we created with the runtests
+task. Hence, we use the fileset element         to tell JUnit where to go to find
+the XML test results.
+You'll also notice that we point         to the /mxunit/ant/xsl directory for the
+formatting information.         This is optional, and you may use any stylesheet you
+wish or the default         one in Ant's JUnit Report Task path.
+
+*5. Run it ...* you should see this:
+
+!http://mxunit.s3.amazonaws.com/images/mx_screenshots/ant-junit-4.png!
+
+*6. View the report*
+
+You can now browse /mxunit/tutorial/ant/junithtml/ and open index.html in your web
+browser. You     should see the following: An live interactive version of this report
+is available [here|http://mxunit.org/testresults/index.html].
+
+!http://mxunit.s3.amazonaws.com/images/mx_screenshots/ant-junit-5.png!
+
+You can take this process further by adding additional directory elements that   
+contain tests. You may also execute individual test cases using the testcase element.
+Details on the MXUnit Ant Task can be found  [here|default:Ant Task Doc] . 
+
+
+
+5341298
+
+
+
+
+Verstion: 6
+
+Created By: virtix
+
+Created On: 2010-03-26 11:59:37.000
+
+Last Update By: virtix
+
+Last Update On: 2010-03-26 13:47:34.000
+
+
+
